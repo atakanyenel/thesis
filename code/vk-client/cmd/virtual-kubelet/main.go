@@ -38,7 +38,7 @@ import (
 var (
 	buildVersion = "N/A"
 	buildTime    = "N/A"
-	k8sVersion   = "v1.14.3" // This should follow the version of k8s.io/kubernetes we are importing
+	k8sVersion   = "v1.15.0" // This should follow the version of k8s.io/kubernetes we are importing
 )
 
 func main() {
@@ -55,8 +55,8 @@ func main() {
 
 	var opts root.Opts
 	optsErr := root.SetDefaultOpts(&opts)
-	opts.Provider = "azure"
-	opts.Version = strings.Join([]string{k8sVersion, "vk-azure-aci", buildVersion}, "-")
+	opts.Provider = "unikernel"
+	opts.Version = strings.Join([]string{k8sVersion, "vk-unikernel", buildVersion}, "-")
 
 	s := providers.NewStore()
 	rootCmd := root.NewCommand(ctx, filepath.Base(os.Args[0]), s, opts)
