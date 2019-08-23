@@ -4,3 +4,6 @@ services:
     build: .
     environment:
       REGISTRY_SERVER: http://192.168.1.147:8000
+     
+    volumes:
+        - ${PWD}:/tmp

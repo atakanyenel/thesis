@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"runtime"
+	"strconv"
+
 	"time"
 
 	"github.com/virtual-kubelet/virtual-kubelet/errdefs"
@@ -17,8 +20,6 @@ import (
 )
 
 const (
-	defaultCPUCapacity    = "20"
-	defaultMemoryCapacity = "100Gi"
 	defaultPodCapacity    = "20"
 
 	namespaceKey     = "namespace"
@@ -45,13 +46,19 @@ type MockConfig struct {
 
 func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP string, daemonEndpointPort int32) (*Provider, error) {
 
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
 	provider := Provider{
 		nodeName:           nodeName,
 		operatingSystem:    operatingSystem,
 		internalIP:         internalIP,
 		daemonEndpointPort: daemonEndpointPort,
 		pods:               make(map[string]*v1.Pod),
-		config:             MockConfig{CPU: defaultCPUCapacity, Memory: defaultMemoryCapacity, Pods: defaultPodCapacity},
+		config: MockConfig{
+			CPU:strconv.Itoa(runtime.NumCPU()),
+			Memory:strconv.Itoa(int(m.Sys/1024/1024))+"Mi", //Todo: Mi yanlış olabilir
+			Pods:defaultPodCapacity,
+		},
 		startTime:          time.Now(),
 		// By default notifier is set to a function which is a no-op. In the event we've implemented the PodNotifier interface,
 		// it will be set, and then we'll call a real underlying implementation.
@@ -226,17 +233,6 @@ func (*Provider) RunInContainer(ctx context.Context, namespace, podName, contain
 	panic("RunInContainer")
 }
 
-func (*Provider) Capacity(ctx context.Context) v1.ResourceList {
-
-	ctx, span := trace.StartSpan(ctx, "Capacity")
-	defer span.End()
-
-	return v1.ResourceList{
-		"cpu":    resource.MustParse(defaultCPUCapacity),
-		"memory": resource.MustParse(defaultMemoryCapacity),
-		"pods":   resource.MustParse(defaultPodCapacity),
-	}
-}
 
 func (*Provider) NodeConditions(ctx context.Context) []v1.NodeCondition {
 	ctx, span := trace.StartSpan(ctx, "NodeConditions")
