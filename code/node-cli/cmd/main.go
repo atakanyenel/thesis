@@ -21,7 +21,7 @@ func main() {
 
 	node, err := cli.New(ctx,
 		cli.WithProvider("unikernel", func(cfg provider.InitConfig) (provider.Provider, error) {
-			provider, err := unikernel.NewProvider(cfg.ConfigPath, cfg.NodeName, cfg.OperatingSystem, cfg.InternalIP, cfg.DaemonPort)
+			provider, err := unikernel.NewProvider(cfg.ConfigPath, cfg.NodeName, cfg.OperatingSystem, cfg.InternalIP, cfg.DaemonPort, cfg.PodCapacity)
 			return provider, err
 		}),
 		// Adds flags and parsing for using logrus as the configured logger

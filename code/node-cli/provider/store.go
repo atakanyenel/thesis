@@ -59,6 +59,7 @@ func (s *Store) Exists(name string) bool {
 type InitConfig struct {
 	ConfigPath        string
 	NodeName          string
+	PodCapacity       string
 	OperatingSystem   string
 	InternalIP        string
 	DaemonPort        int32

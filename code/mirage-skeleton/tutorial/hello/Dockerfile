@@ -1,5 +1,4 @@
-FROM alpine
+From ubuntu
 
-COPY _build/main.native main.native
-
-CMD ["./main.native"]
+copy main.native hello
+CMD ["./hello"]

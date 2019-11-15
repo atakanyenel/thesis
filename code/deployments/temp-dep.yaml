@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: temp-program
+    labels:
+        app: temp-program
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: temp-program
+    template:
+        metadata:
+            labels:
+                app: temp-program
+        spec:
+            containers:
+            - name: unikernel
+              image : unikernel-image
+              ports:
+              - containerPort: 4433
+            nodeSelector:
+              type: virtual-kubelet
+              sensor: temperature
+            tolerations:
+            - key: "virtual-kubelet.io/provider"
+              operator: "Equal"
+              value: "unikernel"
+              effect: "NoSchedule"

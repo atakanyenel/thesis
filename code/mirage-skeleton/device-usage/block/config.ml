@@ -6,10 +6,10 @@ let shellconfig = Type ShellConfig
 let config_shell = impl @@ object
     inherit base_configurable
 
-    method build _i =
+    method! build _i =
       Bos.OS.Cmd.run Bos.Cmd.(v "dd" % "if=/dev/zero" % "of=disk.img" % "count=100000")
 
-    method clean _i =
+    method! clean _i =
       Bos.OS.File.delete (Fpath.v "disk.img")
 
     method module_name = "Functoria_runtime"
@@ -24,7 +24,7 @@ let main =
     ~packages
     ~deps:[abstract config_shell] "Unikernel.Main" (time @-> block @-> job)
 
-let img = block_of_file "disk.img"
+let img = Key.(if_impl is_solo5 (block_of_file "storage") (block_of_file "disk.img"))
 
 let () =
   register "block_test" [main $ default_time $ img]

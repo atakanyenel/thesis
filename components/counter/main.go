@@ -22,10 +22,3 @@ func main() {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
-
-func startLogging(incomingTime string, message string, count uint64) {
-	go func(incomingTime string, message string, count uint64) {
-		fmt.Printf("%s,%s,%s\n", incomingTime, message, count)
-		time.Sleep(1 * time.Second)
-	}(incomingTime, message, count)
-}

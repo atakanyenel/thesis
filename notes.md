@@ -64,8 +64,20 @@
 
 ## KVM vs Xen
 ---
-`sudo add-apt-repository ppa:avsm/ppa
+```sh
+sudo apt install software-properties-common build-essential m4
+sudo add-apt-repository ppa:avsm/ppa
 sudo apt update
 sudo apt install opam
 opam init
-opam install mirage`
+opam install mirage
+```
+
+# Experiments
+
+
+## Spin up times with docker 8.11.2019
+
+1. 
+
+

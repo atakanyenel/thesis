@@ -28,6 +28,7 @@ import (
 // Defaults for root command options
 const (
 	DefaultNodeName             = "virtual-kubelet"
+	DefaultPodCapacity          = "20"
 	DefaultOperatingSystem      = "Linux"
 	DefaultInformerResyncPeriod = 1 * time.Minute
 	DefaultMetricsAddr          = ":10255"
@@ -35,9 +36,9 @@ const (
 	DefaultPodSyncWorkers       = 10
 	DefaultKubeNamespace        = corev1.NamespaceAll
 	DefaultKubeClusterDomain    = "cluster.local"
-
-	DefaultTaintEffect = string(corev1.TaintEffectNoSchedule)
-	DefaultTaintKey    = "virtual-kubelet.io/provider"
+	DefaultProvider             = "unikernel"
+	DefaultTaintEffect          = string(corev1.TaintEffectNoSchedule)
+	DefaultTaintKey             = "virtual-kubelet.io/provider"
 )
 
 // Opts stores all the options for configuring the root virtual-kubelet command.
@@ -52,7 +53,7 @@ type Opts struct {
 	KubeNamespace string
 	// Domain suffix to append to search domains for the pods created by virtual-kubelet
 	KubeClusterDomain string
-
+	PodCapacity       string
 	// Sets the port to listen for requests from the Kubernetes API server
 	ListenPort int32
 
@@ -133,8 +134,10 @@ func setDefaults(o *Opts) {
 	o.PodSyncWorkers = DefaultPodSyncWorkers
 	o.ListenPort = DefaultListenPort
 	o.MetricsAddr = DefaultMetricsAddr
+	o.Provider = DefaultProvider
 	o.InformerResyncPeriod = DefaultInformerResyncPeriod
 	o.KubeClusterDomain = DefaultKubeClusterDomain
+	o.PodCapacity = DefaultPodCapacity
 	o.Labels = map[string]string{} // Default value
 }
 

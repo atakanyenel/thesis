@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os/exec"
 	"runtime"
 	"strconv"
-
 	"time"
 
 	"github.com/virtual-kubelet/virtual-kubelet/errdefs"
@@ -20,12 +20,19 @@ import (
 )
 
 const (
-	defaultPodCapacity    = "20"
-
-	namespaceKey     = "namespace"
-	nameKey          = "name"
-	containerNameKey = "containerName"
+	defaultCpuCapacity    = "20"
+	defaultMemoryCapacity = "100Gi"
+	namespaceKey          = "namespace"
+	nameKey               = "name"
+	containerNameKey      = "containerName"
+	defaultCommand        = "ncat -l 8080" //FIXME: we dont need this
 )
+
+type PodWithCancel struct {
+	pod        *v1.Pod
+	cancelFunc context.CancelFunc
+	output func()(io.ReadCloser,error)
+}
 
 // LocalProvider implements the virtual-kubelet provider interface and runs locally, pretending to run pods
 type Provider struct {
@@ -33,7 +40,7 @@ type Provider struct {
 	operatingSystem    string
 	internalIP         string
 	daemonEndpointPort int32
-	pods               map[string]*v1.Pod
+	pods               map[string]*PodWithCancel
 	config             MockConfig
 	startTime          time.Time
 	notifier           func(*v1.Pod)
@@ -44,7 +51,7 @@ type MockConfig struct {
 	Pods   string `json:"pods,omitempty"`
 }
 
-func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP string, daemonEndpointPort int32) (*Provider, error) {
+func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP string, daemonEndpointPort int32, PodCapacity string) (*Provider, error) {
 
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
@@ -53,13 +60,18 @@ func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP st
 		operatingSystem:    operatingSystem,
 		internalIP:         internalIP,
 		daemonEndpointPort: daemonEndpointPort,
-		pods:               make(map[string]*v1.Pod),
+		pods:               make(map[string]*PodWithCancel),
 		config: MockConfig{
-			CPU:strconv.Itoa(runtime.NumCPU()),
-			Memory:strconv.Itoa(int(m.Sys/1024/1024))+"Mi", //Todo: Mi yanlış olabilir
-			Pods:defaultPodCapacity,
+			CPU:    strconv.Itoa(runtime.NumCPU()),
+			Memory: strconv.Itoa(int(m.Sys/1024/1024)) + "Mi", //Todo: Mi yanlış olabilir
+			Pods:   PodCapacity,
 		},
-		startTime:          time.Now(),
+		/*config:MockConfig{
+			CPU:    defaultCpuCapacity,
+			Memory: defaultMemoryCapacity,
+			Pods:   defaultPodCapacity,
+		},*/
+		startTime: time.Now(),
 		// By default notifier is set to a function which is a no-op. In the event we've implemented the PodNotifier interface,
 		// it will be set, and then we'll call a real underlying implementation.
 		// This makes it easier in the sense we don't need to wrap each method.
@@ -73,15 +85,15 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 	ctx, span := trace.StartSpan(ctx, "CreatePod")
 	defer span.End()
 
-	ctx = addAttributes(ctx, span, namespaceKey, pod.Namespace,nameKey, pod.Name)
-	log.G(ctx).Infof("receive CreatePod %q",pod.Name)
+	ctx = addAttributes(ctx, span, namespaceKey, pod.Namespace, nameKey, pod.Name)
+	log.G(ctx).Infof("receive CreatePod %q", pod.Name)
 
-	key,err:=buildKey(pod)
-	if err!=nil{
+	key, err := buildKey(pod)
+	if err != nil {
 		return err
 	}
 
-	now:=metav1.NewTime(time.Now())
+	now := metav1.NewTime(time.Now())
 	pod.Status = v1.PodStatus{
 		Phase:     v1.PodRunning,
 		HostIP:    "192.168.1.147",
@@ -115,7 +127,38 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 			},
 		})
 	}
-	s.pods[key] = pod
+	//Only run if nodeSelector is virtual-kubelet
+	isUnikernel:=false
+	for _,t:= range pod.Spec.Tolerations {
+		if t.Key=="virtual-kubelet.io/provider" && t.Value=="unikernel" {
+			isUnikernel=true
+		}
+	}
+
+	// ACTUAL START
+	if isUnikernel {
+		commandContext, cancel := context.WithCancel(context.Background())
+
+		cmd := exec.CommandContext(commandContext, "sh", "-c", defaultCommand)
+		go func() {
+
+			log.G(ctx).Infof("starting command: ", cmd)
+			err = cmd.Start()
+			if err != nil {
+				log.G(ctx).Warnf("Couldn't start command ", err)
+			}
+			err = cmd.Wait()
+			if err != nil {
+				log.G(ctx).Warnf("Waiting on cmd:", err)
+			}
+
+
+		}()
+
+		s.pods[key] = &PodWithCancel{pod, cancel, cmd.StdoutPipe}
+	} else{ //kubeproxy
+		s.pods[key]=&PodWithCancel{pod,func(){},nil}
+	}
 	s.notifier(pod)
 	return nil
 }
@@ -134,7 +177,7 @@ func (s *Provider) UpdatePod(ctx context.Context, pod *v1.Pod) error {
 		return err
 	}
 
-	s.pods[key] = pod
+	s.pods[key].pod = pod
 	s.notifier(pod)
 	return nil
 }
@@ -147,22 +190,23 @@ func (s *Provider) DeletePod(ctx context.Context, pod *v1.Pod) error {
 
 	log.G(ctx).Infof("receive DeletePod %q", pod.Name)
 
-	key,err:=buildKey(pod)
-	if err!=nil{
+	key, err := buildKey(pod)
+	if err != nil {
 		return err
 	}
 
-	if _,exists:=s.pods[key]; !exists{
+	if _, exists := s.pods[key]; !exists {
 		return errdefs.NotFound("pod not found")
 	}
-	now:=metav1.Now()
-	delete(s.pods,key)
-	pod.Status.Phase=v1.PodSucceeded
-	pod.Status.Reason="UnikernelProviderDeleted"
+	now := metav1.Now()
+	s.pods[key].cancelFunc() //INFO : cancel the running shell command
+	delete(s.pods, key)
+	pod.Status.Phase = v1.PodSucceeded
+	pod.Status.Reason = "UnikernelProviderDeleted"
 
-	for idx:=range pod.Status.ContainerStatuses{
-		pod.Status.ContainerStatuses[idx].Ready=false
-		pod.Status.ContainerStatuses[idx].State=v1.ContainerState{
+	for idx := range pod.Status.ContainerStatuses {
+		pod.Status.ContainerStatuses[idx].Ready = false
+		pod.Status.ContainerStatuses[idx].State = v1.ContainerState{
 			Terminated: &v1.ContainerStateTerminated{Message: "Unikernel provider terminated container upon deletion",
 				FinishedAt: now,
 				Reason:     "UnikernelProviderPodContainerDeleted",
@@ -185,13 +229,13 @@ func (s *Provider) GetPod(ctx context.Context, namespace, name string) (pod *v1.
 
 	log.G(ctx).Infof("receive GetPod %q", name)
 
-	key, err := buildKeyFromNames(namespace,name)
+	key, err := buildKeyFromNames(namespace, name)
 	if err != nil {
 		return nil, err
 	}
 
-	if pod, ok := s.pods[key]; ok {
-		return pod, nil
+	if podwithCancel, ok := s.pods[key]; ok {
+		return podwithCancel.pod, nil
 	}
 	return nil, errdefs.NotFoundf("pod \"%s/%s\" is not known to the provider", namespace, name)
 }
@@ -219,20 +263,39 @@ func (s *Provider) GetPods(ctx context.Context) ([]*v1.Pod, error) {
 
 	log.G(ctx).Info("receive GetPods")
 	var pods []*v1.Pod
-	for _, pod := range s.pods {
-		pods = append(pods, pod)
+	for _, podWithCancel := range s.pods {
+		pods = append(pods, podWithCancel.pod)
 	}
 	return pods, nil
 }
 
-func (*Provider) GetContainerLogs(ctx context.Context, namespace, podName, containerName string, opts api.ContainerLogOpts) (io.ReadCloser, error) {
+func (s *Provider) GetContainerLogs(ctx context.Context, namespace, name, containerName string, opts api.ContainerLogOpts) (io.ReadCloser, error) {
+	ctx, span := trace.StartSpan(ctx, "GetPod")
+	var err error
+	defer func() {
+		span.SetStatus(err)
+		span.End()
+	}()
+
+	ctx = addAttributes(ctx, span, namespaceKey, namespace, nameKey, name)
+
+	log.G(ctx).Infof("receive GetPod %q", name)
+
+	key, err := buildKeyFromNames(namespace, name)
+	if err != nil {
+		return nil, err
+	}
+
+	if podwithCancel, ok := s.pods[key]; ok {
+		return podwithCancel.output()
+	}
+
 	panic("Get Container Logs")
 }
 
 func (*Provider) RunInContainer(ctx context.Context, namespace, podName, containerName string, cmd []string, attach api.AttachIO) error {
 	panic("RunInContainer")
 }
-
 
 func (*Provider) NodeConditions(ctx context.Context) []v1.NodeCondition {
 	ctx, span := trace.StartSpan(ctx, "NodeConditions")
@@ -285,7 +348,7 @@ func buildKey(pod *v1.Pod) (string, error) {
 		return "", fmt.Errorf("pod name not found")
 	}
 
-	return buildKeyFromNames(pod.ObjectMeta.Namespace,pod.ObjectMeta.Name)
+	return buildKeyFromNames(pod.ObjectMeta.Namespace, pod.ObjectMeta.Name)
 }
 
 func (s *Provider) NotifyPods(ctx context.Context, notifier func(*v1.Pod)) {

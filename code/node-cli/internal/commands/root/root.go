@@ -124,6 +124,7 @@ func runRootCommand(ctx context.Context, s *provider.Store, c *opts.Opts) error 
 		DaemonPort:        int32(c.ListenPort),
 		InternalIP:        os.Getenv("VKUBELET_POD_IP"),
 		KubeClusterDomain: c.KubeClusterDomain,
+		PodCapacity:       c.PodCapacity,
 	}
 
 	pInit := s.Get(c.Provider)

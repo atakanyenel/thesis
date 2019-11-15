@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: simple-uni
+    labels:
+        app: simple-uni
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simple-uni
+    template:
+        metadata:
+            labels:
+                app: simple-uni
+        spec:
+            containers:
+            - name: unikernel
+              image : unikernel-image
+              ports:
+              - containerPort: 4433
+            nodeSelector:
+              type: virtual-kubelet
+            tolerations:
+            - key: "virtual-kubelet.io/provider"
+              operator: "Equal"
+              value: "unikernel"
+              effect: "NoSchedule"

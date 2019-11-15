@@ -3,6 +3,5 @@
 
 ID=rpi-$(uuidgen | tr -d - | tr -d '\n' | tr '[:upper:]' '[:lower:]')
 echo    $ID
-chmod +x /tmp/virtual-kubelet
 
-/tmp/virtual-kubelet --provider unikernel --nodename $ID --kubeconfig /tmp/kubeconfig.yaml
+./virtual-kubelet --nodename $ID --kubeconfig /tmp/kubeconfig.yaml --labels $LABELS --podcapacity 20

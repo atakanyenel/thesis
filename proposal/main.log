@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.27)  3 JUN 2019 22:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.27)  8 NOV 2019 12:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/atakanyenel/Desktop/thesis/proposal/main.tex
+**/Users/atakanyenel/Desktop/thesis/proposal/main
 (/Users/atakanyenel/Desktop/thesis/proposal/main.tex
 LaTeX2e <2018-12-01>
 (/usr/local/texlive/2019/texmf-dist/tex/latex/nag/nag.sty
@@ -130,7 +130,7 @@ Package tocbasic Info: omitting babel extension for `lot'
 \c@table=\count91
 Class scrbook Info: Redefining `\numberline' on input line 6811.
 \bibindent=\dimen102
-) (/Users/atakanyenel/Desktop/thesis/proposal/settings.tex (/usr/local/texlive/2019/texmf-dist/tex/latex/base/inputenc.sty
+) (./settings.tex (/usr/local/texlive/2019/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks15
 \inpenc@posthook=\toks16
@@ -830,15 +830,15 @@ File: pgflibraryplothandlers.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \tikznumberofchildren=\count404
 \tikznumberofcurrentchild=\count405
 \tikz@fig@count=\count406
-
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \pgfmatrixcurrentrow=\count407
 \pgfmatrixcurrentcolumn=\count408
 \pgf@matrix@numberofcolumns=\count409
 )
 \tikz@expandcount=\count410
- (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ))) (/usr/local/texlive/2019/texmf-dist/tex/latex/pgfplots/pgfplots.sty (/usr/local/texlive/2019/texmf-dist/tex/generic/pgfplots/pgfplots.revision.tex)
 Package: pgfplots 2018/03/28 v1.16 Data Visualization (1.16)
@@ -1385,7 +1385,7 @@ Package: supertabular 2004/02/20 v4.1e the supertabular environment
 )) (/usr/local/texlive/2019/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty
 Package: glossary-tree 2019/01/06 v4.42 (NLCT)
 \glstreeindent=\skip124
-)) (/Users/atakanyenel/Desktop/thesis/proposal/pages/glossary.tex))
+)) (./pages/glossary.tex))
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package biblatex Info: Trying to load language 'english'...
@@ -1406,7 +1406,8 @@ Package biblatex Info: Trying to load language 'german'...
 Package biblatex Info: ... file 'german.lbx' found.
  (/usr/local/texlive/2019/texmf-dist/tex/latex/biblatex/lbx/german.lbx
 File: german.lbx 2018/11/02 v3.12 biblatex localization (PK/MW)
-)) (/Users/atakanyenel/Desktop/thesis/proposal/main.aux)
+))
+No file main.aux.
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
@@ -1424,7 +1425,7 @@ LaTeX Font Info:    ... okay on input line 22.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
 LaTeX Font Info:    ... okay on input line 22.
 LaTeX Font Info:    Try loading font information for T1+pplx on input line 22.
- (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/t1pplx.fd
+(/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/t1pplx.fd
 File: t1pplx.fd 2004/09/06 font definitions for T1/pplx.
 )
 Package nag Info: Attempting subfig hack.
@@ -1438,11 +1439,12 @@ Package biblatex Info: Automatic encoding selection.
 \openout3 = `main.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'main.bbl' found.
- (/Users/atakanyenel/Desktop/thesis/proposal/main.bbl)
+Package biblatex Info: ... file 'main.bbl' not found.
+
+No file main.bbl.
 Package biblatex Info: Reference section=0 on input line 22.
 Package biblatex Info: Reference segment=0 on input line 22.
- (/usr/local/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+(/usr/local/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count508
 \scratchdimen=\dimen341
@@ -1507,7 +1509,6 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 22.
 LaTeX Info: Redefining \pageref on input line 22.
 LaTeX Info: Redefining \nameref on input line 22.
- (/Users/atakanyenel/Desktop/thesis/proposal/main.out) (/Users/atakanyenel/Desktop/thesis/proposal/main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
 
@@ -1668,7 +1669,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- (/Users/atakanyenel/Desktop/thesis/proposal/pages/title.tex
+ (./pages/title.tex
 <logos/tum.pdf, id=7, 54.02504pt x 28.452pt>
 File: logos/tum.pdf Graphic file (type pdf)
 <use logos/tum.pdf>
@@ -1686,10 +1687,10 @@ Package pdftex.def Info: logos/faculty.png  used on input line 47.
 
 
 
-{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map} </Users/atakanyenel/Desktop/thesis/proposal/logos/tum.pdf> </Users/atakanyenel/Desktop/thesis/proposal/logos/faculty.png>]) (/Users/atakanyenel/Desktop/thesis/proposal/pages/disclaimer.tex [2
+{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./logos/tum.pdf> <./logos/faculty.png>]) (./pages/disclaimer.tex [2
 
 
-]) (/Users/atakanyenel/Desktop/thesis/proposal/pages/abstract.tex
+]) (./pages/abstract.tex
 chapter without number
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 1.
@@ -1700,7 +1701,6 @@ LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <10.95> not available
 
 ]
 Package tocbasic Info: character protrusion at toc deactivated on input line 40.
- (/Users/atakanyenel/Desktop/thesis/proposal/main.toc)
 \tf@toc=\write6
 \openout6 = `main.toc'.
 
@@ -1709,9 +1709,9 @@ Package tocbasic Info: character protrusion at toc deactivated on input line 40.
 
 
 
-] (/Users/atakanyenel/Desktop/thesis/proposal/chapters/01_introduction.tex
+] (./chapters/01_introduction.tex
 chapter 1.
-<figures/1-123.png, id=111, 944.52875pt x 363.3575pt>
+<figures/1-123.png, id=54, 944.52875pt x 363.3575pt>
 File: figures/1-123.png Graphic file (type png)
 <use figures/1-123.png>
 Package pdftex.def Info: figures/1-123.png  used on input line 8.
@@ -1723,34 +1723,58 @@ Underfull \hbox (badness 1442) in paragraph at lines 9--9
 
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 11.
+
+LaTeX Warning: Citation '7396164' on page 1 undefined on input line 12.
+
+
+LaTeX Warning: Citation 'Hightower:2017:KUR:3175917' on page 1 undefined on input line 14.
+
+
+LaTeX Warning: Citation 'Podolskiy:2017:QCA:3069383.3069390' on page 1 undefined on input line 16.
+
 [1
 
 
 
- </Users/atakanyenel/Desktop/thesis/proposal/figures/1-123.png>]
+ <./figures/1-123.png>]
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <12> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 20.
+
+
+LaTeX Warning: Citation 'iot-sec' on page 2 undefined on input line 30.
+
 LaTeX Font Info:    Font shape `T1/pplx/m/sl' in size <10.95> not available
 (Font)              Font shape `T1/pplx/m/it' tried instead on input line 31.
- [2]
-<figures/Linux-containers-vms-unikernels.png, id=131, 1505.625pt x 625.33624pt>
+[2]
+<figures/Linux-containers-vms-unikernels.png, id=72, 1505.625pt x 625.33624pt>
 File: figures/Linux-containers-vms-unikernels.png Graphic file (type png)
 <use figures/Linux-containers-vms-unikernels.png>
 Package pdftex.def Info: figures/Linux-containers-vms-unikernels.png  used on input line 44.
 (pdftex.def)             Requested size: 358.50612pt x 148.90057pt.
- [3 </Users/atakanyenel/Desktop/thesis/proposal/figures/Linux-containers-vms-unikernels.png>]
-<figures/vk.png, id=141, 451.6875pt x 361.35pt>
+
+
+LaTeX Warning: Citation 'virtual' on page 3 undefined on input line 51.
+
+[3 <./figures/Linux-containers-vms-unikernels.png>]
+<figures/vk.png, id=83, 451.6875pt x 361.35pt>
 File: figures/vk.png Graphic file (type png)
 <use figures/vk.png>
 Package pdftex.def Info: figures/vk.png  used on input line 55.
 (pdftex.def)             Requested size: 358.50612pt x 286.81975pt.
- [4 </Users/atakanyenel/Desktop/thesis/proposal/figures/vk.png (PNG copy)>]
-<figures/arch3.png, id=149, 604.2575pt x 531.9875pt>
+
+
+LaTeX Warning: Citation 'virtual' on page 4 undefined on input line 56.
+
+
+LaTeX Warning: Citation 'virtual' on page 4 undefined on input line 56.
+
+[4 <./figures/vk.png (PNG copy)>]
+<figures/arch3.png, id=90, 604.2575pt x 531.9875pt>
 File: figures/arch3.png Graphic file (type png)
 <use figures/arch3.png>
 Package pdftex.def Info: figures/arch3.png  used on input line 82.
 (pdftex.def)             Requested size: 358.50612pt x 315.6314pt.
-) (/Users/atakanyenel/Desktop/thesis/proposal/chapters/lit_review.tex [5] [6 </Users/atakanyenel/Desktop/thesis/proposal/figures/arch3.png>]
+) (./chapters/lit_review.tex [5] [6 <./figures/arch3.png>]
 chapter 2.
 LaTeX Font Info:    Try loading font information for OMS+pplx on input line 9.
 LaTeX Font Info:    No file OMSpplx.fd. on input line 9.
@@ -1767,52 +1791,65 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-) (/Users/atakanyenel/Desktop/thesis/proposal/chapters/background.tex [7
 
 
-]
+LaTeX Warning: Citation 'madhavapeddy2014unikernels' on page 7 undefined on input line 9.
+
+
+LaTeX Warning: Citation 'levine2016unik' on page 7 undefined on input line 11.
+
+
+LaTeX Warning: Citation '7396164' on page 7 undefined on input line 13.
+
+
+LaTeX Warning: Citation 'nanovms' on page 7 undefined on input line 16.
+
+
+LaTeX Warning: Citation 'qemu' on page 7 undefined on input line 16.
+
+
+LaTeX Warning: Citation 'francia_2016' on page 7 undefined on input line 21.
+
+) (./chapters/background.tex [7
+
+
+] [8]
 chapter 3.
-) (/Users/atakanyenel/Desktop/thesis/proposal/chapters/implementation.tex [8
+) (./chapters/implementation.tex [9
 
 
 ]
 chapter 4.
-) (/Users/atakanyenel/Desktop/thesis/proposal/chapters/04_evaluation.tex [9
+) (./chapters/04_evaluation.tex [10
 
 
 ]
 chapter 5.
-) (/Users/atakanyenel/Desktop/thesis/proposal/chapters/05_conclusion.tex [10
+) (./chapters/05_conclusion.tex [11
 
 
 ]
 chapter 6.
-) [11
+) [12
 
 
 ]
 Package tocbasic Info: character protrusion at lof deactivated on input line 59.
- (/Users/atakanyenel/Desktop/thesis/proposal/main.lof)
 \tf@lof=\write7
 \openout7 = `main.lof'.
-
- [12
-
-
-]
-Package tocbasic Info: character protrusion at lot deactivated on input line 60.
- (/Users/atakanyenel/Desktop/thesis/proposal/main.lot)
-\tf@lot=\write8
-\openout8 = `main.lot'.
 
  [13
 
 
 ]
-chapter without number
-Package microtype Info: Character `029' is missing
-(microtype)             in font `T1/pplx/m/sc/10.95'.
-(microtype)             Ignoring protrusion settings for this character.
+Package tocbasic Info: character protrusion at lot deactivated on input line 60.
+\tf@lot=\write8
+\openout8 = `main.lot'.
+
+
+
+LaTeX Warning: Empty bibliography on input line 62.
+
 No complaints by nag.
 [14
 
@@ -1820,32 +1857,49 @@ No complaints by nag.
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 64.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 64.
- (/Users/atakanyenel/Desktop/thesis/proposal/main.aux)
+ (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 64.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 64.
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                main
+(biblatex)                and rerun LaTeX afterwards.
 
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 62081 strings out of 492609
- 1345635 string characters out of 6129048
- 2052233 words of memory out of 5000000
- 64735 multiletter control sequences out of 15000+600000
- 580375 words of font info for 236 fonts, out of 8000000 for 9000
+ 61948 strings out of 492609
+ 1340156 string characters out of 6129048
+ 2051233 words of memory out of 5000000
+ 64674 multiletter control sequences out of 15000+600000
+ 573895 words of font info for 203 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 81i,8n,136p,9126b,2954s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/fpl/fplrc8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on /Users/atakanyenel/Desktop/thesis/proposal/main.pdf (18 pages, 562718 bytes).
+ 81i,8n,136p,9122b,2277s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on main.pdf (18 pages, 525792 bytes).
 PDF statistics:
- 361 PDF objects out of 1000 (max. 8388607)
- 306 compressed objects within 4 object streams
- 64 named destinations out of 1000 (max. 500000)
- 37659 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 280 PDF objects out of 1000 (max. 8388607)
+ 228 compressed objects within 3 object streams
+ 53 named destinations out of 1000 (max. 500000)
+ 31507 words of extra memory for PDF output out of 35830 (max. 10000000)
 

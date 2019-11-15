@@ -33,6 +33,7 @@ func installFlags(flags *pflag.FlagSet, c *opts.Opts) {
 	flags.StringVar(&c.ProviderConfigPath, "provider-config", c.ProviderConfigPath, "cloud provider configuration file")
 	flags.StringVar(&c.MetricsAddr, "metrics-addr", c.MetricsAddr, "address to listen for metrics/stats requests")
 
+	flags.StringVar(&c.PodCapacity, "podcapacity", c.PodCapacity, "set Max Pod Capacity for Node")
 	flags.StringVar(&c.TaintKey, "taint", c.TaintKey, "Set node taint key")
 	flags.BoolVar(&c.DisableTaint, "disable-taint", c.DisableTaint, "disable the virtual-kubelet node taint")
 	flags.MarkDeprecated("taint", "Taint key should now be configured using the VK_TAINT_KEY environment variable")
