@@ -4,17 +4,18 @@ module Main (KV: Mirage_kv.RO) (Time: Mirage_time.S) = struct
 
   let start kv _time=
 
-    let read_from_file kv =
-        KV.get kv (Mirage_kv.Key.v "secret") >|= function
+    let read_from_file kv filename =
+        KV.get kv (Mirage_kv.Key.v filename) >|= function
             | Error e ->
-                Logs.warn (fun f -> f "Could not compare the secret against a known constant: %a"
+                Logs.warn (fun f -> f "Cannot find the file %a"
                 KV.pp_error e)
             | Ok stored_secret ->
-                Logs.info (fun f -> f "Data -> %a" Format.pp_print_string stored_secret);
+                Logs.info (fun f -> f "Reading from: %s -> %s" filename stored_secret);
                
     in
+        let filename=Key_gen.filename() in
         let rec loop() =
-        read_from_file kv >>= fun()->
+        read_from_file kv filename >>= fun()->
         Time.sleep_ns (Duration.of_sec 2)>>= fun () ->
         loop()
         in 

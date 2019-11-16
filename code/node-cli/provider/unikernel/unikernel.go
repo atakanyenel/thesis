@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os/exec"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/virtual-kubelet/virtual-kubelet/errdefs"
@@ -20,18 +22,17 @@ import (
 )
 
 const (
-	defaultCpuCapacity    = "20"
-	defaultMemoryCapacity = "100Gi"
-	namespaceKey          = "namespace"
-	nameKey               = "name"
-	containerNameKey      = "containerName"
-	defaultCommand        = "ncat -l 8080" //FIXME: we dont need this
+	//defaultCPUCapacity    = "20"
+	//defaultMemoryCapacity = "100Gi"
+	namespaceKey   = "namespace"
+	nameKey        = "name"
+	defaultCommand = "ncat -l 8080" //FIXME: we dont need this
 )
 
 type PodWithCancel struct {
 	pod        *v1.Pod
 	cancelFunc context.CancelFunc
-	output func()(io.ReadCloser,error)
+	output     func() (io.ReadCloser, error)
 }
 
 // LocalProvider implements the virtual-kubelet provider interface and runs locally, pretending to run pods
@@ -128,10 +129,10 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 		})
 	}
 	//Only run if nodeSelector is virtual-kubelet
-	isUnikernel:=false
-	for _,t:= range pod.Spec.Tolerations {
-		if t.Key=="virtual-kubelet.io/provider" && t.Value=="unikernel" {
-			isUnikernel=true
+	isUnikernel := false
+	for _, t := range pod.Spec.Tolerations {
+		if t.Key == "virtual-kubelet.io/provider" && t.Value == "unikernel" {
+			isUnikernel = true
 		}
 	}
 
@@ -146,18 +147,17 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 			err = cmd.Start()
 			if err != nil {
 				log.G(ctx).Warnf("Couldn't start command ", err)
+				pod.Status.Phase = v1.PodFailed
 			}
 			err = cmd.Wait()
 			if err != nil {
 				log.G(ctx).Warnf("Waiting on cmd:", err)
 			}
-
-
 		}()
 
 		s.pods[key] = &PodWithCancel{pod, cancel, cmd.StdoutPipe}
-	} else{ //kubeproxy
-		s.pods[key]=&PodWithCancel{pod,func(){},nil}
+	} else { //kubeproxy
+		s.pods[key] = &PodWithCancel{pod, func() {}, nil}
 	}
 	s.notifier(pod)
 	return nil
@@ -289,17 +289,15 @@ func (s *Provider) GetContainerLogs(ctx context.Context, namespace, name, contai
 	if podwithCancel, ok := s.pods[key]; ok {
 		return podwithCancel.output()
 	}
-
-	panic("Get Container Logs")
+	return ioutil.NopCloser(strings.NewReader("Message")), nil
 }
 
 func (*Provider) RunInContainer(ctx context.Context, namespace, podName, containerName string, cmd []string, attach api.AttachIO) error {
-	panic("RunInContainer")
+	log.G(ctx).Infof("ExecInContainer %q\n", containerName)
+	return nil
 }
 
 func (*Provider) NodeConditions(ctx context.Context) []v1.NodeCondition {
-	ctx, span := trace.StartSpan(ctx, "NodeConditions")
-	defer span.End()
 
 	return []v1.NodeCondition{{
 		Type:               "Ready",
@@ -364,7 +362,7 @@ func (s *Provider) capacity() v1.ResourceList {
 func (s *Provider) ConfigureNode(ctx context.Context, n *v1.Node) {
 	ctx, span := trace.StartSpan(ctx, "mock.ConfigureNode")
 	defer span.End()
-
+	log.G(ctx).Infof("Configuring Node:", n)
 	n.Status.Capacity = s.capacity()
 	n.Status.Allocatable = s.capacity()
 	n.Status.Conditions = s.nodeConditions()

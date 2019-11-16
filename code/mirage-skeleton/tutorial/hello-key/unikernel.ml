@@ -1,6 +1,6 @@
 open Lwt.Infix
 
-module Hello (Time : Mirage_time_lwt.S) = struct
+module Hello (Time : Mirage_time.S) = struct
 
   let start _time =
 
@@ -13,6 +13,6 @@ module Hello (Time : Mirage_time_lwt.S) = struct
         Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
         loop (n-1)
     in
-    loop 4
+    loop 1
 
 end
