@@ -1,14 +1,5 @@
 
-# Writing a provider
+☐ Write background
+    ☐ Virtualization and Unikernels
 
-☐ VK'e deployment resource gönder. @est(10m)
-☐ bu deployment ile bir service yarat. @est(5m)
-
-☐ Docker machine için basit bir provider yaz. @est(2 hours) 
-
-☐ Deployment için service yaratıp bunu docker-machine gönder.
-    ☐ Basit bir nginx açsın, fazlasına gerek yok.
-
-☐ Podlar için service yaratabilir miyiz ?
-
-☐ Docker machinelerden birini sistem dışı durdur , bakalım VK yaratıyor mu tekrar ?
+☐ Write lit review

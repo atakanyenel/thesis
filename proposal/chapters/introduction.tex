@@ -1,0 +1,31 @@
+% !TeX root = ../main.tex
+% Add the above to each chapter to make compiling the PDF easier in some editors.
+
+\chapter{Introduction}\label{chapter:introduction}
+Cloud computing moves towards smaller deliverables. First hardware,then infrastructure, virtual machines, platforms, containers, and functions. While customers are facing with smaller deliverables, the background stays mostly the same. Even if the user only deploys a function, cloud provider creates an OS and deploys a containerized application that runs the given user function. There are at least 3 different abstractions between what user wants to run (their function) and where it runs ( hardware). That's 2 times more than the desired abstraction level. There should be ways to decrease the distance between the hardware and the user application without compromising the flexibility of cloud computing. 
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/1-123.png}
+  \caption{Moving from traditional architecture to virtualization based architecture: https://resources.infosecinstitute.com/11-points-consider-virtualizing-security/} \label{fig:arch}
+\end{figure}
+\section{Motivation}
+Unikernels are special programs that package application code together with a minimal operating system image.\cite{7396164} These special programs can be booted like operating systems and more interestingly , they can also be virtualized like operating systems. That means we can do , in theory, any scheduling operation we normally do on virtual machines with unikernels. In the current world of orchestration technologies , this opens many new areas to apply the principles of deployment, scaling and scheduling.
+
+Kubernetes is an open source system for automating orchestration of containerized applications. \cite{Hightower:2017:KUR:3175917} Kubernetes by default uses Docker as it's runtime. Both it's own components and user defined components are deployed as docker containers. Instead of communicating with virtual machines running on the Kubernetes cluster, user only interacts with the Kubernetes API and it schedules deployments according to rules. 
+
+The docker runtime requires a host operating system to run the docker daemon, thus this requires every node to have a full fledged operating system to run even simple applications. Those operating systems also run background jobs that come with the OS but not required by the running applications. E.g. a usb driver or a sound driver is not vital for a web application but operating system still runs them by default. Because of this drawback, there is a new branch of operating systems, like container linux (previously coreos)\cite{coreos}, where the OS is optimized to run only containers. Unikernel programs package only functions required by the running application in a different configuration. That decreases the scaling time \cite{Podolskiy:2017:QCA:3069383.3069390} of the applications because first no operating system is required to boot up, and second the applications are much more smaller , so they can be downloaded faster.
+
+The proposed effects of a kubernetes cluster running together with a unikernel system can be summarised as follows: 
+
+\subsection{Security}
+ The host OS's are required for the multi-tenant cloud architecture for isolation. Otherwise, vulnerability in one of the containers can compromise all other containers running on the same VM. On the other hand, a vulnerability found in the operating system can also compromise the running applications. Unikernel packages include required parts of the operating system so the attack surface is greatly reduced.
+
+\subsection{Resource Utilization}
+The user never interacts with the underlying operating system that their application is running on. It is only used by cloud provider infrastructure. Nevertheless, the user still pays for the resources used by the operating system. Unikernels also remove the docker daemon abstraction and combine it with VM abstraction.
+
+\subsection{Scaling Time}
+Unikernels have a very small footprint and can run on hardwares only with a hypervisor.
+
+\subsection{IoT Scenarios}
+Unikernels also have role in the IoT world. Their size allows them to be deployed to places with sparse internet connection or low-end devices. Their security story makes them hard targets in the IoT ecosystem, where security practices are still a challenge for developers. \cite{iot-sec} On the other end, the single-address space feature of unikernels is a downside for their usage in IoT applications, because it makes it hard for unikernels to read sensor data from the device itself. Nevertheless, for simple, proof of concept applications, kubernetes can be used to schedule them to IoT devices. Kubernetes comes in handy for such scenarios, because users can label their deployments and K8s (Kubernetes) will deploy them to their respective devices. Multiple unikernel applications can be deployed to the same device with a single deployment through the Kubernetes API. Given that multiple unikernels can run on the same device, a microservice based architecture can also be used for IoT programs where a single unikernel is tasked with only one job and it communicates with other unikernels through a shared medium locally on the device or through Kubernetes services. This allows distributed computing paradigms to be used on IoT devices with k8s orchestration it.
+

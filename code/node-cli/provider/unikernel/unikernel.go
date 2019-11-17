@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os/exec"
 	"runtime"
 	"strconv"
 	"strings"
@@ -24,9 +23,8 @@ import (
 const (
 	//defaultCPUCapacity    = "20"
 	//defaultMemoryCapacity = "100Gi"
-	namespaceKey   = "namespace"
-	nameKey        = "name"
-	defaultCommand = "ncat -l 8080" //FIXME: we dont need this
+	namespaceKey = "namespace"
+	nameKey      = "name"
 )
 
 type PodWithCancel struct {
@@ -138,22 +136,8 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 
 	// ACTUAL START
 	if isUnikernel {
-		commandContext, cancel := context.WithCancel(context.Background())
 
-		cmd := exec.CommandContext(commandContext, "sh", "-c", defaultCommand)
-		go func() {
-
-			log.G(ctx).Infof("starting command: ", cmd)
-			err = cmd.Start()
-			if err != nil {
-				log.G(ctx).Warnf("Couldn't start command ", err)
-				pod.Status.Phase = v1.PodFailed
-			}
-			err = cmd.Wait()
-			if err != nil {
-				log.G(ctx).Warnf("Waiting on cmd:", err)
-			}
-		}()
+		cancel, cmd := Execute(ctx, pod)
 
 		s.pods[key] = &PodWithCancel{pod, cancel, cmd.StdoutPipe}
 	} else { //kubeproxy
