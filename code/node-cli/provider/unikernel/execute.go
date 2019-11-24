@@ -2,6 +2,7 @@ package unikernel
 
 import (
 	"context"
+	"fmt"
 	"github.com/virtual-kubelet/virtual-kubelet/log"
 	v1 "k8s.io/api/core/v1"
 	"os/exec"
@@ -34,9 +35,17 @@ func Execute(ctx context.Context, pod *v1.Pod) (context.CancelFunc, *exec.Cmd) {
 }
 
 func buildCommand(pod *v1.Pod) string {
-	if true || reflect.DeepEqual(pod, &v1.Pod{}) { //Fixme: remove true
+	if reflect.DeepEqual(pod, &v1.Pod{}) { //Fixme: remove true
 		return defaultCommand
 	}
 
-	return "x"
+	container := pod.Spec.Containers[0]
+	envVar := container.Env[0]
+	path, err := exec.LookPath(container.Image)
+	if err != nil {
+		//todo: Download the executable
+		return defaultCommand
+	}
+	command := fmt.Sprintf("%s --%s=%s", path, envVar.Name, envVar.Value)
+	return command
 }

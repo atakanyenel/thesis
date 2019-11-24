@@ -22,6 +22,9 @@ func Test_buildCommand(t *testing.T) {
 	}
 	p := v1.Pod{}
 	p.Name = "custom"
+	p.Spec.Containers = []v1.Container{{Image: "my-unikernel-image", Env: []v1.EnvVar{{Name: "sensor", Value: "Temperature"}}}}
+	k := p.DeepCopy()
+	k.Spec.Containers[0].Image = "ls"
 	tests := []struct {
 		name string
 		args args
@@ -29,12 +32,16 @@ func Test_buildCommand(t *testing.T) {
 	}{
 		{"empty",
 			args{pod: &v1.Pod{}},
-			"ncat -l 8080", // TODO: Add test cases.
+			defaultCommand,
 		},
 		{
 			"custom",
 			args{&p},
-			"x",
+			defaultCommand, //Todo: change to error
+		}, {
+			"inpath",
+			args{k},
+			"/bin/ls --sensor=Temperature",
 		}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

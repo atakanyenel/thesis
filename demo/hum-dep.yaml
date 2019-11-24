@@ -1,25 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-    name: temp-program
+    name: humidity
     labels:
-        app: temp-program
+        app: humidity
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: temp-program
+            app: humidity
     template:
         metadata:
             labels:
-                app: temp-program
+                app: humidity
         spec:
             containers:
             - name: unikernel
-              image : unikernel-image
+              image : echo "sad" > gh
+              env:
+                - name: "sensor"
+                  value: "humidity"
             nodeSelector:
               type: virtual-kubelet
-              sensor: temperature
+              model: raspberry-pi
             tolerations:
             - key: "virtual-kubelet.io/provider"
               operator: "Equal"

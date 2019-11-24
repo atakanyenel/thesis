@@ -1,6 +1,6 @@
 open Mirage
 
-let disk = generic_kv_ro "t"
+let disk = generic_kv_ro "sensors"
 let key =
   let doc = Key.Arg.info ~doc:"Get name of sensor" ["sensor"] in
   Key.(create "filename" Arg.(opt string "secret" doc))

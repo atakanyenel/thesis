@@ -254,16 +254,13 @@ func (s *Provider) GetPods(ctx context.Context) ([]*v1.Pod, error) {
 }
 
 func (s *Provider) GetContainerLogs(ctx context.Context, namespace, name, containerName string, opts api.ContainerLogOpts) (io.ReadCloser, error) {
-	ctx, span := trace.StartSpan(ctx, "GetPod")
+	ctx, span := trace.StartSpan(ctx, "ContainerLogs")
 	var err error
 	defer func() {
 		span.SetStatus(err)
 		span.End()
 	}()
-
-	ctx = addAttributes(ctx, span, namespaceKey, namespace, nameKey, name)
-
-	log.G(ctx).Infof("receive GetPod %q", name)
+	log.G(ctx).Infof("Get Container logs %q", name)
 
 	key, err := buildKeyFromNames(namespace, name)
 	if err != nil {
