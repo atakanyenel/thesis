@@ -9,22 +9,28 @@ Cloud computing is becoming increasingly popular as on-demand provisioning capab
 \subsection{Virtualization}
 The different use cases explained above are only possible because cloud computing provides abstraction by virtualisation. Real hardware in data centers can be abstracted and be broken to smaller units and be distributed to customers as virtual machines. That way every customer can have their own personal computer running on the cloud and their system is fully isolated from other customers. While virtual machines were the defacto unit in cloud computing for many years, now there is a new technology called \textit{containerisation}. Contaniers allow applications to be packed with their dependencies, and those application can run on the same host OS on top of a container engine. That allows for better utilized servers and less dependency from the underlying hardware. It comes with a cost though. Containers add another layer of abstraction on the stack thus they have a delay. 
 
-This abstraction is possible with hypervisor technologies such as Xen. Controlled by software APIs, hypervisors boot self-contained computers on demand, and can run applications as if they were running on physical hosts. This is called \textit{server consolidation} and it has been a great way to reduce under-utilized hardware.
+This abstraction is possible with hypervisor technologies such as Xen. Controlled by software APIs, hypervisors boot self-contained computers on demand, and can run applications as if they were running on physical hosts. This is called \textit{server consolidation} and it has been a great way to reduce under-utilized hardware. 
 
+\iffalse
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.4\textwidth]{figures/Linux-containers-vms-unikernels.png}
+  \caption{Different virtualization techniques: https://nordicapis.com/introduction-to-unikernels/} \label{fig:virt}
+\end{figure}
+\fi
 \section{Unikernels}
-Unikernels \cite{library-operating-system} are specialised machine images compiled from high-level languages. Those machine images can run directly on the hypervisor or on the bare metal. 
+Unikernels \cite{library-operating-system} \cite{madhavapeddy2014unikernels} are specialised machine images compiled from high-level languages. Those machine images can run directly on the hypervisor or on the bare metal. First examples of unikernels can be seen from the late 1990's from the projects like Exodus\cite{exokernel} and Nemesis \cite{nemesis}. In a unikernel project, the developer selects libraries from a repository where the OS functionalities are implemented. In most cases, these libraries are also implemented in the high-level language that the project is implemented. Once the required libraries for the project are selected, whole codebase is compiled with configuration code for the target system. The resulting artifact has the modular stack architecture similar to figure \ref{fig:unikernel-arch} and is a single OS image. This OS image can than be distributed similar to conventional OS images and be booted directly by hypervisor or directly on the hardware. They can be uploaded to cloud systems like OpenStack \cite{openstack} to be booted at will or can be distributed to smaller devices, which is the purpose of this project.
+
 \begin{figure}[htpb]
   \
-  \includegraphics[height=0.3\textwidth]{figures/Contrasting-software-layers-in-existing-VM-appliances-vs-unikernels-standalone-kernel_W640.jpg} 
+  \includegraphics[height=0.3\textwidth]{figures/Contrasting-software-layers-in-existing-VM-appliances-vs-unikernels-standalone-kernel_W640.jpg}
   \caption{ Contrasting software layers in existing VM appliances vs. unikernel’s standalone kernel compilation approach. \cite{library-operating-system}} \label{fig:unikernel-arch}
 \end{figure}
 % Todo: write more
 
-\begin{figure}[htpb]
-    \centering
-    \includegraphics[width=0.4\textwidth]{figures/Linux-containers-vms-unikernels.png}
-    \caption{Different virtualization techniques: https://nordicapis.com/introduction-to-unikernels/} \label{fig:virt}
-  \end{figure}
+Unikernels are currently not production ready. \cite{unfit-for-production} They lack the proper tooling around them and they don't have a "killer-app" for now. Nevertheless there is a growing interest around them with startups trying to bring the technology to general usage. One of those start-ups is Unikernel Systems, based in Cambridge, UK. Unikernel Systems was acquired by Docker in 2016 \cite{docker-acquisiton}. The company consists mostly of developers from the Xen Project. Unikernel technology is more low-level than what Docker provides with it's containers and they stated that they want to use low-level programming expertise of the unikernel team to enchance the power of Docker. All these connections between those three components, namely Docker, Unikernel System and ex-Xen developers show us the big picture of cloud techology.
+
+The advantages and drawbacks of using unikernels is explained more in the implementation part of the this thesis with encountered problems and solutions.
 
 \section{Orchestration}
 

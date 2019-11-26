@@ -82,10 +82,27 @@ month={Dec},}
  journal={nextplatform.com},
  year={2015},
  month={June},
- author={Timothy Prickett Morgan}
+ author={ Morgan, Timothy Prickett}
  }
 
- @article{cloud-use-cases,
+@misc{unfit-for-production,
+title={Unikernels are unfit for production},
+year={2016},
+month={01},
+author={Cantrill, Bryan},
+url={https://www.joyent.com/blog/unikernels-are-unfit-for-production},
+journal="joyent.com"
+}
+
+
+@misc{docker-acquisiton,
+url="https://www.docker.com/docker-news-and-press/docker-acquires-unikernel-systems-extend-breadth-docker-platform",
+year="2016",
+month="01",
+journal="docker.com"
+}
+
+@article{cloud-use-cases,
 author = {Milenkoski, Aleksandar and Iosup, Alexandru and Kounev, Samuel and Sachs, Kai and Rygielski, Piotr and Ding, Jason and Cirne, Walfredo and Rosenberg, Florian},
 year = {2013},
 month = {05},
@@ -100,4 +117,45 @@ file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Download
 isbn = {9781450318709},
 keywords = {D1 [Programming Techniques],Organization and Design,Performance},
 title = {{Unikernels: Library Operating Systems for the Cloud}}
+}
+
+@article{network-in-mirage,
+abstract = {MirageOS is a modern library operating system written in the functional, memory-safe OCaml programming language. Users of MirageOS write application code in OCaml and link against various libraries provided by Mi-rageOS. These include a complete network stack (Ethernet, IP, TCP, UDP, TLS) written in pure OCaml as well as a number of backends for receiving and transmitting packets. We introduce some of MirageOS' techniques for handling raw memory. We detail two of the various networking backends offered by MirageOS as well as a library used for safe abstraction over raw memory. We additionally suggest possible performance improvements in MirageOS. Finally we compare MirageOS with ixy.ml, a small userspace driver for ixgbe-compatible NICs written entirely in OCaml.},
+author = {Bonk, Fabian and Emmerich, Paul},
+doi = {10.2313/NET-2019-06-1_10},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Bonk, Emmerich - Unknown - Networking in MirageOS.pdf:pdf},
+keywords = {Index Terms-library operating system,OCaml,networking,unikernel},
+title = {{Networking in MirageOS}},
+url = {https://ocaml.org/}
+}
+
+
+@article{exokernel,
+abstract = {Traditional operating systems limit the performance, flexibility, and functionality of applications by fixing the interface and implementation of operating system abstractions such as interprocess communication and virtual memory. The exokernel operating system architecture addresses this problem by providing application-level management of physical resources. In the exokernel architecture, a small kernel securely exports all hardware resources through a lowlevel interface to untrusted library...},
+author = {Engler, D R and Kaaspoek, M F and O'Toole, J},
+doi = {http://doi.acm.org/10.1145/224056.224076},
+file = {:Users/atakanyenel/Desktop/thesis/literature/papers/2-engler95exokernel.pdf:pdf},
+isbn = {0-89791-715-4},
+journal = {Proceedings of the 15th ACM Symposium on Operating System Principles},
+number = {December},
+pages = {256--266},
+title = {{ExoKernel: An Operating System Architecture for Application Level Resource Management}},
+volume = {1},
+year = {1995}
+}
+
+@techreport{nemesis,
+abstract = {Support for multimedia applications by general purpose computing platforms has been the subject of considerable research. Much of this work is based on an evolutionary strategy in which small changes to existing systems are made. The approach adopted here is to start ab initio with no backward compatibility constraints. This leads to a novel structure for an operating system. The structure aims to decouple applications from one another and to provide multiplexing of all resources, not just the CPU, at a low level. The motivation for this structure, a design based on the structure, and its implementation on a number of hardware platforms is described.},
+author = {Leslie, Ian and Mcauley, Derek and Black, Richard and Roscoe, Timothy and Barham, Paul and Evers, David and Fairbairns, Robin and Hyden, Eoin},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Leslie et al. - Unknown - The Design and Implementation of an Operating System to Support Distributed Multimedia Applications.pdf:pdf},
+title = {{The Design and Implementation of an Operating System to Support Distributed Multimedia Applications}}
+}
+
+
+
+@techreport{openstack,
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Unknown - Unknown - OpenStack An Overview.pdf:pdf},
+title = {{OpenStack: An Overview}},
+url = {www.openstack.org/start/},
+year={2014}
 }
