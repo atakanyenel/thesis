@@ -54,6 +54,8 @@ func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP st
 
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
+	cpu:=strconv.Itoa(runtime.NumCPU())
+	memory:=strconv.Itoa(int(m.Sys/1024/1024)) + "Mi" //Todo: Mi yanlış olabilir
 	provider := Provider{
 		nodeName:           nodeName,
 		operatingSystem:    operatingSystem,
@@ -61,8 +63,8 @@ func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP st
 		daemonEndpointPort: daemonEndpointPort,
 		pods:               make(map[string]*PodWithCancel),
 		config: MockConfig{
-			CPU:    strconv.Itoa(runtime.NumCPU()),
-			Memory: strconv.Itoa(int(m.Sys/1024/1024)) + "Mi", //Todo: Mi yanlış olabilir
+			CPU:   cpu ,
+			Memory: memory,
 			Pods:   PodCapacity,
 		},
 		/*config:MockConfig{

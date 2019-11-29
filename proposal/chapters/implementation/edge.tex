@@ -1,0 +1,16 @@
+
+\section{Setting up edge environments}
+\subsection{Type-2 Hypervisor}
+\subsection{Type-1 Hypervisor}
+\subsection{IoT Devices}
+
+
+
+
+\iffalse
+Unikernels can be booted only in systems that either have a type-1 or a type-2 hypervisor. While they can be booted directly from BIOS on hardware, this does not give the flexibility required by cloud computing standards so a hypervisor is required to boot up and remove programs to achieve the desired state by the system.
+
+Type-2 hypervisors run on a host operating system and they are easier to work with. If they provide an API, the host operating system can be used to develop programs to communicate with them. Given an example , a linux machine with virtualbox installed can boot up unikernel programs with terminal commands and no GUI is required. Then ,this terminal commands can be automated with a program that communicates with the internet.
+
+For type-1 hypervisors, the task at hand is harder. There is no operating system involved and one has to work mostly with the API provided by the hypervisor itself. This calls for a program that either can be deployed to the hypervisor as a unikernel itself or for a virtual machine that can talk with the underlying hypervisor.
+\fi
