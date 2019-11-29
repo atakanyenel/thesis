@@ -152,11 +152,18 @@ title = {{The Design and Implementation of an Operating System to Support Distri
 }
 
 @techreport{openstack,
-file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Unknown - Unknown - OpenStack An Overview.pdf:pdf},
-title = {{OpenStack: An Overview}},
-url = {www.openstack.org/start/},
-year={2014}
+abstract = {Cloud computing is a quite new concept for which the resources are virtualized, dynamically extended and provided as a service on the Internet. In this paper, we present a comparative study between some of the IaaS (Infrastructure as a Service) commonly used to select the best suited one for deployment and research development in the field of cloud computing. The aim is to provide the computer industry with the opportunity to build a hosting architecture, massively scalable which is completely open source, while overcoming the constraints and the use of proprietary technologies. Then, we present the solution OpenStack retained by the comparative study. We discuss in detail its functional and architectural system. We finish by a discussion of the motivation of our choice of the IaaS solution.},
+author = {Sefraoui, Omar and Aissaoui, Mohammed and Eleuldj, Mohsine},
+booktitle = {International Journal of Computer Applications},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Sefraoui, Aissaoui, Eleuldj - 2012 - OpenStack Toward an Open-Source Solution for Cloud Computing(2).pdf:pdf},
+keywords = {Eucalyptus,General Terms: OpenStack,IAAS,IaaS Keywords: Opencloud,OpenNebula,OpenStack,Scalableifx,Virtualization},
+number = {03},
+pages = {975--8887},
+title = {{OpenStack: Toward an Open-Source Solution for Cloud Computing}},
+volume = {55},
+year = {2012}
 }
+
 
 @techreport{diamante,
 abstract = {grow rapidly in 2019, transforming how applications are created, deployed, and managed. Enterprises are turning to containers to increase efficiency, facilitate application portability, and enable multi-cloud IT operations. Last year, in our inaugural Container Adoption Benchmark Survey we found that enterprises were still early in the container journey, but already demonstrating a strong preference for open source in the container stack, resulting in a strong trend from proprietary VM-based solutions to containers. This year we once again surveyed more than 500 IT leaders, and the results reinforce last year's findings, providing strong evidence that container technology is quickly entering the enterprise mainstream. The use of bare-metal containers is increasing as a way to reduce infrastructure complexity, deliver the full performance and efficiency benefits of the technology, and reduce costs by eliminating VMware licensing. Enterprises are focusing on a range of container use cases beyond cloud-native applications as they explore containerizing legacy applications and add support for big data and other workloads. Key Findings: n Cloud-native applications remain the number one container use case for 2019, according to 33 percent of respondents. n The database use case has moved up to a close second, chosen by 32 percent of respondents. n Respondents are running containers in multiple environments: on premises (45 percent), private cloud (29 percent), and public cloud (up to 37 percent). n Almost 56 percent who run containers on bare metal do so for higher performance; 36 percent choose bare metal to reduce costs. n Management complexity is the biggest bare-metal adoption challenge (36 percent) followed by time-to-deploy and keeping software up to date (both 22 percent). n For enterprises investing {\$}100k or more on containers, seventy percent are entering production in 2019, and more than one-third (34 percent) are running containers on bare metal. n For enterprises investing {\$}100k or more on containers, 43 percent plan to move some workloads to containers, while 26 percent intend to move most workloads to containers. EXECUTIVE SUMMARY},
@@ -189,4 +196,73 @@ urldate = {2019-11-26}
 title = {{Envoy}},
 url = {https://www.envoyproxy.io/},
 urldate = {2019-11-26}
+}
+
+@inproceedings{unikernels-improve,
+abstract = {Cloud computing has been a great enabler for both the Internet of Things and Big Data. However, as with all new computing developments, development of the technology is usually much faster than consideration for, and development of, solutions for security and privacy. In a previous paper, we proposed that a unikernel solution could be used to improve security and privacy in a cloud scenario. In this paper, we outline how we might apply this approach to the Internet of Things, which can demonstrate an improvement over existing approaches.},
+author = {Duncan, Bob and Happe, Andreas and Bratterud, Alfred},
+booktitle = {Proceedings - 9th IEEE/ACM International Conference on Utility and Cloud Computing, UCC 2016},
+doi = {10.1145/2996890.3007875},
+file = {:Users/atakanyenel/Desktop/thesis/literature/papers/2-unikernels improve.pdf:pdf},
+isbn = {9781450346160},
+keywords = {Attack surface,Cloud security and privacy,Compliance},
+month = {dec},
+pages = {292--297},
+publisher = {Association for Computing Machinery, Inc},
+title = {{Enterprise IoT security and scalability: How unikernels can improve the status quo}},
+year = {2016}
+}
+
+@inproceedings{kubeedge,
+abstract = {In this paper, we introduce an infrastructure in edge computing environment, KubeEdge, to extend cloud capabilities to the edge. In the new form of cloud architecture, Cloud consists of computing resources both at centralized data centers and at distributed edges. KubeEdge infrastructure connects and coordinates two computing environments for applications leveraging both computing resources to achieve better performance and user experience. Technically, KubeEdge provides the network protocol infrastructure and the same runtime environment on the edge as in the cloud, which allows the seamless communication of applications with components running on edge nodes as well as cloud servers. It also allows the existing cloud services and cloud development model to be adopted at edge. Based on Kubernetes [1], KubeEdge architecture includes a network protocol stack called KubeBus, a distributed metadata store and synchronization service, and a lightweight agent (EdgeCore) for the edge. KubeBus is designed to have its own implementation of OSI network protocol layers, which connects servers at edge and VMs in the cloud as one virtual network. KubeBus provides a unified multitenant communication infrastructure with fault tolerance and high availability. The distributed metadata store and sync service is designed to support the offline scenario when edge nodes are not connected to the cloud. EdgeController component in KubeEdge architecture is a controller plugin for Kubernetes [1] to manage remote edge nodes and cloud VMs as one logical cluster, which enables KubeEdge to schedule, deploy and manage container applications across edge and cloud with the same API.},
+author = {Xiong, Ying and Sun, Yulin and Xing, Li and Huang, Ying},
+booktitle = {Proceedings - 2018 3rd ACM/IEEE Symposium on Edge Computing, SEC 2018},
+doi = {10.1109/SEC.2018.00048},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Xiong et al. - 2018 - Extend cloud to edge with KubeEdge.pdf:pdf},
+isbn = {9781538694459},
+keywords = {Cloud computing,Data synchronization,Distributed systems,Edge computing,Network protocol},
+month = {dec},
+pages = {373--377},
+publisher = {Institute of Electrical and Electronics Engineers Inc.},
+title = {{Extend cloud to edge with KubeEdge}},
+year = {2018}
+}
+
+
+@inproceedings{fledge,
+abstract = {In recent years, containers have quickly gained popularity in the cloud, mostly thanks to their scalable, ethereal and isolated nature. Simultaneously, edge devices have become powerful enough to run con-tainerized microservices, while remaining small and low-powered. These evolutions have triggered a wave of research into container placement strategies on clusters including edge devices, leading to concepts such as fog computing. These container placement strategies can optimize work-load placement across cloud and edge clusters, but current container orchestrators are very resource intensive and are not designed to run on edge devices. This paper presents FLEDGE as a Kubernetes compatible edge container orchestrator. A number of aspects of how to achieve low-resource container orchestration are examined, for example the choice of container runtime and how to implement container networking. Finally, a number of evaluations are performed, comparing FLEDGE to K3S and Kubernetes, to show that it is a viable alternative to existing container orchestrators.},
+author = {Goethals, Tom and Volckaert, Bruno and {De Turck}, Filip},
+booktitle = {9th IEEE International Symposium on Cloud and Service Computing},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Goethals - Unknown - FLEDGE Kubernetes Compatible Container Orchestration on Low-resource Edge Devices.pdf:pdf},
+title = {{FLEDGE: Kubernetes Compatible Container Orchestration on Low-resource Edge Devices}},
+year = {2019}
+}
+
+@misc{k3s,
+title = {{K3s: Lightweight Kubernetes}},
+url = {https://k3s.io/},
+urldate = {2019-11-29}
+}
+@article{fades,
+abstract = {{\textcopyright} 2017 Association for Computing Machinery. FADES is an edge offloading architecture that empowers us to run compact, single purpose tasks at the edge of the network to support a variety of IoT and cloud services. The design principle behind FADES is to efficiently exploit the resources of constrained edge devices through fine-grained computation offloading. FADES takes advantage of MirageOS unikernels to isolate and embed application logic in concise Xen-bootable images.We have implemented FADES and evaluated the system performance under various hardware and network conditions. Our results show that FADES can effectively strike a balance between running complex applications in the cloud and simple operations at the edge. As a solid step to enable finegrained edge offloading, our experiments also reveal the limitation of existing IoT hardware and virtualization platforms, which shed light on future research to bring unikernel into IoT domain.},
+author = {Cozzolino, Vittorio and Ding, Aaron Yi},
+doi = {10.475/123},
+file = {:Users/atakanyenel/Desktop/thesis/literature/papers/fades-pre-camera.pdf:pdf},
+isbn = {9781450350587},
+journal = {Proceedings of HotConNet '17, Los Angeles, CA, USA,},
+keywords = {2017,aaron yi ding,acm reference format,and j{\"{o}}rg ott,edge computing,fades,fine-grained,iot,virtualization,vittorio cozzolino},
+pages = {36--41},
+title = {{FADES: Fine-Grained Edge Offloading with Unikernels}},
+year = {2017}
+}
+@misc{microk8s,
+title = {{MicroK8s - Fast, Light, Upstream Developer Kubernetes}},
+url = {https://microk8s.io/},
+urldate = {2019-11-29}
+}
+
+@misc{cilium,
+title = {{Cilium}},
+url = {https://cilium.io/},
+urldate = {2019-11-29}
 }

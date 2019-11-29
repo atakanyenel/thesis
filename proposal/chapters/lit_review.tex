@@ -19,3 +19,12 @@ The practical part of unikernel development is mostly running through open sourc
 Some of these projects also include Kubernetes as their deployment targets but they do it by including a host OS, thus does not use the full potential of unikernels.
 
 There are companies working on development of unikernels. The most prominent one is Docker, which is the defacto standart for containerised applications. \cite{francia_2016} Unikernels was also subject to CNCF conferences in the past.
+
+
+There are open source projects that leverage Kubernetes functionality for IoT devices. Kubeedge \cite{kubeedge} is a technology from Huawei , that bridges the communication between edge devices and K8S cloud. They are still using Docker when running applications on the edge device. Their future work mentions an intelligent scheduling based on data locality, network status and computing power, which this thesis aims to solve to an extend using kubernetes labels.
+
+Another project that is similar to this thesis is the FLEDGE project.\cite{fledge} FLEDGE also uses virtual-kubelet technology to communicate between edge devices and the kubernetes cluster. An important difference is they are deploying virtual-kubelet instance per edge device to the cloud and use it as a proxy when communicationg with the edge device. It's a nice mixin to use both cloud-native technologies with IoT technologies but as they state in their future work, it causes a new pod to be created for every edge device, which affects the scalability of the solution.
+
+Another mature solution is k3s \cite{k3s}, a lightweight kubernetes distribution designed for edge devices. K3S is stripped version of kubernetes with non-default options removed, and some options hardcoded into the system. While K3S is compatible wth the current kubernetes standards as they are using the same codebase, it sets up it's own master node and can not be used with a running kubernetes cluster.
+
+Another similar project is FADES \cite{fades} project by Munich Techical University. They are using MirageOS unikernels but their deployment environment is specialised hardware devices, namely Intel NUC and Cubietruck. They also have their own orchestrator in Python. While it's better customised for their own scenarios, it lacks the battle-tested reliability of Kubernetes. Nevertheless, it's a proof of growing interest for orchestrated unikernel deployment on edge devices.

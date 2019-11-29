@@ -16,7 +16,7 @@ spec:
         spec:
             containers:
             - name: unikernel
-              image : echo "sad" > gh
+              image : main.native
               env:
                 - name: "sensor"
                   value: "humidity"
