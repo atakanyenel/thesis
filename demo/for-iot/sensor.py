@@ -2,7 +2,8 @@ import random
 import time
 import threading
 import logging
-FILES = ["temperature", "humidity", "radar"]
+import os
+FILES = ["sensors/temperature", "sensors/humidity", "sensors/radar"]
 FORMAT = "%(asctime)s: %(message)s"
 
 
@@ -20,6 +21,8 @@ def thread_function(name):
         data=new_data
 
 if __name__ == "__main__":
+    if not os.path.exists('sensors'):
+        os.makedirs('sensors')
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")

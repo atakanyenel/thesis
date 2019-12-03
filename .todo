@@ -1,8 +1,8 @@
 
-☐ Write background
-    ☐ Virtualization and Unikernels
+[x] Write background
+    [x] Virtualization and Unikernels
 
-☐ Write lit review
+[x] Write lit review
 
-Performance interference
-Kubernetes Quotes -> Performance isolation
+[-] Performance interference
+[-] Kubernetes Quotes -> Performance isolation

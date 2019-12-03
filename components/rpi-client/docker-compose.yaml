@@ -3,6 +3,8 @@ services:
   rpi-temp:
     build: .
     image: atakanyenel/vk-client
+    deploy:
+      replicas: 2
     volumes:
         - ${PWD}:/tmp
     environment:

@@ -1,16 +1,24 @@
 
 \section{Setting up edge environments}
+Unikernels, similar to traditional OSes can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. An example project is called Jitsu\cite{jitsu}, Just in time sumoning of unikernels. In that project, for every DNS request they are starting a unikernel to respond to that request. The working principle can be seen in \ref{fig:jitsu}.
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/jitsu.jpg}
+    \caption{Jitsu \cite{jitsu}} \label{fig:jitsu}
+  \end{figure}
+
+This scenario can also be achieved in Kubernetes. In kubernetes, incoming requests to the cluster are controlled with an API object called \textit{ingress}, and a custom DNS service with different rules can start up a unikernel (or any other process) to respond to the request. Jitsu project uses Xen and libvirt to manage their hypervisor.
+
+This thesis was tested on Xen hypervisor and a unikernel specific execution environment called Solo5 \cite{solo5}. Used IoT device is Raspberry Pi and because it's currently not officially supported to install hypervisors on Raspberry Pi's, unikernels compiled for unix were used instead. This case also shows that, with this implementation it's actually possible to run any arbitrary binary on raspberry pi without any further modification.
+
 \subsection{Type-2 Hypervisor}
+It's possible to run unikernels on type-2 hypervisors, like virtualbox. This thesis did not aim to run them on type-2 hypervisors but there are project that do that , so it's possible by updating the provider methods, thus it's worthy to be mentioned for future work.
+
+% todo:
 \subsection{Type-1 Hypervisor}
+The unikernel technology used by this project, MirageOS, is being developed by ex XEN developers. Naturally it has official support for Xen and all their examples can be compiled to Xen. 
 \subsection{IoT Devices}
 
+Raspberry Pi 3 has 1GB, 900 Mhz RAM and 4*ARM Cortex-A53,1.2 GHz CPU. Because it uses ARM, x64 hypervisors can not be ported easily. There is also no motivation for it, since Raspberry Pi's are not powerful machines and virtualisation is a resource hungry process. Nevertheless, there are projects for lightweight virtualization on Raspberry Pi.
 
-
-
-\iffalse
-Unikernels can be booted only in systems that either have a type-1 or a type-2 hypervisor. While they can be booted directly from BIOS on hardware, this does not give the flexibility required by cloud computing standards so a hypervisor is required to boot up and remove programs to achieve the desired state by the system.
-
-Type-2 hypervisors run on a host operating system and they are easier to work with. If they provide an API, the host operating system can be used to develop programs to communicate with them. Given an example , a linux machine with virtualbox installed can boot up unikernel programs with terminal commands and no GUI is required. Then ,this terminal commands can be automated with a program that communicates with the internet.
-
-For type-1 hypervisors, the task at hand is harder. There is no operating system involved and one has to work mostly with the API provided by the hypervisor itself. This calls for a program that either can be deployed to the hypervisor as a unikernel itself or for a virtual machine that can talk with the underlying hypervisor.
-\fi
