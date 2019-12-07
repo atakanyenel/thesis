@@ -1,10 +1,16 @@
 \section{Virtual Kubelet}
 Virtual Kubelet\cite{virtual} is an open source project by Microsoft that provides a programmable kubelet API interface to developers. It was developed to run workloads on Container as a service providers, such as Azure Container Instances. When started with a valid kubeconfig file, virtual kubelet registers itself as a node to the Kubernetes Cluster and executes commands given from the cluster. It has a programmable backend, called provider, through a Golang Interface for developers to write custom deployment logic to their own infrastructure. In Azure's case, using Virtual-Kubelet, they are registering their ACI service as a node with almost unlimited capacity, as ACI, in theory, can scale up number of containers without any restriction from the underlying hardware. There are also third-party providers, e.g. AWS fargate or Nomad, to offload workload to their respective container services. Microsoft also uses this techology to connect it's Kubernetes service with it's Azure IoT Hub service.\cite{Chandra2019} They are deploying docker containers to their edge devices through the kubernetes API. Virtual kubelet is started with the following command:
+\begin{code}[htpb]
+  \centering
+  \begin{tabular}{c}
+    \begin{lstlisting}[language=python]
+      ./virtual-kubelet --nodename $ID --provider unikernel \\
+       --kubeconfig kubeconfig.yaml --labels $LABELS
+      \end{lstlisting}
+\end{tabular}
+\caption{Command to run Virtual Kubelet}\label{lst:vkcommand}
+\end{code}
 
-\begin{lstlisting}[language=python,caption={Command to run Virtual Kubelet},captionpos={b},label={lst:vkcommand}]
-./virtual-kubelet --nodename $ID --provider unikernel \\
- --kubeconfig kubeconfig.yaml --labels $LABELS
-\end{lstlisting}
 
 In the command \textit{\$ID} is a random generated string to give as node name. As virtual-kubelet can work with different providers, name of the provider is also given as argument. The providers written for this thesis is called \textbf{unikernel} and will be explained more in detail. \textit{\$LABELS} are to set kubernetes node resource labels and it plays a big role on identifying different edge devices, thus multiple labels can be given.
 
@@ -20,7 +26,7 @@ The working principle of virtual kubelet is shown in figure \ref{fig:vk}. As vir
 
 Another option is to run those containers in a different virtual machine , which is not a node of the target kubernetes cluster. A valid kubeconfig can be used among running containers through a shared volume and a tool like docker-compose can be used to scale them. In this thesis, this approach was used for testing. A chunk of the docker-compose file can be seen in \ref{fig:docker-compose}.
 
-\begin{figure}[htpb]
+\begin{code}[htpb]
   \centering
   \begin{tabular}{c}
   \begin{lstlisting}[language=ruby]
@@ -37,7 +43,7 @@ Another option is to run those containers in a different virtual machine , which
 \end{lstlisting}
 \end{tabular}
 \caption{A virtual node deployment}\label{fig:docker-compose}
-\end{figure}
+\end{code}
 
 
 A valid kubeconfig file can be found in the same directory as the docker-compose file and started containers use it to register themselves. When started, this configuration adds two additional nodes to the cluster with the label \textit{sensor=temperature}.
@@ -56,7 +62,7 @@ Current open source distribution of virtual-kubelet does not support giving labe
 
 The first job done by the provider is to register the resources to the kubernetes master as available. In the following code \ref{fig:runtime}, the provider constructor reads CPU and memory data from the device where virtual-kubelet is deployed. Kubernetes API uses standartised metrics for measuring CPU and memory, so read values are cast to string before being sent. There is also a third value called \textit{podCapacity}, which restricts the maximum number of pods that can be run on the device , independent from whether the device has enough resources or not.
 % Golang Code block start
-\begin{figure}[htpb]
+\begin{code}[htpb]
   \centering
   \begin{tabular}{c}
   \begin{lstlisting}[language=python]
@@ -70,14 +76,14 @@ memory := strconv.Itoa(int(m.Sys/1024/1024)) + "Mi"
 \end{lstlisting}
 \end{tabular}
 \caption{Getting Resource data}\label{fig:runtime}
-\end{figure}
+\end{code}
 % Golang Code block end
 % Todo  -> talk about the execute code
 
 \subsection{Communication between cluster and device}
 Once a virtual node is deployed to the cluster, it is crucial to restrict it to deployments it's supposed to handle. To achieve this, deployments regarding the virtaul kubelet are tagged with a special label. First the \textit{nodeSelector} array of the specification get the item \textit{type: virtual-kubelet}. With that annotation , no real node tries to handle the deployment. The second annotation is to get the correct provider. In theory, a cluster can have multiple virtual nodes with different providers suited for different workloads and a deployment has to go to it's respective provider. Adding a \textit{tolerations} flag allows to select a particular provider. A chunk of an example deployment file can be seen in \ref{fig:deployment}.
 
-\begin{figure}[htpb]
+\begin{code}[htpb]
   \centering
   \begin{tabular}{c}
   \begin{lstlisting}[language=python]
@@ -92,7 +98,7 @@ Once a virtual node is deployed to the cluster, it is crucial to restrict it to 
 \end{lstlisting}
 \end{tabular}
 \caption{Node specific Deployment}\label{fig:deployment}
-\end{figure}
+\end{code}
 \textit{NoSchedule} effect protects real deployments from being handled by a virtual node. A pod without the exact tolerations will not be deployed to the node. It's easy to see that all that annotations work both ways. To isolate normal docker based deployments from virtual nodes and to isolate unikernel based deployments from real nodes.
 
 Another approach of working with unikernel specific deployments is to extend the Kubernetes API by defining a \textit{custom resource}. Custom resources are more handcrafted, because they only contain information given by the developer. Stated by the kubernetes API, "When you combine a custom resource with a custom controller, custom resources provide a true declarative API." Kubernetes has an Operator Pattern to extend the API in a more official way. In the first development iteration of the Operator Pattern, it turned out that the custom controller would only read data from the \textit{unikernel custom resource} and create a deployment configuration with the keys explained above and the information from the custom resource. Then, that deployment would be handled exactly the same, so it only saves the user from adding above mentioned keys but increases the complexity of the cluster greatly by adding a custom resource definition and a controller.
@@ -100,7 +106,7 @@ Another approach of working with unikernel specific deployments is to extend the
 \subsection{Communication between kubernetes and hypervisor}
 Once a unikernel specific deployment reaches virtual-kubelet,all of it's data can be read. Every method that handles the pod lifecycle has a pod object as argument. An example signature can be seen in the \ref{fig:signature}. The usability of this increases greatly when one realises that , this pod related information is not read or processed anywhere else other than the running node. It allows to modify values to specific keys without comprimising integrity of the system. In a valid pod deploymnet, the \textit{image} key is used to specify the name of the docker container that deployment runs. If that container is not found in the given registry, kubernetes returns an error saying that deployment failed and image couldn't be found. In the unikernel deployment, the image key is used to specify the name of the unikernel binary to run. That name can be handled in many ways. In earlier developments, docker containers simulating edge devices where created with multiple example unikernel binaries, and there were only couple of options to give to \textit{image} key. Now a unikernel registry exists behind a FTP server and given values are searched there first, if they don't exist on the edge device. This approach is similar to one used by docker based deployments.
 
-\begin{figure}[htpb]
+\begin{code}[htpb]
   \centering
   \begin{tabular}{c}
   \begin{lstlisting}[language=ruby]
@@ -108,8 +114,10 @@ Once a unikernel specific deployment reaches virtual-kubelet,all of it's data ca
 \end{lstlisting}
 \end{tabular}
 \caption{DeletePod function Signature}\label{fig:signature}
-\end{figure}
+\end{code}
 
 \textit{CreatePod} method is responsible for creating new pods. Upon receiving a new pod and checking that pod is valid, this methods executes a shell command to talk with the underlying hardware. This shell command executes domain specific command with supplied parameters. The command runs in a subroutine, and status of the pod is updated as running. While specific commands will be explained more in the upcoming section and interesting takeaway of this section is how the system hdoes context management with those commands. These commands are all wrong running, and if they end up stopping for a reason, they have to be restarted by kubernetes. \textit{GetPods} method is periodically called by the kubernetes api and that method calls another shell command to checked started unikernels. That output is then parsed as a pod object and returned back to master. The pods are saved in a dictionary with their name as key, and their context of their respective command as value. Their command context allows the system to call the \textit{cancel} closure of a command if that pod needs to be deleted, or their command output is send to the \textit{GetLogs} command to follow command output. Golang is very helpful in that area ,because by design it has great mechanics for context aware concurrency.
 
 \textit{nodeConditions} is also a periodically called function by the master and it can be configured to reflect changes on the host system. For example, if many unikernel images are running on device, there might be not enough memory to start more instances and that methods would change \textit{OutOfDisk} condition to true.
+
+When a node disconnects from the Kubernetes cluster, Kubernetes does not re-deploy pods running on it until 5 minutes. The node shows up as NotReady but the pods are still running on it. This is an unwanted scenario for this use case, thus an additional container is deployed to the cluster to delete nodes when they disconnect. The container called, \textit{nodeWatcher} listens for events regarding nodes, and when a node disconnects, which has a the \textit{virtual-kubelet} label, they are also deleted from the cluster. This allows cluster to redeploy pods running on the node. \textit{NodeWatcher} is a simple container written in python, without any complex logic.

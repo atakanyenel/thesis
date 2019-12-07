@@ -29,12 +29,6 @@ Before starting to implement unikernels to Kubernetes, a couple of proof of conc
 
 5) A node without a host operating system with type-1 hypervisor will be created. This node should also run the custom program that communicates with the kubernetes cluster on the hypervisor and should also do the networking of unikernels between other kubernetes resources.This will be the final outcome of the thesis.
 
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figures/arch3.png}
-  \caption{A kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
-\end{figure}
-
 
 A scope of this project is not to come up with a new unikernel solution and it will use the ones already developed by the open-source community.It also won't compare application performance between docker containers and unikernels. It will although compare the deployment time between those.
 \fi

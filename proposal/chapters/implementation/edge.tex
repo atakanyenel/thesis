@@ -1,15 +1,6 @@
 
 \section{Setting up edge environments}
-Unikernels, similar to traditional OSes can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. An example project is called Jitsu\cite{jitsu}, Just in time sumoning of unikernels. In that project, for every DNS request they are starting a unikernel to respond to that request. The working principle can be seen in \ref{fig:jitsu}.
-
-\begin{figure}[htpb]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/jitsu.jpg}
-    \caption{Jitsu \cite{jitsu}} \label{fig:jitsu}
-  \end{figure}
-
-This scenario can also be achieved in Kubernetes. In kubernetes, incoming requests to the cluster are controlled with an API object called \textit{ingress}, and a custom DNS service with different rules can start up a unikernel (or any other process) to respond to the request. Jitsu project uses Xen and libvirt to manage their hypervisor.
-
+Unikernels, similar to traditional OSes can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. 
 This thesis was tested on Xen hypervisor and a unikernel specific execution environment called Solo5 \cite{solo5}. Used IoT device is Raspberry Pi and because it's currently not officially supported to install hypervisors on Raspberry Pi's, unikernels compiled for unix were used instead. This case also shows that, with this implementation it's actually possible to run any arbitrary binary on raspberry pi without any further modification.
 
 \subsection{Type-2 Hypervisor}
