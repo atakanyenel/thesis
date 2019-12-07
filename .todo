@@ -4,9 +4,15 @@
 
 [x] Write lit review
 
-[-] Performance interference
-[-] Kubernetes Quotes -> Performance isolation
+[ ] Performance interference
+    [] https://ieeexplore.ieee.org/document/7097816
+
+[ ] Kubernetes Quotes -> Performance isolation
+    [] http://www-archive.xenproject.org/files/summit_3/perf-isolation-gupta.pdf
+
+    [] https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-resource-requests-and-limits
 
 
-[] List of Code Snippets 
-[] Results
+[x] List of Code Snippets 
+[x] Results
+[] Kubectl check command

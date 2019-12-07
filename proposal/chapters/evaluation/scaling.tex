@@ -3,11 +3,38 @@
 
 \begin{figure}[htpb]
     \centering
-    \includegraphics[width=1\textwidth]{figures/boot-speed.png}
-    \caption{Boot Speed Comparison } \label{fig:boot}
+    \includegraphics[width=0.7\textwidth]{figures/boot-speed.png}
+    \caption{Boot Speed Comparison } \label{fig:boot-time}
   \end{figure}
   
+
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/scales/scale-up-30.png}
+    \caption{Scaling from 0 to 30 pods } \label{fig:scale-up-30}
+  \end{figure}
   
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/scales/scale-up-50.png}
+    \caption{Scaling from 0 to 50 pods } \label{fig:scale-up-50}
+  \end{figure}
+  
+  \begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/scales/scale-down-50.png}
+    \caption{Scaling from 50 to 0 pods } \label{fig:scale-down-50}
+  \end{figure}
+  
+  \begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/scales/scale-down-30.png}
+    \caption{Scaling from 30 to 0 pods } \label{fig:scale-down-30}
+  \end{figure}
+  
+\iffalse % this data is old use docker-uni.numbers
   \pgfplotstableread[row sep=\\,col sep=&]{
       count & docker & unikernel \\
       1     & 1.146  & 0.015   \\
@@ -41,3 +68,4 @@
   \end{tikzpicture}
   \caption{Boot Time on Mac os }\label{fig:boot-time}
 \end{figure}
+\fi
