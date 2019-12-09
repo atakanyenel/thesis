@@ -179,24 +179,7 @@ url = {https://kubernetes.io/docs/setup/best-practices/cluster-large/{\#}:{~}:ta
 urldate = {2019-11-26}
 }
 
-@misc{istio,
-title = {{Istio}},
-url = {https://istio.io/},
-urldate = {2019-11-26}
-}
 
-@misc{helm,
-title = {{Helm}},
-url = {https://helm.sh/},
-urldate = {2019-11-26}
-}
-
-
-@misc{envoy,
-title = {{Envoy}},
-url = {https://www.envoyproxy.io/},
-urldate = {2019-11-26}
-}
 
 @inproceedings{unikernels-improve,
 abstract = {Cloud computing has been a great enabler for both the Internet of Things and Big Data. However, as with all new computing developments, development of the technology is usually much faster than consideration for, and development of, solutions for security and privacy. In a previous paper, we proposed that a unikernel solution could be used to improve security and privacy in a cloud scenario. In this paper, we outline how we might apply this approach to the Internet of Things, which can demonstrate an improvement over existing approaches.},
@@ -311,4 +294,124 @@ file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Download
 keywords = {Index Terms-library operating system,OCaml,networking,unikernel},
 title = {{Networking in MirageOS}},
 url = {https://ocaml.org/}
+}
+
+@misc{xl-man-page,
+title = {{Ubuntu Manpage: xl - Xen management tool, based on LibXenlight}},
+url = {http://manpages.ubuntu.com/manpages/bionic/man1/xl.1.html},
+urldate = {2019-12-07}
+}
+
+@inproceedings{performance-isolation,
+abstract = {With the rapid development of virtualization techniques, modern data centers move into a new era of cloud in recent years. Despite numerous advantages such as high resource utilization and rapid service scalability, current virtualization techniques don't guarantee perfect performance isolation among virtual machines sharing the physical machine, which may lead to unstable and unpredictable user-perceived application performance in clouds. Therefore, understanding and modeling performance interference among collocated applications is of utmost importance. However, the hypervisor and guest OSes usually run independent resource schedulers and are invisible into each other, thereby making accurately characterizing performance interference a non-trivial work. In this paper, we first present a comprehensive experimental study on performance interference of different combinations of benchmarks, observing that virtual CPU floating overhead between multiple physical CPUs, and VMEXITs, i.e., the control transitions between the hypervisor and VMs, constitute the key source of performance interference. In order to characterize the performance interference effects, we measure both the application-level and VM-level characteristics from the collocated applications and then build a novel interference prediction framework based on kernel canonical correlation analysis. Our evaluations first show the practicability of KCCA in finding reliable correlation, and further confirm the high accuracy and great applicability of our interference model with a low prediction error of no more than 7.9{\%}.},
+author = {Chi, Ruiqing and Qian, Zhuzhong and Lu, Sanglu},
+booktitle = {Proceedings of the International Conference on Parallel and Distributed Systems - ICPADS},
+doi = {10.1109/PADSW.2014.7097816},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Chi, Qian, Lu - 2014 - Be a good neighbour Characterizing performance interference of virtual machines under xen virtualization environm.pdf:pdf},
+isbn = {9781479976157},
+issn = {15219097},
+keywords = {Xen,cloud computing,performance interference},
+pages = {257--264},
+publisher = {IEEE Computer Society},
+title = {{Be a good neighbour: Characterizing performance interference of virtual machines under xen virtualization environments}},
+volume = {2015-April},
+year = {2014}
+}
+
+
+@techreport{Deshane,
+abstract = {We present initial results from and quantitative analysis of two leading open source hypervisors, Xen and KVM. This study focuses on the overall performance, performance isolation, and scalability of virtual machines running on these hypervisors. Our comparison was carried out using a benchmark suite that we developed to make the results easily repeatable. Our goals are to understand how the different architectural decisions taken by different hypervisor developers affect the resulting hypervisors, to help hypervisor developers realize areas of improvement for their hypervisors, and to help users make informed decisions about their choice of hypervisor.},
+author = {Deshane, Todd and Shepherd, Zachary and Matthews, Jeanna N and Ben-Yehuda, Muli and Rao, Balaji},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Deshane et al. - Unknown - Quantitative Comparison of Xen and KVM(2).pdf:pdf},
+title = {{Quantitative Comparison of Xen and KVM}},
+url = {http://www.cs.indiana.edu/{~}mhtang/paper.pdf,}
+}
+
+@misc{mailing-list,
+author={P. Meireles},
+year={2017},
+title = {m0n0wall{\&}virtualization},
+url = {https://m0n0wall.m0n0.narkive.com/OI4NbHQq/m0n0wall-virtualization},
+urldate = {2019-12-07}
+}
+
+@misc{CVE-2019-5736-details,
+title = {{NVD - CVE-2019-5736}},
+url = {https://nvd.nist.gov/vuln/detail/CVE-2019-5736},
+urldate = {2019-12-07}
+}
+
+
+@misc{CVE-2019-14271-details,
+year={2019},
+title = {{NVD - CVE-2019-14271}},
+url = {https://nvd.nist.gov/vuln/detail/CVE-2019-14271},
+urldate = {2019-12-07}
+}
+
+@misc{CVE-2018-9862-details,
+year={2018},
+title = {{NVD - CVE-2018-9862}},
+url = {https://nvd.nist.gov/vuln/detail/CVE-2018-9862},
+urldate = {2019-12-07}
+}
+
+@misc{CVE-2018-8115-details,
+year={2018},
+title = {{NVD - CVE-2018-8115}},
+url = {https://nvd.nist.gov/vuln/detail/CVE-2018-8115},
+urldate = {2019-12-07}
+}
+
+@misc{CVE-2018-11757-details,
+year={2018},
+title = {{NVD - CVE-2018-11757}},
+url = {https://nvd.nist.gov/vuln/detail/CVE-2018-11757},
+urldate = {2019-12-07}
+}
+
+
+@article{Duncan2017,
+abstract = {Achieving cloud security is not a trivial problem and developing and enforcing good cloud security controls is a fundamental requirement if this is to succeed. The very nature of cloud computing can add additional problem layers for cloud security to an already complex problem area. We discuss why this is such an issue, consider what desirable characteristics should be aimed for and propose a novel means of effectively and efficiently achieving these goals through the use of unikernel based systems. The main thrust of this position paper is to discuss the key issues which need to be addressed, noting which of those might be covered by our proposed approach. We discuss how our proposed approach may help better address the key security issues we have identified.},
+author = {Duncan, Bob and Bratterud, Alfred and Happe, Andreas},
+doi = {10.1109/INTECH.2016.7845113},
+file = {:Users/atakanyenel/Desktop/thesis/literature/papers/3-enhancing-cloud-security.pdf:pdf},
+isbn = {9781509020003},
+journal = {2016 6th International Conference on Innovative Computing Technology, INTECH 2016},
+keywords = {Cloud security and privacy,complexity,compliance,management control},
+pages = {110--115},
+publisher = {IEEE},
+title = {{Enhancing cloud security and privacy: Time for a new approach?}},
+year = {2017}
+}
+
+
+@article{virtio,
+ author = {Russell, Rusty},
+ title = {Virtio: Towards a De-facto Standard for Virtual I/O Devices},
+ journal = {SIGOPS Oper. Syst. Rev.},
+ issue_date = {July 2008},
+ volume = {42},
+ number = {5},
+ month = jul,
+ year = {2008},
+ issn = {0163-5980},
+ pages = {95--103},
+ numpages = {9},
+ url = {http://doi.acm.org/10.1145/1400097.1400108},
+ doi = {10.1145/1400097.1400108},
+ acmid = {1400108},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {I/O, KVM, Linux, lguest, ring buffer, virtio, virtio_pci, virtualization, vring},
+} 
+
+
+@inproceedings{multilayered,
+author = {Jindal, Anshul and Podolskiy, Vladimir and Gerndt, Michael},
+year = {2017},
+month = {11},
+pages = {24-31},
+title = {Multilayered Cloud Applications Autoscaling Performance Estimation},
+doi = {10.1109/SC2.2017.12}
 }

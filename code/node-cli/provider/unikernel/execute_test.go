@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	v1 "k8s.io/api/core/v1"
+	"os/exec"
 	"testing"
+	"time"
 )
 
 func TestExecute(t *testing.T) {
@@ -50,4 +52,26 @@ func Test_buildCommand(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRunCommand(t *testing.T) {
+	commandContext, cancel := context.WithCancel(context.Background())
+
+	cmd := exec.CommandContext(commandContext, "sh", "-c", "program")
+	err := cmd.Start()
+	if err != nil {
+		t.Errorf("%s", err)
+	}
+	go func() {
+
+		err = cmd.Wait()
+		if err != nil {
+			t.Errorf("%s", err)
+		}
+
+	}()
+
+	time.Sleep(10 * time.Second)
+	cancel() //cancel running command
+	fmt.Println("asd")
 }

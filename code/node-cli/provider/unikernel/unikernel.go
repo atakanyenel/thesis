@@ -280,18 +280,7 @@ func (*Provider) RunInContainer(ctx context.Context, namespace, podName, contain
 	return nil
 }
 
-func (*Provider) NodeConditions(ctx context.Context) []v1.NodeCondition {
 
-	return []v1.NodeCondition{{
-		Type:               "Ready",
-		Status:             v1.ConditionTrue,
-		LastHeartbeatTime:  metav1.Now(),
-		LastTransitionTime: metav1.Now(),
-		Reason:             "KubeletReady",
-		Message:            "kubelet is ready.",
-	},
-	}
-}
 
 func (s *Provider) nodeAddresses() []v1.NodeAddress {
 	return []v1.NodeAddress{

@@ -59,9 +59,6 @@ The only customizable part of virtual-kubelet is the provider interface. The int
 This thesis implements a single provider called \textit{unikernel} for the unikernel runtime. A single virtual-kubelet binary can support multiple providers through command line arguments as can be seen from listing \ref{lst:vkcommand}. In this project, unikernel deployment is happening in 3 different environment. It's possible to write different providers for different environments but to decrease the built binary size, a single provider was compiled using Golang's build tags for different environments. This requires the deployment medium to be known beforehand, instead of virtual-kubelet figuring it by itself by checking the installed hypervisor.
 
 Current open source distribution of virtual-kubelet does not support giving labels to registered nodes. Label based scheduling is an easy way of deploying correct programs to edge devices, so virtual-kubelet source code had to be forked and modified to update node labels from outside with arguments.
-
-The first job done by the provider is to register the resources to the kubernetes master as available. In the following code \ref{fig:runtime}, the provider constructor reads CPU and memory data from the device where virtual-kubelet is deployed. Kubernetes API uses standartised metrics for measuring CPU and memory, so read values are cast to string before being sent. There is also a third value called \textit{podCapacity}, which restricts the maximum number of pods that can be run on the device , independent from whether the device has enough resources or not.
-% Golang Code block start
 \begin{code}[htpb]
   \centering
   \begin{tabular}{c}
@@ -77,9 +74,38 @@ memory := strconv.Itoa(int(m.Sys/1024/1024)) + "Mi"
 \end{tabular}
 \caption{Getting Resource data}\label{fig:runtime}
 \end{code}
-% Golang Code block end
-% Todo  -> talk about the execute code
+The first job done by the provider is to register the resources to the kubernetes master as available. In the following code \ref{fig:runtime}, the provider constructor reads CPU and memory data from the device where virtual-kubelet is deployed. Kubernetes API uses standartised metrics for measuring CPU and memory, so read values are cast to string before being sent. There is also a third value called \textit{podCapacity}, which restricts the maximum number of pods that can be run on the device , independent from whether the device has enough resources or not.
+% Golang Code block start
 
+% Golang Code block end
+
+\begin{code}[htpb]
+  \centering
+  \begin{tabular}{c}
+  \begin{lstlisting}[language=ruby]
+    func (s *Provider) DeletePod(ctx context.Context, pod *v1.Pod) error
+\end{lstlisting}
+\end{tabular}
+\caption{DeletePod function Signature}\label{fig:signature}
+\end{code}
+
+The following list explains how other functions were implemented in unikernel and hypervisor context. They have similar to function in \ref{fig:signature}
+\begin{description}  
+  \item [CreatePod] creates a pod with given pod information from the deployment yaml. All values can be read with the pod object. It calls an \textit{Execute} method, which runs the shell command to invoke the hypervisor with given parameters and returns the context information of the command. This information is saved to an in-memory map with pod name for further reference.
+  \item [UpdatePod] updates the unikernel context in memory but not the running process. It's not possible to change parameters of running machines in Xen until next restart, so processes keep running instead of restarting them.
+  \item [DeletePod] calls \textit{xl destroy <pod-name>} command to destroy the running unikernel. If the process is not a unikernel and a normal binary, it invokes the \textit{cancel} command which is saved with pod metadata.
+  \item [GetPod] returns metadata about the pod from the in-memory map.
+  \item [GetPodStatus] calls \textit{GetPod} and returns the status section from metadata.
+  \item [GetPods] calls \textit{xl list -l} to get current hypervisor info and parses the json output, updates the in-memory map and returns it.
+  \item [GetContainerLogs] find the command context from the map and returns it's stdout pipe. 
+  \item [RunInContainer] is no-op.
+  \item [nodeAddresses] is no-op but it's possible to return an IPv6 address in the future.
+  \item [nodeDaemonEndpoints] returns a default value.
+  \item [notifyPods] is no-op.
+  \item [capacity] returns values set up with \ref{fig:runtime}.
+  \item [ConfigureNode] is only called once. It's set up node information such as running operating system, architecture, addresses\ldots
+  \item [nodeConditions] is called periodically to check on node. By checking the remaining capacity on the node, it might return one of the errors: \textit{OutofDisk}, \textit{MemoryPressure}, \textit{DiskPressure}, \textit{NetworkUnavailable}. 
+  \end{description}
 \subsection{Communication between cluster and device}
 Once a virtual node is deployed to the cluster, it is crucial to restrict it to deployments it's supposed to handle. To achieve this, deployments regarding the virtaul kubelet are tagged with a special label. First the \textit{nodeSelector} array of the specification get the item \textit{type: virtual-kubelet}. With that annotation , no real node tries to handle the deployment. The second annotation is to get the correct provider. In theory, a cluster can have multiple virtual nodes with different providers suited for different workloads and a deployment has to go to it's respective provider. Adding a \textit{tolerations} flag allows to select a particular provider. A chunk of an example deployment file can be seen in \ref{fig:deployment}.
 
@@ -105,16 +131,6 @@ Another approach of working with unikernel specific deployments is to extend the
 
 \subsection{Communication between kubernetes and hypervisor}
 Once a unikernel specific deployment reaches virtual-kubelet,all of it's data can be read. Every method that handles the pod lifecycle has a pod object as argument. An example signature can be seen in the \ref{fig:signature}. The usability of this increases greatly when one realises that , this pod related information is not read or processed anywhere else other than the running node. It allows to modify values to specific keys without comprimising integrity of the system. In a valid pod deploymnet, the \textit{image} key is used to specify the name of the docker container that deployment runs. If that container is not found in the given registry, kubernetes returns an error saying that deployment failed and image couldn't be found. In the unikernel deployment, the image key is used to specify the name of the unikernel binary to run. That name can be handled in many ways. In earlier developments, docker containers simulating edge devices where created with multiple example unikernel binaries, and there were only couple of options to give to \textit{image} key. Now a unikernel registry exists behind a FTP server and given values are searched there first, if they don't exist on the edge device. This approach is similar to one used by docker based deployments.
-
-\begin{code}[htpb]
-  \centering
-  \begin{tabular}{c}
-  \begin{lstlisting}[language=ruby]
-    func (s *Provider) DeletePod(ctx context.Context, pod *v1.Pod) error
-\end{lstlisting}
-\end{tabular}
-\caption{DeletePod function Signature}\label{fig:signature}
-\end{code}
 
 \textit{CreatePod} method is responsible for creating new pods. Upon receiving a new pod and checking that pod is valid, this methods executes a shell command to talk with the underlying hardware. This shell command executes domain specific command with supplied parameters. The command runs in a subroutine, and status of the pod is updated as running. While specific commands will be explained more in the upcoming section and interesting takeaway of this section is how the system hdoes context management with those commands. These commands are all wrong running, and if they end up stopping for a reason, they have to be restarted by kubernetes. \textit{GetPods} method is periodically called by the kubernetes api and that method calls another shell command to checked started unikernels. That output is then parsed as a pod object and returned back to master. The pods are saved in a dictionary with their name as key, and their context of their respective command as value. Their command context allows the system to call the \textit{cancel} closure of a command if that pod needs to be deleted, or their command output is send to the \textit{GetLogs} command to follow command output. Golang is very helpful in that area ,because by design it has great mechanics for context aware concurrency.
 

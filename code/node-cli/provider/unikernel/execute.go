@@ -9,7 +9,7 @@ import (
 	"reflect"
 )
 
-const defaultCommand = "ncat -l 8080"
+const defaultCommand = "program"
 
 func Execute(ctx context.Context, pod *v1.Pod) (context.CancelFunc, *exec.Cmd) {
 
