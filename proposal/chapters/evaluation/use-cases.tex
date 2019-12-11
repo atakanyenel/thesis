@@ -1,3 +1,36 @@
 \section{Use Cases in Internet of Things}
 
-Using kubernetes as an orchestrator
+Deploying virtual kubelet to edge devices is a double edge sword. On the one hand, It easily migrates development effort of Kubernetes communication to IoT. You get security and interoperability out of the box. For every possible state of your edge device, there is a predefined Kubernetes description that matches with it. That allows solutions for cloud enviroments to be co-used with edge devices, such as the \textit{Node Watcher} program explained above. On the other hand, kubernetes ecosystem is not build for resource constraint devices. The communication protocol between kubelets and kubernetes master is HTTPS. While it's secure, it's more resource hungry than other popular IoT messaging systems such as MQTT. As discussed above, projects like FLEDGE overcome this problem by deploying virtual-kubelet to the cloud and using MQTT to connect to devices. An e-mail exchange with one of the FLEDGE authors revealed that , they are migrating to implement virtual kubelet on the edge device. It's up to users to decide, which one is more suitable to their system. If they are using large clusters with weak edge devices, it's better to deploy virtual-kubelet to the cloud and deploy another, more lightweight agent to edge devices. If they have relatively powerful devices, such as Raspberry Pis, It's more than enough to deploy virtual-kubelet to the edge device.
+
+To test unikernel technology on IoT ,a demo program is created to read values from sensors. A python script is reads sensor data and writes it to file, than the running unikernel applications reads that file to get the actual data. In future scenarios, the python script is unnecessary and unikernel can read sensor value directly from input buffer. This was not implemented in this demo, because it requires to write a OCaml driver for Raspberry Pi sensor connections, which is out of scope for this thesis. This unikernel can take arguments when starting the select name of the sensor to read from. The parameter of the argument can be passed from the kubernetes deployment file. A special kubernetes resource, DaemonSet , allows kubernetes to automatically deploy certain containers to every node. This is used mainly for monitoring or for proxying but in this case it is an easy way to deploy certain program to every edge device. The user does not have to deal with new deployments when new devices join the cluster. Kubernetes will simply deploy predetermined programs to it by looking at labels of the newly added node/edge device. Full code of the program can be seen in \ref{fig:ocaml-demo}. That code is accompanied by a config file which determines input arguments and lists dependencies. Total image size is 2.6 MB when compiled to linux.
+
+\begin{code}[htpb]
+    \centering
+    \begin{tabular}{c}
+    \begin{lstlisting}[language=caml,showstringspaces=false,breaklines=true,upquote=true]
+        open Lwt.Infix
+
+        module Main (KV: Mirage_kv.RO) (Time: Mirage_time.S) = struct
+        
+          let start kv _time=
+        
+            let read_from_file kv filename = (*Filename given as argument*)
+                KV.get kv (Mirage_kv.Key.v filename) >|= function
+                    | Error e ->
+                        Logs.warn (fun f -> f "Cannot find the file %a"
+                        KV.pp_error e)
+                    | Ok sensor_value ->
+                        Logs.info (fun f -> f "Reading from: %s -> %s" filename sensor_value);
+            in
+                let filename=Key_gen.filename() in
+                let rec loop() =
+                read_from_file kv filename >>= fun()->
+                Time.sleep_ns (Duration.of_sec 2)>>= fun () ->
+                loop()
+                in 
+                loop()
+        end
+  \end{lstlisting}
+  \end{tabular}
+  \caption{A MirageOS program}\label{fig:ocaml-demo}
+\end{code}
