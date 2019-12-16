@@ -1,15 +1,18 @@
 
 \section{Setting up edge environments}
-Unikernels, similar to traditional OSes can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. 
-This thesis was tested on Xen hypervisor and a unikernel specific execution environment called Solo5 \cite{solo5}. Used IoT device is Raspberry Pi and because it's currently not officially supported to install hypervisors on Raspberry Pi's, unikernels compiled for unix were used instead. This case also shows that, with this implementation it's actually possible to run any arbitrary binary on raspberry pi without any further modification.
+Unikernels, similar to traditional OSes can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. For proof of concept development, many different edge device configurations were used. There are two different usage scenarios in mind when configuring devices. First one is hypervisor enabled unikernel runtime and the other one is with IoT.
 
-\subsection{Type-2 Hypervisor}
-It's possible to run unikernels on type-2 hypervisors, like virtualbox. This thesis did not aim to run them on type-2 hypervisors but there are project that do that , so it's possible by updating the provider methods, thus it's worthy to be mentioned for future work.
+For hypervisor enabled runtime, a laptop was used. Installing a hypervisor on conventional virtual machines in cloud is an hard task because it breaks internal networking and makes it impossible to access machine from outside. Eventhough that would work, it's not a good testing environment as accessing to BIOS of a cloud provided virtual machine is not easy.
 
-% todo:
-\subsection{Type-1 Hypervisor}
-The unikernel technology used by this project, MirageOS, is being developed by ex XEN developers. Naturally it has official support for Xen and all their examples can be compiled to Xen. 
-\subsection{IoT Devices}
+This additional laptop has debian as the host operating system and Xen was installed through debian with administrative priviledge to access BIOS. After Xen is installed, when laptop is booted up, user can select to start debian with Xen-enabled. This gives access to Xen command line tool, xl, to manipulate dom0. While a linux system is installed on the computer that communicates with the hypervisor, it's a straightforward process to write kubernetes clients. That laptop is connected to kubernetes cluster through kubeconfig.yaml and it's public IP. Figure \ref{fig:hypervisor} shows the final overview of the setup. The custom deployer is virtual-kubelet and the hypervisor square is the Xen installed laptop. Two additional linux VM's are traditional kubernetes nodes connected with kubelet.
 
-Raspberry Pi 3 has 1GB, 900 Mhz RAM and 4*ARM Cortex-A53,1.2 GHz CPU. Because it uses ARM, x64 hypervisors can not be ported easily. There is also no motivation for it, since Raspberry Pi's are not powerful machines and virtualisation is a resource hungry process. Nevertheless, there are projects for lightweight virtualization on Raspberry Pi.
+For testing possible deployment configuration a linux machine with docker installed was used. While docker daemon is installed, kubelet is not installed and management of docker containers is done by virtual-kubelet. This functionality looks very similar to actual kubelet, thus it's a good exercise.
 
+For IoT devices, Raspberry Pi 3 was used. Raspberry Pi uses ARM processor and x64 hypervisors can't be ported easily. There is also not too much motivation for it, because Raspberry Pi is not a powerful end-device and virtualisation is a resource hungry process. Nevertheless, there are projects for lightweight virtualisation on Raspberry Pi. For more powerful end devices though, there are hypervisor projects but they are out of scope for this thesis.
+
+To experiment more with unikernel ecosystem, solo5 was also installed to the aforementioned laptop. Solo5 can be built on top of quemu or KVM and it markets itself as unikernel specific runtime. To test solo5, Qemu was installed since hardware virtualisation was disabled, thus KVM couldn't be installed.
+
+Another enviroment is virtual kubelet installed docker containers. Docker containers are built on top Ubuntu base image and unikernels can run on them. They are being used to simulate hundreds of IoT machines, since they also lack hypervisor technology.
+
+When configuring edge devices for supervisors, a network interface should be set.
+% todo: minios

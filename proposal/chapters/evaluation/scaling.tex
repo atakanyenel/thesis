@@ -34,35 +34,133 @@ The first take from the graph is the boot-up time of Xen hypervisor. It only nee
 
 \subsection{Scaling time}
 Another experiment is for measuring scalability of unikernels compared to Docker in Kubernetes. In the following experiments, the setting is the same. There is a 3 node kubernetes cluster, with a master node, a normal node, and a node connected by virtual kubelet. The master node cannot be scheduled. The program that is being tested is a infinite loop program that reads data from a file and outputs the value every 2 seconds. The docker container is the same program with ubuntu image wrapped around it. Both nodes have the test image already pulled to their disk. The deployments are already created in Kubernetes and at start they have 0 replicas. As soon as \textit{scale} command is called, a script counts number of pods with the \textbf{running} status every 0.5 seconds.
+
+\begin{figure}[htpb]
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}[
+  axis lines=middle,
+  width=\textwidth,
+  height=.5\textwidth,
+  ymin=0,
+  x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
+      xlabel=Seconds,
+    ylabel=No. of Pods,
+    xticklabel style = {rotate=30,anchor=east},
+    enlargelimits = false,
+    xticklabels from table={scale30.dat}{Time},xtick=data]
+  \addplot[orange,thick] table [y=Docker,x=Time]{scale30.dat};
+  \addlegendentry{Docker}
+  \addplot [green,thick] table [y=Unikernel,x=Time]{scale30.dat};
+  \addlegendentry{Unikernel}
+  \end{axis}
+  \end{tikzpicture}
+  \caption{Scaling from 0 to 30 pods}\label{fig:scale-up-30}
+  \end{figure}
+
+ \iffalse 
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=1\textwidth]{figures/scales/scale-up-30.png}
   \caption{Scaling from 0 to 30 pods } \label{fig:scale-up-30}
 \end{figure}
-
+\fi
 
 Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen plays a role in their scalability.When given a command to scale from 0 to 30 pods , it only takes 2 sconds for unikernels to boot up. It takes 19 seconds for docker containers. The numbers are smaller than what was measured in boot-up times, because in that case the programs are started in parallel instead of sequentially. 
 
+
+\begin{figure}[htpb]
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}[
+  axis lines=middle,
+  width=\textwidth,
+  height=.5\textwidth,
+  ymin=0,
+  x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
+      xlabel=Seconds,
+    ylabel=No. of Pods,
+    xticklabel style = {rotate=30,anchor=east},
+    enlargelimits = false,
+    xticklabels from table={scale50.dat}{Time},xtick=data]
+  \addplot[orange,thick] table [y=Docker,x=Time]{scale50.dat};
+  \addlegendentry{Docker}
+  \addplot[green,thick] table [y=Unikernel,x=Time]{scale50.dat};
+  \addlegendentry{Unikernel}
+  \end{axis}
+  \end{tikzpicture}
+  \caption{Scaling from 0 to 50 pods}\label{fig:scale-up-50}
+  \end{figure}
+
+  \iffalse
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.7\textwidth]{figures/scales/scale-up-50.png}
   \caption{Scaling from 0 to 50 pods } \label{fig:scale-up-50}
 \end{figure}
-  
+\fi  
 Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 30. It takes 4 seconds for all unikernels to start , while docker needs 26 seconds to start them.
+\begin{figure}[htpb]
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}[
+  axis lines=middle,
+  width=\textwidth,
+  height=.5\textwidth,
+  ymin=0,
+  x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
+      xlabel=Seconds,
+    ylabel=No. of Pods,
+    xticklabel style = {rotate=30,anchor=east},
+    enlargelimits = false,
+    xticklabels from table={scaledown50.dat}{Time},xtick=data]
+  \addplot[orange,thick] table [y=Docker,x=Time]{scaledown50.dat};
+  \addlegendentry{Docker}
+  \addplot [green,thick] table [y=Unikernel,x=Time]{scaledown50.dat};
+  \addlegendentry{Unikernel}
+  \end{axis}
+  \end{tikzpicture}
+  \caption{Scaling from 50 to 0 pods}\label{fig:scale-down-50}
+  \end{figure}
 
+  \begin{figure}[htpb]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+    axis lines=middle,
+    width=\textwidth,
+    height=.5\textwidth,
+    ymin=0,
+    x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
+        xlabel=Seconds,
+      ylabel=No. of Pods,
+      xticklabel style = {rotate=30,anchor=east},
+      enlargelimits = false,
+      xticklabels from table={scaledown30.dat}{Time},xtick=data]
+    \addplot[orange,thick] table [y=Docker,x=Time]{scaledown30.dat};
+    \addlegendentry{Docker}
+    \addplot [green,thick] table [y=Unikernel,x=Time]{scaledown30.dat};
+    \addlegendentry{Unikernel}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Scaling from 30 to 0 pods}\label{fig:scale-down-30}
+    \end{figure}
+
+  \iffalse
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.7\textwidth]{figures/scales/scale-down-30.png}
   \caption{Scaling from 30 to 0 pods } \label{fig:scale-down-30}
 \end{figure}
+\fi
 
+\iffalse
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.7\textwidth]{figures/scales/scale-down-50.png}
   \caption{Scaling from 50 to 0 pods } \label{fig:scale-down-50}
 \end{figure}
-
+\fi
 
 Figure \ref{fig:scale-down-30} and \ref{fig:scale-down-50} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while docker containers need around 20 seconds. 
 
@@ -87,3 +185,6 @@ For this formula, a result of \textbf{1} means that there was a high latency dur
 
 \subsection{Kubernetes reaction time}
 There is also another information we can read from the graph, namely how fast kubernetes distributes information. For example, when we look at Figure \ref{fig:scale-down-50}, and only observe the scaling behaviour of docker containers, we might think that Kubernetes has a delay of 6 seconds when distributing \textit{scale-down} command to other nodes. Same argument would also be true for \textit{scale-up} command when we check other experiments as well. There is a visible delay in all cases where node count stays constant for a couple of seconds, than changes rapidly according to the command. When we observe the unikernel behavior though, we have a different scenario. The node reacts to command almost instantly, with only half a second delay. This phenomenon is visible in all graphs. This new information makes it plausible to suggest a new argument: "The boot-up times of docker containers is te bottleneck for Kubernetes scalability and different runtimes such as Kata or gVisor might help to overcome this problem".
+
+
+  
