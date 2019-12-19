@@ -1,7 +1,7 @@
 
 \section{Developing Unikernel Applications}
 
-Since Unikernel first introduced in 2013 by Madhavapeddy et al in \cite{library-operating-system}, there has been different language stacks to implement to proposed solution. Table \ref{tab:stacks} shows couple of state of the art technologies with their target platform their development language.
+Since Unikernel first introduced in 2013 by Madhavapeddy et al in \cite{library-operating-system}, there has been different language stacks to implement the proposed solution. Table \ref{tab:stacks} shows couple of state of the art projects with their target platform and their development language.
 
 \begin{table}[htpb]
     \caption[Different Unikernel Stacks]{Different Unikernel Stacks}\label{tab:stacks}
@@ -21,11 +21,11 @@ Since Unikernel first introduced in 2013 by Madhavapeddy et al in \cite{library-
     \end{tabular}
   \end{table}
 
-The reason for chosing MirageOS was the activity around its development and that it behaves directly as a unikernel. For example, both OSv and Rumprun have unused functionality on their kernels to support more languages.
+The reason for choosing MirageOS was the activity around its development and that it behaves directly as a unikernel. For example, both OSv and Rumprun have unused functionality on their kernels to support more languages.
 
-MirageOS requires two files to develop a unikernel. First one is the \textit{config.ml} file. It defines the entry point of the program and lists dependencies. Second one is \textit{unikernel.ml} , which has the application entry point. There can be other files for coding that they can be included to final build. To use a dependency, it has to be in the config file and adding a dependency requires regeneration of files.
+MirageOS requires two files to develop a unikernel. First one is the \textit{config.ml} file. It defines the entry point of the program and lists dependencies. Second one is \textit{unikernel.ml} , which has the application entry point. To use a dependency, it has to be in the config file and adding a dependency requires additional files to be regenerated.
 
-MirageOS uses an OPAM package with the name \textit{mirage} \cite{opammirage} for development. This package is used to create configuration files that will be sealed with the application code for the target environment and aso for compiling the program. The following command in \ref{fig:mirage_configure} configures a package for compilation. 
+MirageOS uses an OPAM package with the name \textit{mirage} \cite{opammirage} for development. This package is used to create configuration files that will be sealed with the application code for the target environment and it also compiles the application. Drivers for unikernels are also written in Ocaml and published as additional opam packages. Once Mirage creates a deployment tree, it installs required packages through the OCaml repository. The following command in \ref{fig:mirage_configure} configures a package for compilation. 
 
 \begin{code}[htpb]
     \centering
@@ -41,11 +41,8 @@ That command targets the solo5 environment with \textit{hvt} value. \textit{kv\_
 
 After that step a \textit{Makefile} is generated for future commands. \textit{make depend} downloads dependencies for the program and \textit{make build} builds the unikernel. Build command compiles and seals the unikernel in couple of seconds, once the dependencies are installed. The build artifact is a single image. If it requires static files during build, they can either be packaged into the image or the image can be configured to access them during runtime.
 
-The overall architecture solution can be seen in figure \ref{fig:hypervisor}.
-
-
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/arch3.png}
-  \caption{A kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
+  \caption{A Kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
 \end{figure}

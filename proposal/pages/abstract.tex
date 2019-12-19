@@ -1,14 +1,12 @@
 \chapter{\abstractname}
 
-%TODO: Abstract
-
 Virtualisation is heavily used in cloud computing. Hardware resources in data centers are distributed among clients as virtual machines running on hypervisors. As architecture model of software development moves more on to microservices, containerized applications arisen to allow multiple programs to run on the same virtual machine with isolation. While containerized applications increased the utility of hardware resources , they still require a full fledged operating system underneath to host them.
 Running a complete operating system to run microservices is problematic in 2 ways. They allow for a greater attack surface , because a vulnerability in the underlying operating system can also compromise the running applications. This causes DevOps engineers to specify a secure host operating system for their applications, which contradicts with the "abstraction from operating system" promise of containers. Second, operating systems waste hardware resources with background jobs that are not required by the application. 
 
 Unikernels are specialised programs that package the smallest operating system with the application itself. They don't require a running operating system to be deployed and they can be booted directly from BIOS. They have a very small attack surface as vulnerabilities can only exist within the deployed app. This reduces the code fingerprint of the deployed system greatly. They also don't waste any resources as there are no processes running other than the application. 
 
-Because unikernels are very small operating systems , they can be booted with type-1 and type-2 hypervisors. This thesis will create a ecosystem that boots up unikernel applications scheduled by a Kubernetes cluster. The expected result is  decrease in both resources used by the cluster and time it takes to scale an application.
+This thesis provides an environment to run unikernel application with Kubernetes by using a type-1 hypervisor. It presents a custom deployer to deploy applications through the Kubernetes API. Then it uses the same interface to communicate with IoT devices and compares their needs for unikernel applications. The result is a simpler communication scheme between cloud and edge, and better resource utilization with respect to both start up times and scalability.
 
-It will try to answer questions e.g. How to communicate with hypervisors ? How to deploy external unikernels through internet to hardware ? How to connect unikernels to kubernetes ? How does unikernels affect scheduling of kubernetes applications ?
+It discusses the questions such as: How to communicate with hypervisor ? How to deploy external unikernels from cloud to hardware ? How to connect unikernels to Kubernetes ? How does unikernels affect scheduling of Kubernetes applications ?
 
- \textbf{Keywords}: Cloud computing, Unikernel, Kubernetes, Hypervisor
+\textbf{Keywords}: Cloud computing, Unikernel, Kubernetes, Hypervisor

@@ -16,3 +16,57 @@
 [x] List of Code Snippets 
 [x] Results
 [] Kubectl check command
+
+
+# Vladimir commands
+
+[ ] Use scientific language
+    [x] Don't use K8S
+
+[ ] Background should explain unikernel and k8s more
+    [ ] Explain borg
+    [ ] Alternatives are not real alternatives, they do different tasks. 
+
+[] Improve 2.4 
+    [ ] what do you want to bring with this section ?
+    [ ] what do I want to tell the reader ?
+    #Burada bir related work örneği var. 
+
+[] Lit review -> Related Work
+    [] move examples of unikernels to background
+        [ ] Spend more time writing about them
+    [] address "low resource devices dynamic management"
+        [] Iot device management with k8s
+            [] also for microcontrollers
+
+[] Bigger Picture
+    [] lower discussion to runC by OCI https://opensource.com/life/16/8/runc-little-container-engine-could
+
+    [] Broaden solution 
+        [] organize communication
+        [] Sharing of sensor access between multiple unikernels
+        [] EuroSys or Usenix ATC
+
+[] Diagrams for:
+    [] 4.2.3
+    [] 4.2.4
+    [] 4.3
+
+[] Evaluation
+    [] Where you performed the tests
+    [] How many times
+    [] Is figure average of results
+
+[] Discussion about:
+    [] Multiple sensors on same device, and data shared between them. 
+
+[] Trying to make IoT more flexible => add it to kubernetes, allow sensor sharing.
+[] Address this for single board and not for MCU.
+
+[] Part of laptop seem detached, some form of pre evaluation. "I did this... it works in this scenario, but won't work for me"
+
+[] Quality
+    [] Fig 4.1, Fig 5.1
+    [] typos
+    [] difference between edge and end
+    [] Fix figure 5.4.
