@@ -46,9 +46,9 @@ Another experiment is for measuring scalability of unikernels compared to Docker
   x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
       xlabel=Seconds,
     ylabel=No. of Pods,
-    xticklabel style = {rotate=30,anchor=east},
+    xticklabel style = {},
     enlargelimits = false,
-    xticklabels from table={scale30.dat}{Time},xtick=data]
+    xticklabels={0,1,2,...,20},xtick={0,1,2,...,20}]
   \addplot[orange,thick] table [y=Docker,x=Time]{scale30.dat};
   \addlegendentry{Docker}
   \addplot [green,thick] table [y=Unikernel,x=Time]{scale30.dat};
@@ -80,9 +80,9 @@ Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen pl
   x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
       xlabel=Seconds,
     ylabel=No. of Pods,
-    xticklabel style = {rotate=30,anchor=east},
+    xticklabel style = {},
     enlargelimits = false,
-    xticklabels from table={scale50.dat}{Time},xtick=data]
+    xticklabels={0,1,2,...,30},xtick={0,1,2,...,30}]
   \addplot[orange,thick] table [y=Docker,x=Time]{scale50.dat};
   \addlegendentry{Docker}
   \addplot[green,thick] table [y=Unikernel,x=Time]{scale50.dat};
@@ -111,9 +111,9 @@ Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 5
   x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
       xlabel=Seconds,
     ylabel=No. of Pods,
-    xticklabel style = {rotate=30,anchor=east},
+    xticklabel style = {},
     enlargelimits = false,
-    xticklabels from table={scaledown50.dat}{Time},xtick=data]
+    xticklabels={0,1,2,...,25},xtick={0,1,2,...,25}]
   \addplot[orange,thick] table [y=Docker,x=Time]{scaledown50.dat};
   \addlegendentry{Docker}
   \addplot [green,thick] table [y=Unikernel,x=Time]{scaledown50.dat};
@@ -134,9 +134,9 @@ Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 5
     x label style={at={(current axis.right of origin)},anchor=north, below=10mm},
         xlabel=Seconds,
       ylabel=No. of Pods,
-      xticklabel style = {rotate=30,anchor=east},
+      xticklabel style = {},
       enlargelimits = false,
-      xticklabels from table={scaledown30.dat}{Time},xtick=data]
+      xticklabels={0,1,2,...,25},xtick={0,1,2,...,25}]
     \addplot[orange,thick] table [y=Docker,x=Time]{scaledown30.dat};
     \addlegendentry{Docker}
     \addplot [green,thick] table [y=Unikernel,x=Time]{scaledown30.dat};

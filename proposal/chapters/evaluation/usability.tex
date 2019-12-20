@@ -5,12 +5,33 @@ The networking in unikernels is also different than what we use in docker contai
 
 On the other hand, there are projects where MirageOS was used for superior functionality. An example project is called Jitsu\cite{jitsu}, Just in time summoning of unikernels. In that project, for every DNS request, they are starting a unikernel to respond to that request by returning the newly acquired IP of the unikernel with the response header. The working principle can be seen in \ref{fig:jitsu}.
 
+\begin{figure}[h!]
+\centering
+\begin {sequencediagram}
+  \newinst {client}{Client}
+  \newinst [2]{jitsu}{Jitsu}
+  \newinst [2]{libvirt}{Libvirt}
+  \newinst [2]{unikernel}{Unikernel}
+  %todo: change this to calls
+  \mess [1]{client}{ DNS req. }{jitsu}
+  \mess [1]{jitsu}{ Start VM. }{libvirt}
+  \mess [1]{libvirt}{ Boot Unikernel }{unikernel}
+  \mess [1]{unikernel}{}{libvirt}
+
+  \mess [1]{libvirt}{ VM started }{jitsu}
+
+  \mess [1]{jitsu}{DNS reply with unikernel IP }{client}
+  \mess [1]{client}{TCP connection}{unikernel}
+\end {sequencediagram}
+\caption{Jitsu \cite{jitsu}}\label{fig:jitsu}
+\end{figure}
+\iffalse
 \begin{figure}[htpb]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/jitsu.jpg}
     \caption{Jitsu \cite{jitsu}} \label{fig:jitsu}
   \end{figure}
-
+\fi
 This project is being used to serve static websites, which is a simple task to do. Nevertheless, their fast boot times allows them to use unikernels instead of docker containers. The DNS server running in that example is also a unikernel, so the environment can be achieved in a pure unikernel fashion.
 
 Another unikernel stack , IncludeOS, writes it's applicatios in C++. C++ is a more industry oriented language than OCaml, but they still have the same network problems. IncludeOS requires an additional file to set up network correctly. It was not easy to set up their hello\_world example flawlessly.

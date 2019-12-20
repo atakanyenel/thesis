@@ -42,7 +42,8 @@ That command targets the solo5 environment with \textit{hvt} value. \textit{kv\_
 After that step a \textit{Makefile} is generated for future commands. \textit{make depend} downloads dependencies for the program and \textit{make build} builds the unikernel. Build command compiles and seals the unikernel in couple of seconds, once the dependencies are installed. The build artifact is a single image. If it requires static files during build, they can either be packaged into the image or the image can be configured to access them during runtime.
 
 \begin{figure}[htpb]
+  
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/arch3.png}
-  \caption{A Kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
+  \includegraphics[width=1.2\textwidth]{figures/arch.pdf}
+  \caption{ Kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
 \end{figure}
