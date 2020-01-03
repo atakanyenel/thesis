@@ -132,6 +132,37 @@ Once a virtual node is deployed to the cluster, it is crucial to restrict it to 
 
 Another approach of working with unikernel specific deployments is to extend the Kubernetes API by defining a \textit{custom resource}. Custom resources are more handcrafted, because they only contain information given by the developer. Stated by the Kubernetes API, "When you combine a custom resource with a custom controller, custom resources provide a true declarative API." Kubernetes has an Operator Pattern to extend the API in a more official way. In the first development iteration of the Operator Pattern, it turned out that the custom controller would only read data from the \textit{unikernel custom resource} and create a deployment configuration with the keys explained above and the information from the custom resource. Then, that deployment would be handled exactly the same, so it only saves the user from adding above mentioned keys but increases the complexity of the cluster greatly by adding a custom resource definition and a controller.
 
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+  \begin{figure}[!h]
+    \centering
+\begin{tikzpicture}[node distance = 2cm,auto]
+  \centering
+  \node [block] (deployment) {Deploy};
+  \node [decision,below of=deployment] (schedule) {Has \textbf{effect: NoSchedule?}};
+  \node [block,left of=schedule, node distance=5cm] (normal) {Handled by normal nodes.};
+  \node [decision,below of=schedule,node distance=5cm] (virtual-kubelet) {Has \textbf{type: virtual-kubelet?}};
+  \node [cloud,left of=virtual-kubelet,node distance=5cm] (invalid) {Invalid Configuration};
+  \node [decision,below of=virtual-kubelet,node distance=5cm] (provider) {Has \textbf{provider: unikernel?}};
+  \node [block,left of=provider,node distance=5cm] (different) {Go to respective provider.};
+  \node [block,right of=provider,node distance=5cm] (end) {Handled by Xen.};
+  % Draw edges
+  \path [line] (deployment) -- (schedule);
+  \path [line] (schedule) -- node {no} (normal);
+  \path [line] (schedule) -- node {yes}(virtual-kubelet);
+  \path [line] (virtual-kubelet) -- node {no} (invalid);
+  \path [line] (virtual-kubelet) -- node {yes} (provider);
+  \path [line] (provider) -- node {no} (different);
+  \path [line] (provider) -- node {yes} (end);
+\end{tikzpicture}
+\caption{Decision flowchart for unikernel Deployments}
+\label{fig:deployment-flowchart}
+\end{figure}
 \subsection{Communication between virtual-kubelet and hypervisor}
 Once a unikernel specific deployment reaches virtual-kubelet, all of it's data can be read. Every method that handles the pod lifecycle has a pod object as argument. This was already mentioned in  figure \ref{fig:signature}. The usability of this interface increases greatly when one realises that , this pod related information is not read or processed anywhere else other than the running node. It allows to redefine what those values stand for without comprimising integrity of the system. In a valid pod deployment, the \textit{image} key is used to specify the name of the docker container that deployment runs. If that container is not found in the given registry, Kubernetes returns an error saying that deployment failed and image couldn't be found. In the unikernel deployment, the image key is used to specify the name of the unikernel binary to run. That name can be handled in many ways. In earlier developments, docker containers simulating edge devices weree created with multiple example unikernel binaries, and there were only couple of options to give to \textit{image} key. Now a unikernel registry exists behind a FTP server and given values are searched there first, if they don't exist on the edge device. This approach is similar to one used by docker based deployments.
 

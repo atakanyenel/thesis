@@ -24,17 +24,17 @@
     [x] Don't use K8S
 
 [ ] Background should explain unikernel and k8s more
-    [ ] Explain borg
-    [ ] Alternatives are not real alternatives, they do different tasks. 
+    [x] Explain borg
+    [x] Alternatives are not real alternatives, they do different tasks. 
 
-[] Improve 2.4 
-    [ ] what do you want to bring with this section ?
-    [ ] what do I want to tell the reader ?
+[x] Improve 2.4 
+    [x] what do you want to bring with this section ?
+    [x] what do I want to tell the reader ?
     #Burada bir related work örneği var. 
 
-[] Lit review -> Related Work
-    [] move examples of unikernels to background
-        [ ] Spend more time writing about them
+[x] Lit review -> Related Work
+    [x] move examples of unikernels to background
+        [x] Spend more time writing about them
     [] address "low resource devices dynamic management"
         [] Iot device management with k8s
             [] also for microcontrollers
@@ -48,8 +48,8 @@
         [] EuroSys or Usenix ATC
 
 [] Diagrams for:
-    [] 4.2.3
-    [] 4.2.4
+    [x] 4.2.3
+    [] 4.2.4 # parse xen output
     [] 4.3
 
 [] Evaluation
@@ -61,7 +61,7 @@
     [] Multiple sensors on same device, and data shared between them. 
 
 [] Trying to make IoT more flexible => add it to kubernetes, allow sensor sharing.
-[] Address this for single board and not for MCU.
+[] Address this for single board and not for MCU. (Micro Controller Unit)
 
 [] Part of laptop seem detached, some form of pre evaluation. "I did this... it works in this scenario, but won't work for me"
 

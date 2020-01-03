@@ -1,24 +1,8 @@
 % !TeX root = ../main.tex
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
-\chapter{Literature Review}\label{chapter:literature}
+\chapter{Related Work}\label{chapter:literature}
  The search on "unikernel"s in Google Scholar brings up 843 articles and the search "unikernel AND Kubernetes" only brings 137, while "Kubernetes" itself brings 5600. Some articles only mention unikernels as a potential way to deploy their application and does not work on the topic itself. Many articles compare unikernels with other virtualisation methods and benchmark them.
- 
-The practical part of unikernel development is mostly running through open source projects. Nevertheless, there is currently no production ready unikernel project that can be used for any arbitrary need. There are multiple groups developing unikernel solutions. A small group of these solutions include: 
-\begin{itemize}
-  \item MirageOS \url{https://github.com/mirage/mirage} \cite{madhavapeddy2014unikernels}
-  MirageOS is a unikernel solution for the OCaml language. It provides libraries for e.g. networking, storage that become operating system drivers when the application is compiled. It produces artifacts that run either on the XEN or KVM hypervisor. It also runs on the ARM64 CPUs , which makes it possible to deploy MirageOS unikernels to Raspberry Pis as IoT targets. 
-  \item Unik \url{https://github.com/solo-io/unik}\cite{levine2016unik} This project brands itself as "Compilation and Deployment Platform" and has support for many providers. They have a documentation to add new providers. They also support different languages to write unikernels, which might come in handy when developing logic for end devices.
-  \item IncludeOS \url{https://github.com/includeos/IncludeOS} \cite{7396164}
-  IncludeOS includes the operating system code to the application as a library when compiled. It can compile C and C++ applications. They target IoT devices as well for improved security. IncludeOS can be used to develop function as a Service (FAAS). Kubernetes can be used to realize that architecture.
-  \item Ops \url{https://github.com/nanovms/ops}
-  Ops is an interface for creating unikernels in the nanovms infrastructure. \cite{nanovms} It is a wrapper around QEMU \cite{qemu}. Ops uses configuration files to build unikernel images at compile time. It also supports multiple languages.
-\end{itemize}
-
-Some of these projects also include Kubernetes as their deployment targets but they do it by including a host OS, thus does not use the full potential of unikernels.
-
-There are companies working on development of unikernels. The most prominent one is Docker, which is the defacto standart for containerised applications. \cite{francia_2016} Unikernels was also subject to CNCF conferences in the past.
-
 
 There are open source projects that leverage Kubernetes functionality for IoT devices. Kubeedge \cite{kubeedge} is a technology from Huawei , that bridges the communication between edge devices and Kubernetes cloud. They are still using Docker when running applications on the edge device. Their future work mentions an intelligent scheduling based on data locality, network status and computing power, which this thesis aims to solve to an extend using Kubernetes labels.
 
