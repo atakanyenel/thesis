@@ -1,7 +1,11 @@
 \section{Scalability}
+The tests for scalability was conducted on a Lenovo V110 laptop with Intel Core i5 processor and 8GB DDR3 4 RAM running Debian OS with Xen enabled. It would be closer to real world environment if tests could be run on the cloud, but the cloud provider used by this thesis prevented hypervisors to be installed on virtual machines. In the current setting, laptop mocks a virtual machine on the cloud with Xen.
 
+The tests were conducted 10 times with different restarts inbetween to prevent caching. All tests runs yielded similar figures and the data from the latest test run was used. 
 \subsection{Boot up times}
-One of the selling points of cloud computing is It's scalability. Scalability  is also one of the biggest selling points of unikernel technology. All the literature around unikernels refer to their superior boot up time when compared with containerisation technology. The measurements in figure \ref{fig:boot-up} support that idea. 
+
+
+One of the selling points of cloud computing is It's scalability. Scalability is also one of the biggest selling points of unikernel technology. All the literature around unikernels refer to their superior boot up time when compared with containerisation technology. The measurements in figure \ref{fig:boot-up} support that idea. 
 \begin{figure}[htpb]
   \centering
   \begin{tikzpicture}

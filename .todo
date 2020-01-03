@@ -39,10 +39,10 @@
         [] Iot device management with k8s
             [] also for microcontrollers
 
-[] Bigger Picture
-    [] lower discussion to runC by OCI https://opensource.com/life/16/8/runc-little-container-engine-could
+[] Bigger Picture :
+    [x] lower discussion to runC by OCI https://opensource.com/life/16/8/runc-little-container-engine-could @critical 
 
-    [] Broaden solution 
+    [] Broaden solution
         [] organize communication
         [] Sharing of sensor access between multiple unikernels
         [] EuroSys or Usenix ATC
@@ -52,10 +52,10 @@
     [] 4.2.4 # parse xen output
     [] 4.3
 
-[] Evaluation
-    [] Where you performed the tests
-    [] How many times
-    [] Is figure average of results
+[x] Evaluation
+    [x] Where you performed the tests
+    [x] How many times
+    [x] Is figure average of results
 
 [] Discussion about:
     [] Multiple sensors on same device, and data shared between them. 
@@ -63,7 +63,7 @@
 [] Trying to make IoT more flexible => add it to kubernetes, allow sensor sharing.
 [] Address this for single board and not for MCU. (Micro Controller Unit)
 
-[] Part of laptop seem detached, some form of pre evaluation. "I did this... it works in this scenario, but won't work for me"
+[x] Part of laptop seem detached, some form of pre evaluation. "I did this... it works in this scenario, but won't work for me"
 
 [] Quality
     [x] Fig 4.1
