@@ -1,7 +1,33 @@
 \section{Scalability}
 The tests for scalability was conducted on a Lenovo V110 laptop with Intel Core i5 processor and 8GB DDR3 4 RAM running Debian OS with Xen enabled. It would be closer to real world environment if tests could be run on the cloud, but the cloud provider used by this thesis prevented hypervisors to be installed on virtual machines. In the current setting, laptop mocks a virtual machine on the cloud with Xen.
 
-The tests were conducted 10 times with different restarts inbetween to prevent caching. All tests runs yielded similar figures and the data from the latest test run was used. 
+The tests were conducted 10 times with different restarts inbetween to prevent caching. All tests runs yielded similar figures and the data from the latest test run was used. The code block for testing scalability can be seen in \ref{fig:kubectl}.
+
+\begin{code}[htpb]
+  \centering
+  \begin{tabular}{c}
+  \begin{lstlisting}[language=Python]
+    def scale(desired_count, deployment_name): # usage: result = scale("nginx",20)
+        POD_COUNT_COMMAND = f "kubectl get pods --selector=app={deployment_name} | grep 'Running\|Terminating' | wc -l" # get running or terminating pods
+        SCALE_COMMAND = f "kubectl scale deployment {deployment_name} --replicas {desired_count}" # scale deployment
+        data = []
+        second = 0
+        INTERVAL = 0.5
+        subprocess.run(["sh", "-c", SCALE_COMMAND]) # execute scale command
+        count = int(subprocess.run(['sh', '-c', POD_COUNT_COMMAND], stdout = subprocess.PIPE).stdout.decode('utf-8')) # count number of pods
+        data.append([second, count]) # save number of pods
+        while desired_count != count: # continue while scaling
+            time.sleep(INTERVAL)
+            second += INTERVAL
+            count = int(subprocess.run(['sh', '-c', POD_COUNT_COMMAND], stdout = subprocess.PIPE).stdout.decode('utf-8'))
+            data.append([second, count])
+
+        return data
+
+\end{lstlisting}
+\end{tabular}
+\caption{Testing Scalability}\label{fig:kubectl}
+\end{code}
 \subsection{Boot up times}
 
 

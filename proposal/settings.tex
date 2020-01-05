@@ -89,12 +89,17 @@
 % Settings for lstlistings
 
 % Use this for basic highlighting
+\definecolor{greencomments}{rgb}{0,0.5,0}
 \lstset{%
   basicstyle=\ttfamily,
   columns=fullflexible,
   autogobble,
   keywordstyle=\bfseries\color{TUMBlue},
-  stringstyle=\color{TUMAccentGreen}
+  stringstyle=\color{TUMAccentGreen},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  commentstyle=\color{greencomments},
 }
 
 % use this for C# highlighting

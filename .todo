@@ -15,7 +15,7 @@
 
 [x] List of Code Snippets 
 [x] Results
-[] Kubectl check command
+[x] Kubectl check command
 
 
 # Vladimir commands
@@ -23,7 +23,7 @@
 [ ] Use scientific language
     [x] Don't use K8S
 
-[ ] Background should explain unikernel and k8s more
+[x] Background should explain unikernel and k8s more @high 
     [x] Explain borg
     [x] Alternatives are not real alternatives, they do different tasks. 
 
@@ -35,16 +35,16 @@
 [x] Lit review -> Related Work
     [x] move examples of unikernels to background
         [x] Spend more time writing about them
-    [] address "low resource devices dynamic management"
-        [] Iot device management with k8s
-            [] also for microcontrollers
+    [x] address "low resource devices dynamic management"
+        [x] Iot device management with k8s
+            [x] also for microcontrollers
 
 [] Bigger Picture :
     [x] lower discussion to runC by OCI https://opensource.com/life/16/8/runc-little-container-engine-could @critical 
 
     [] Broaden solution
         [] organize communication
-        [] Sharing of sensor access between multiple unikernels
+        [x] Sharing of sensor access between multiple unikernels
         [] EuroSys or Usenix ATC
 
 [] Diagrams for:
@@ -57,11 +57,11 @@
     [x] How many times
     [x] Is figure average of results
 
-[] Discussion about:
-    [] Multiple sensors on same device, and data shared between them. 
+[x] Discussion about:
+    [x] Multiple sensors on same device, and data shared between them. 
 
-[] Trying to make IoT more flexible => add it to kubernetes, allow sensor sharing.
-[] Address this for single board and not for MCU. (Micro Controller Unit)
+[x] Trying to make IoT more flexible => add it to kubernetes, allow sensor sharing.
+[x] Address this for single board and not for MCU. (Micro Controller Unit)
 
 [x] Part of laptop seem detached, some form of pre evaluation. "I did this... it works in this scenario, but won't work for me"
 
