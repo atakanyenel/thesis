@@ -1,6 +1,6 @@
 
-\section{Setting up edge environments}
-Unikernels, similar to traditional OS's can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. For proof of concept development, many different edge device configurations were used. There are two different usage scenarios in mind when configuring devices. First one is hypervisor enabled unikernel runtime and the other one is with IoT.
+\section{Setting up end devices}
+Unikernels, similar to traditional OS's can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. For proof of concept development, many different end device configurations were used. There are two different usage scenarios in mind when configuring devices. First one is hypervisor enabled unikernel runtime and the other one is with IoT.
 
 For hypervisor enabled runtime, a laptop was used. Installing a hypervisor on conventional virtual machines in the cloud was not possible because it breaks internal networking and makes it impossible to access machines from outside. Although it would be possible for different cloud providers, it's not a good testing environment as accessing to BIOS of a cloud provided virtual machine is not possible on LRZ.
 
@@ -14,7 +14,7 @@ To experiment more with unikernel ecosystem, solo5 was installed alongside Xen t
 
 Another enviroment is docker containers running virtual-kubelet. They are built on top Ubuntu base image and unikernels can run on them. They are being used to simulate hundreds of IoT machines, since both docker and Raspberry Pis lack hypervisor technology.
 
-When configuring edge devices for hypervisors, a network interface for unikernels should be set. If a unikernel application is using networking, the network interface should be given to the boot up command to make the local DHCP give it an IP.
+When configuring end devices for hypervisors, a network interface for unikernels should be set. If a unikernel application is using networking, the network interface should be given to the boot up command to make the local DHCP give it an IP.
 
 
 \begin{figure}[htpb]

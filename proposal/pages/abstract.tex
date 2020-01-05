@@ -5,7 +5,7 @@ Running a complete operating system to run microservices is problematic in 2 way
 
 Unikernels are specialised programs that package the smallest operating system with the application itself. They don't require a running operating system to be deployed and they can be booted directly from BIOS. They have a very small attack surface as vulnerabilities can only exist within the deployed app. This reduces the memory footprint of the deployed system greatly. Furthermore, They don't waste any resources as there are no processes running other than the application itself. 
 
-This thesis provides an environment to run unikernel applications with Kubernetes by using a type-1 hypervisor. It introduces a custom deployer to deploy applications through the Kubernetes API. Then It uses the same interface to communicate with IoT devices and examines how unikernels fit their needs. The result is a simpler communication scheme between cloud and edge, and better resource utilization with respect to both start up times and scalability.
+This thesis provides an environment to run unikernel applications with Kubernetes by using a type-1 hypervisor. It introduces a custom deployer to deploy applications through the Kubernetes API. Then It uses the same interface to communicate with IoT devices and examines how unikernels fit their needs. The result is a simpler communication scheme between cloud and end devices, and better resource utilization with respect to both start up times and scalability.
 
 It discusses the questions such as: How to communicate with a hypervisor ? How to deploy external unikernels from cloud to hardware ? How to connect unikernels to Kubernetes ? How does unikernels affect scheduling of Kubernetes applications ?
 
