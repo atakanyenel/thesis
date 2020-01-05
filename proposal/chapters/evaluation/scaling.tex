@@ -8,18 +8,18 @@ The tests were conducted 10 times with different restarts inbetween to prevent c
   \begin{tabular}{c}
   \begin{lstlisting}[language=Python]
     def scale(desired_count, deployment_name): # usage: result = scale("nginx",20)
-        POD_COUNT_COMMAND = f "kubectl get pods --selector=app={deployment_name} | grep 'Running\|Terminating' | wc -l" # get running or terminating pods
-        SCALE_COMMAND = f "kubectl scale deployment {deployment_name} --replicas {desired_count}" # scale deployment
+        POD_COUNT_COMMAND = f"kubectl get pods --selector=app={deployment_name} | grep 'Running\|Terminating' | wc -l" # get running or terminating pods
+        SCALE_COMMAND = f"kubectl scale deployment {deployment_name} --replicas {desired_count}" # scale deployment
         data = []
         second = 0
         INTERVAL = 0.5
         subprocess.run(["sh", "-c", SCALE_COMMAND]) # execute scale command
-        count = int(subprocess.run(['sh', '-c', POD_COUNT_COMMAND], stdout = subprocess.PIPE).stdout.decode('utf-8')) # count number of pods
+        count = int(subprocess.run(["sh", "-c", POD_COUNT_COMMAND], stdout = subprocess.PIPE).stdout.decode("utf-8")) # count number of pods
         data.append([second, count]) # save number of pods
         while desired_count != count: # continue while scaling
             time.sleep(INTERVAL)
             second += INTERVAL
-            count = int(subprocess.run(['sh', '-c', POD_COUNT_COMMAND], stdout = subprocess.PIPE).stdout.decode('utf-8'))
+            count = int(subprocess.run(["sh", "-c", POD_COUNT_COMMAND], stdout = subprocess.PIPE).stdout.decode("utf-8"))
             data.append([second, count])
 
         return data
