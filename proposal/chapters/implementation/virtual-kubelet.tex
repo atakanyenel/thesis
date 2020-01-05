@@ -64,7 +64,7 @@ Current open source distribution of virtual-kubelet does not support giving labe
 \begin{code}[htpb]
   \centering
   \begin{tabular}{c}
-  \begin{lstlisting}[language=python]
+  \begin{lstlisting}[language=go]
 import "runtime"
 (...)
 var m runtime.MemStats
@@ -84,7 +84,7 @@ The first job done by the provider is to register the resources to the Kubernete
 \begin{code}[htpb]
   \centering
   \begin{tabular}{c}
-  \begin{lstlisting}[language=ruby]
+  \begin{lstlisting}[language=go]
     func (s *Provider) DeletePod(ctx context.Context, pod *v1.Pod) error
 \end{lstlisting}
 \end{tabular}
@@ -164,9 +164,55 @@ Another approach of working with unikernel specific deployments is to extend the
 \label{fig:deployment-flowchart}
 \end{figure}
 \subsection{Communication between virtual-kubelet and hypervisor}
-Once a unikernel specific deployment reaches virtual-kubelet, all of it's data can be read. Every method that handles the pod lifecycle has a pod object as argument. This was already mentioned in  figure \ref{fig:signature}. The usability of this interface increases greatly when one realises that , this pod related information is not read or processed anywhere else other than the running node. It allows to redefine what those values stand for without comprimising integrity of the system. In a valid pod deployment, the \textit{image} key is used to specify the name of the docker container that deployment runs. If that container is not found in the given registry, Kubernetes returns an error saying that deployment failed and image couldn't be found. In the unikernel deployment, the image key is used to specify the name of the unikernel binary to run. That name can be handled in many ways. In earlier developments, docker containers simulating edge devices weree created with multiple example unikernel binaries, and there were only couple of options to give to \textit{image} key. Now a unikernel registry exists behind a FTP server and given values are searched there first, if they don't exist on the edge device. This approach is similar to one used by docker based deployments.
+Once a unikernel specific deployment reaches virtual-kubelet, all of it's data can be read. Every method that handles the pod lifecycle has a pod object as argument. This was already mentioned in  figure \ref{fig:signature}. The usability of this interface increases greatly when one realises that , this pod related information is not read or processed anywhere else other than the running node. It allows to redefine what those values stand for without comprimising integrity of the system. In a valid pod deployment, the \textit{image} key is used to specify the name of the docker container that deployment runs. If that container is not found in the given registry, Kubernetes returns an error saying that deployment failed and image couldn't be found. In the unikernel deployment, the image key is used to specify the name of the unikernel binary to run. That name can be handled in many ways. In earlier developments, docker containers simulating edge devices were created with multiple example unikernel binaries, and there were only couple of options to give to \textit{image} key. Now a unikernel registry exists behind a FTP server and given values are searched there first, if they don't exist on the edge device. This approach is similar to one used by docker based deployments.
 
-\textit{CreatePod} method is responsible for creating new pods. Upon receiving a new pod and checking that pod is valid, this  executes a shell command to talk with the underlying hardware. The shell command executes domain specific command with supplied parameters. The command runs in a subroutine, and status of the pod is updated as running. While specific commands will be explained more in the upcoming section, an interesting takeaway of this section is how the system does context management with those commands. These commands are all now running, and if they end up stopping for a reason, they have to be restarted by Kubernetes. \textit{GetPods} method is periodically called by the Kubernetes api and that method calls another shell command to check started unikernels. That output is then parsed as a pod object and returned back to master. The pods are saved in a dictionary with their name as key, and the context of their respective command as value. Their command context allows the system to call the \textit{cancel} closure of a command if that pod needs to be deleted, or their command output is send to the \textit{GetLogs} command to return command output. Golang is very helpful in that area ,because by design it has great mechanics for context aware concurrency.
+\textit{CreatePod} method is responsible for creating new pods. Upon receiving a new pod and checking that pod is valid, this  executes a shell command to talk with the underlying hardware. The shell command executes domain specific command with supplied parameters. The command runs in a subroutine, and status of the pod is updated as running. While specific commands will be explained more in the upcoming section, an interesting takeaway of this section is how the system does context management with those commands. These commands are all now running, and if they end up stopping for a reason, they have to be restarted by Kubernetes.
+
+\textit{GetPods} method is periodically called by the Kubernetes api and that method calls another shell command to check started unikernels. For the Xen hypervisor, the output of that command can ben seen in \ref{fig:xenoutput}. That output is parsed as a pod object and returned back to master. The pods are saved in a dictionary with their name as key, and the context of their respective command as value. Their command context allows the system to call the \textit{cancel} closure of a command if that pod needs to be deleted, or their command output is send to the \textit{GetLogs} command to return command output. Golang is very helpful in that area ,because by design it has great mechanics for context aware concurrency. Used struct can be seen in \ref{fig:podmetadata}.
+
+\begin{code}[htpb]
+  \centering
+  \begin{tabular}{c}
+  \begin{lstlisting}
+    (...)
+    "domid": 1,
+    "config": {
+        "c_info": {
+            "type": "hvm",
+            "name": "unikernelapp",
+            "uuid": "76d164d3-0201-49c2-9324-4e8e58543b04",
+            "run_hotplug_scripts": "True"
+        },
+        "b_info": {
+            "max_memkb": 262144,
+            "target_memkb": 262144,
+            "video_memkb": 8192,
+            "shadow_memkb": 2048,
+            "sched_params": {
+                "sched": "credit",
+                "weight": 256,
+                "cap": 0
+            },
+      (...)
+\end{lstlisting}
+\end{tabular}
+\caption{Xen cli output}\label{fig:xenoutput}
+\end{code}
+\begin{code}[htpb]
+  \centering
+  \begin{tabular}{c}
+  \begin{lstlisting}[language=go]
+    type PodWithCancel struct {
+      pod        *v1.Pod // v1 "k8s.io/api/core/v1"
+      cancelFunc context.CancelFunc // to stop running pods
+      output     func() (io.ReadCloser, error) // to read logs
+    }
+    var pods map[string]*PodWithCancel
+\end{lstlisting}
+\end{tabular}
+\caption{Storing pod metadata}\label{fig:podmetadata}
+\end{code}
+
 
 \textit{nodeConditions} is also a periodically called function by the master and it can be configured to reflect changes on the host system. For example, if many unikernel images are running on device, there might be not enough memory to start more instances and that methods would change \textit{OutOfDisk} condition to true.
 

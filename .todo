@@ -49,8 +49,8 @@
 
 [] Diagrams for:
     [x] 4.2.3
-    [] 4.2.4 # parse xen output
-    [] 4.3
+    [x] 4.2.4 # parse xen output
+    [x] 4.3
 
 [x] Evaluation
     [x] Where you performed the tests

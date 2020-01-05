@@ -10,10 +10,18 @@ For testing possible deployment configurations, a linux machine with docker inst
 
 For IoT devices, Raspberry Pi 3 was used. Raspberry Pi uses ARM processor and x64 hypervisors can't be ported easily. There is also not too much motivation for it, because Raspberry Pi is not a powerful end-device and virtualisation is a resource hungry process. Nevertheless, there are projects for lightweight virtualisation on Raspberry Pi. For more powerful end devices though, there are hypervisor projects but they are out of scope for this thesis.
 
-To experiment more with unikernel ecosystem, solo5 was also installed to the aforementioned laptop. Solo5 can be built on top of quemu or KVM and it markets itself as a unikernel specific runtime. To test solo5, Qemu was installed since because the hardware didn't allow KVM virtualisation.
+To experiment more with unikernel ecosystem, solo5 was also installed to the aforementioned laptop. Solo5 can be built on top of quemu or KVM and it markets itself as a unikernel specific runtime. To test solo5, Qemu was installed because the hardware didn't allow KVM virtualisation.
 
 Another enviroment is virtual kubelet installed docker containers. Docker containers are built on top Ubuntu base image and unikernels can run on them. They are being used to simulate hundreds of IoT machines, since both docker and Raspberry Pis lack hypervisor technology.
 
 When configuring edge devices for supervisors, a network interface for virtualisation unikernels should be set. If a unikernel application is using networking, the network interface should be given to the boot up command to make the local DHCP give it an IP.
+
+
+\begin{figure}[htpb]
+  
+    \centering
+    \includegraphics[width=1.2\textwidth]{figures/arch_new.pdf}
+    \caption{ Kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
+  \end{figure}
 %todo: kubeproxy
 % todo: minios

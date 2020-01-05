@@ -91,6 +91,7 @@
 % Use this for basic highlighting
 \definecolor{greencomments}{rgb}{0,0.5,0}
 \definecolor{redstrings}{rgb}{0.64,0.08,0.08}
+\definecolor{bluekeywords}{rgb}{0,0,1}
 \lstset{%
   basicstyle=\ttfamily,
   columns=fullflexible,
@@ -102,8 +103,23 @@
   breaklines=true,
   commentstyle=\color{greencomments},
   stringstyle=\color{redstrings},
+  keywordstyle=\color{bluekeywords},
 }
 
+\lstset{language=go,
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  autogobble,
+  keywordstyle=\bfseries\color{TUMBlue},
+  stringstyle=\color{TUMAccentGreen},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  commentstyle=\color{greencomments},
+  stringstyle=\color{redstrings},
+  morekeywords={type,func,error,struct},
+  keywordstyle=\color{bluekeywords},
+}
 % use this for C# highlighting
 % %\setmonofont{Consolas} %to be used with XeLaTeX or LuaLaTeX
 % \definecolor{bluekeywords}{rgb}{0,0,1}
