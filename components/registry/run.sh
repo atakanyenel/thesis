@@ -1,6 +1,6 @@
 echo "Starting registry script"
 
-echo "Copying virtual kubelet binary"
+echo "Copying Virtual-kubelet binary"
 
 cp ../../code/vk-client/bin/virtual-kubelet .
 cp ../../code/vk-client/bin/linux-virtual-kubelet .
