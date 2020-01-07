@@ -24,13 +24,14 @@ func Execute(ctx context.Context, pod *v1.Pod) (context.CancelFunc, *exec.Cmd) {
 		pod.Status.Phase = v1.PodFailed
 	}
 	go func() {
-
-		err = cmd.Wait()
+		err := cmd.Wait()
 		if err != nil {
-			log.G(ctx).Warnf("Waiting on cmd", err)
-		}
+			log.G(ctx).Warnf("Stopped", err)
+			pod.Status.Phase = v1.PodFailed
 
+		}
 	}()
+
 	return cancel, cmd
 }
 
@@ -40,12 +41,12 @@ func buildCommand(pod *v1.Pod) string {
 	}
 
 	container := pod.Spec.Containers[0]
-	envVar := container.Env[0]
+	argVar := container.Args[0]
 	path, err := exec.LookPath(container.Image)
 	if err != nil {
 		//todo: Download the executable
 		return defaultCommand
 	}
-	command := fmt.Sprintf("%s --%s=%s", path, envVar.Name, envVar.Value)
+	command := fmt.Sprintf("%s %s", path, argVar)
 	return command
 }

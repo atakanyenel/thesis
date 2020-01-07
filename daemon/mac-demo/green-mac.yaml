@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: green-daemon
+  namespace: default
+  labels:
+    unikernel: "true"
+
+spec:
+  selector:
+    matchLabels:
+      name: green-daemon
+  template:
+    metadata:
+      labels:
+        name: green-daemon
+
+    spec:
+      containers:
+        - name: sayer
+          image: mac-demo
+          args:
+            - GREEN
+      nodeSelector:
+          type: virtual-kubelet
+          light: GREEN
+      tolerations:
+      - key: "virtual-kubelet.io/provider"
+        operator: "Equal"
+        value: "unikernel"
+        effect: "NoSchedule"
+
+

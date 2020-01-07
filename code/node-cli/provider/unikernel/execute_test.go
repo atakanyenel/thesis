@@ -4,18 +4,33 @@ import (
 	"context"
 	"fmt"
 	v1 "k8s.io/api/core/v1"
-	"os/exec"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
 	"time"
 )
 
 func TestExecute(t *testing.T) {
 
-	p := &v1.Pod{}
-	Execute(context.Background(), p)
+	fmt.Println("hello")
+	p := &v1.Pod{
+		ObjectMeta: metav1.ObjectMeta{Name: "Custom"},
+		Spec: v1.PodSpec{
+			Containers: []v1.Container{{Image: "mac-demo", Args: []string{"YELLOW"}}},
+		},
+	}
+	cancel, _ := Execute(context.Background(), p)
+	time.Sleep(2 * time.Second)
+	cancel()
 
-	fmt.Printf("%v", p.Status.Phase)
-
+	time.Sleep(4 * time.Second)
+	p.Spec.Containers[0].Args = []string{"GREEN"}
+	cancel, _ = Execute(context.Background(), p)
+	time.Sleep(2 * time.Second)
+	cancel()
+	p.Spec.Containers[0].Args = []string{"new year"}
+	cancel, _ = Execute(context.Background(), p)
+	time.Sleep(2 * time.Second)
+	cancel()
 }
 
 func Test_buildCommand(t *testing.T) {
@@ -24,7 +39,7 @@ func Test_buildCommand(t *testing.T) {
 	}
 	p := v1.Pod{}
 	p.Name = "custom"
-	p.Spec.Containers = []v1.Container{{Image: "my-unikernel-image", Env: []v1.EnvVar{{Name: "sensor", Value: "Temperature"}}}}
+	p.Spec.Containers = []v1.Container{{Image: "mac-demo", Args: []string{"YELLOW"}}}
 	k := p.DeepCopy()
 	k.Spec.Containers[0].Image = "ls"
 	tests := []struct {
@@ -39,11 +54,11 @@ func Test_buildCommand(t *testing.T) {
 		{
 			"custom",
 			args{&p},
-			defaultCommand, //Todo: change to error
+			"/Users/atakanyenel/Desktop/Computer_Science/go/bin/mac-demo YELLOW",
 		}, {
 			"inpath",
 			args{k},
-			"/bin/ls --sensor=Temperature",
+			"/bin/ls YELLOW",
 		}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -52,26 +67,4 @@ func Test_buildCommand(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestRunCommand(t *testing.T) {
-	commandContext, cancel := context.WithCancel(context.Background())
-
-	cmd := exec.CommandContext(commandContext, "sh", "-c", "program")
-	err := cmd.Start()
-	if err != nil {
-		t.Errorf("%s", err)
-	}
-	go func() {
-
-		err = cmd.Wait()
-		if err != nil {
-			t.Errorf("%s", err)
-		}
-
-	}()
-
-	time.Sleep(10 * time.Second)
-	cancel() //cancel running command
-	fmt.Println("asd")
 }

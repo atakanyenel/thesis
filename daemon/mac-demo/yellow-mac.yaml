@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: yellow-daemon
+  namespace: default
+  labels:
+    unikernel: "true"
+
+spec:
+  selector:
+    matchLabels:
+      name: yellow-daemon
+  template:
+    metadata:
+      labels:
+        name: yellow-daemon
+
+    spec:
+      containers:
+        - name: sayer
+          image: mac-demo
+          args:
+            - YELLOW
+      nodeSelector:
+          type: virtual-kubelet
+          light: YELLOW
+      tolerations:
+      - key: "virtual-kubelet.io/provider"
+        operator: "Equal"
+        value: "unikernel"
+        effect: "NoSchedule"
+
+

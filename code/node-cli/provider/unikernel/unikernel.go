@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os/exec"
 	"runtime"
 	"strconv"
 	"strings"
@@ -54,8 +55,8 @@ func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP st
 
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
-	cpu:=strconv.Itoa(runtime.NumCPU())
-	memory:=strconv.Itoa(int(m.Sys/1024/1024)) + "Mi" //Todo: Mi yanlış olabilir
+	cpu := strconv.Itoa(runtime.NumCPU())
+	memory := strconv.Itoa(int(m.Sys/1024/1024)) + "Mi" //Todo: Mi yanlış olabilir
 	provider := Provider{
 		nodeName:           nodeName,
 		operatingSystem:    operatingSystem,
@@ -63,7 +64,7 @@ func NewProvider(providerConfig, nodeName, operatingSystem string, internalIP st
 		daemonEndpointPort: daemonEndpointPort,
 		pods:               make(map[string]*PodWithCancel),
 		config: MockConfig{
-			CPU:   cpu ,
+			CPU:    cpu,
 			Memory: memory,
 			Pods:   PodCapacity,
 		},
@@ -88,12 +89,10 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 
 	ctx = addAttributes(ctx, span, namespaceKey, pod.Namespace, nameKey, pod.Name)
 	log.G(ctx).Infof("receive CreatePod %q", pod.Name)
-
 	key, err := buildKey(pod)
 	if err != nil {
 		return err
 	}
-
 	now := metav1.NewTime(time.Now())
 	pod.Status = v1.PodStatus{
 		Phase:     v1.PodRunning,
@@ -139,7 +138,26 @@ func (s *Provider) CreatePod(ctx context.Context, pod *v1.Pod) error {
 	// ACTUAL START
 	if isUnikernel {
 
-		cancel, cmd := Execute(ctx, pod)
+		commandContext, cancel := context.WithCancel(context.Background())
+
+		cmd := exec.CommandContext(commandContext, "sh", "-c", buildCommand(pod))
+
+		log.G(ctx).Infof("starting Command", cmd)
+		err := cmd.Start()
+		if err != nil {
+			log.G(ctx).Warnf("Couldn't start command", err)
+			pod.Status.Phase = v1.PodFailed
+		}
+		go func() {
+			err := cmd.Wait()
+			if err != nil {
+				log.G(ctx).Warnf("Stopped", err)
+				err := s.DeletePod(ctx, pod)
+				if err != nil {
+					log.G(ctx).Error(err)
+				}
+			}
+		}()
 
 		s.pods[key] = &PodWithCancel{pod, cancel, cmd.StdoutPipe}
 	} else { //kubeproxy
@@ -158,13 +176,14 @@ func (s *Provider) UpdatePod(ctx context.Context, pod *v1.Pod) error {
 
 	log.G(ctx).Infof("receive UpdatePod %q", pod.Name)
 
-	key, err := buildKey(pod)
-	if err != nil {
-		return err
-	}
+	/*	key, err := buildKey(pod)
+		if err != nil {
+			return err
+		}
 
-	s.pods[key].pod = pod
-	s.notifier(pod)
+		s.pods[key].pod = pod
+		s.notifier(pod)
+	*/
 	return nil
 }
 
@@ -188,7 +207,7 @@ func (s *Provider) DeletePod(ctx context.Context, pod *v1.Pod) error {
 	s.pods[key].cancelFunc() //INFO : cancel the running shell command
 	delete(s.pods, key)
 	pod.Status.Phase = v1.PodSucceeded
-	pod.Status.Reason = "UnikernelProviderDeleted"
+	pod.Status.Reason = "UnikernelProviderPodDeleted"
 
 	for idx := range pod.Status.ContainerStatuses {
 		pod.Status.ContainerStatuses[idx].Ready = false
@@ -239,6 +258,7 @@ func (s *Provider) GetPodStatus(ctx context.Context, namespace, name string) (*v
 	if err != nil {
 		return nil, err
 	}
+	log.G(ctx).Infof("%s status: %s", pod.Name, pod.Status.Phase)
 
 	return &pod.Status, nil
 }
@@ -280,8 +300,6 @@ func (*Provider) RunInContainer(ctx context.Context, namespace, podName, contain
 	return nil
 }
 
-
-
 func (s *Provider) nodeAddresses() []v1.NodeAddress {
 	return []v1.NodeAddress{
 		{
@@ -318,7 +336,7 @@ func buildKey(pod *v1.Pod) (string, error) {
 		return "", fmt.Errorf("pod name not found")
 	}
 
-	return buildKeyFromNames(pod.ObjectMeta.Namespace, pod.ObjectMeta.Name)
+	return buildKeyFromNames(pod.ObjectMeta.Namespace, pod.Name)
 }
 
 func (s *Provider) NotifyPods(ctx context.Context, notifier func(*v1.Pod)) {
