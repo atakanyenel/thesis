@@ -1,5 +1,5 @@
 \section{Scalability}
-The tests for scalability was conducted on a Lenovo V110 laptop with Intel Core i5 processor and 8GB DDR3 4 RAM running Debian OS with Xen enabled. It would be closer to real world environment if tests could be run on the cloud, but the cloud provider used by this thesis prevented hypervisors to be installed on virtual machines. In the current setting, laptop mocks a virtual machine on the cloud with Xen.
+The tests for scalability were conducted on a Lenovo V110 laptop with Intel Core i5 processor and 8GB DDR3 4 RAM running Debian OS with Xen enabled. It would be closer to real world environment if tests could be run on the cloud, but the cloud provider used by this thesis prevented hypervisors to be installed on virtual machines. In the current setting, laptop mocks a virtual machine on the cloud with Xen.
 
 The tests were conducted 10 times with restarts in-between to prevent caching. All test-runs yielded similar figures and the data from the latest test run was used. The code block for testing scalability can be seen in \ref{fig:kubectl}.
 
@@ -31,7 +31,7 @@ The tests were conducted 10 times with restarts in-between to prevent caching. A
 \subsection{Boot up times}
 
 
-One of the selling points of cloud computing is It's scalability. Scalability is also one of the biggest selling points of unikernel technology. All the literature around unikernels refer to their superior boot up time when compared with containerisation technology. The measurements in figure \ref{fig:boot-up} support that idea. 
+One of the selling points of cloud computing is its scalability. Scalability is also one of the biggest selling points of unikernel technology. All the literature around unikernels refer to their superior boot up time when compared with containerisation technology. The measurements in figure \ref{fig:boot-up} support that idea.
 \begin{figure}[htpb]
   \centering
   \begin{tikzpicture}
@@ -96,7 +96,7 @@ Another experiment is for measuring scalability of unikernels compared to Docker
 \end{figure}
 \fi
 
-Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen plays a role on their scalability. When given a command to scale from 0 to 30 pods , it only takes 2 seconds for unikernels to boot up. It takes 19 seconds for docker containers. The numbers are smaller than what was measured in boot-up times, because now the programs are being started in parallel through goroutines instead of sequentially.
+Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen plays a role on their scalability. When given a command to scale from 0 to 30 pods, it only takes 2 seconds for unikernels to boot up. It takes 19 seconds for docker containers. The numbers are smaller than what was measured in boot-up times, because now the programs are being started in parallel through goroutines instead of sequentially.
 
 
 \begin{figure}[htpb]
@@ -193,7 +193,7 @@ Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 5
 \fi
 
 Figure \ref{fig:scale-down-50} and \ref{fig:scale-down-30} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while docker containers need around 20 seconds. 
-
+\iffalse
 To measure the performance of scalability of unikernels, we can use the formula proposed by Jindal et al. in \cite{multilayered}. While their formula is for autoscaling systems, It can also be applied here to show the performance difference between unikernels and Docker containers as Kubernetes autoscaler can also operate on unikernel resources as it sees them as pods.
 \begin{equation*}
   \begin{aligned}
@@ -211,7 +211,7 @@ We can think of a situation where there is a high request load for 30 seconds, t
   \end{aligned}
 \end{equation*}
 For this formula, a result of \textbf{1} means that there was a high latency during the whole scaling interval, which means a higher score is better. The scalability of unikernels has 7 times better performance than docker.
-
+\fi
 
 \subsection{Kubernetes reaction time}
 There is also another information we can read from the graph, namely how fast Kubernetes distributes information. For example, when we look at Figure \ref{fig:scale-down-50}, and only observe the scaling behaviour of docker containers, we might think that Kubernetes has a delay of 6 seconds when distributing \textit{scale-down} command to other nodes. Same argument would also be true for \textit{scale-up} command when we check other experiments as well. There is a visible delay in all cases where node count stays constant for a couple of seconds at start, then changes rapidly with respect to the command. When we observe the unikernel behavior though, we have a different scenario. The node reacts to command almost instantly, with only half a second delay. This phenomenon is visible in all graphs. We can read that Kubernetes distributes commands instantly around the cluster. This new information makes it plausible to suggest a new argument: \textit{"The boot-up times of docker containers is the bottleneck for Kubernetes scalability and different runtimes with better boot up times might help to overcome this problem"}.

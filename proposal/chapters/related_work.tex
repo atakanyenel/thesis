@@ -3,42 +3,25 @@
 
 \chapter{Related Work}\label{chapter:literature}
 
-This project relies the research going around Kubernetes and IoT at It's core. Kubernetes has a very active community around it, both in research and development, that Google Scholar returns 9.140 results when searching the technology. While kubernetes has many resources , a Google scholar search on Unikernels bring 1150 results. Most of those results focus on benchmarking unikernels with other virtualisation methods.
+This project relies the research going around Kubernetes and IoT at It's core. Kubernetes has a very active community around it, both in research and development, that Google Scholar returns 9.140 results when searching the technology. While kubernetes has many resources, a Google scholar search on Unikernels brings 1150 results. Most of those results focus on benchmarking unikernels with other virtualisation methods.
 
 Using Kubernetes in an IoT environment is still being discovered. There are open source projects bringing Kubernetes experience to IoT by bridging the gap between edge devices and the cloud. The Kubeedge project \cite{kubeedge} from Huawei, runs dockerised applications on edge devices and manages them through Kubernetes. Their future work mentions an intelligent scheduling based on data locality, network status and computing power, which this thesis aims to solve to an extend using Kubernetes labels.
 
-Another open source solution is K3S \cite{k3s}, a lightweight kubernetes distribution designed for edge computing. K3S strips Kubernetes codebase with non-default options removed , while harcoding some options into the system. A shortcoming for K3S is that they require a complete setup and can not integrate with a already running non-stripped Kubernetes cluster.
+Another open source solution is K3S \cite{k3s}, a lightweight kubernetes distribution designed for edge computing. K3S strips Kubernetes codebase with non-default options removed, while harcoding some options into the system. A shortcoming for K3S is that it requires a complete setup and can not integrate with a already running non-stripped Kubernetes cluster.
 
-A project similar to the work presented in this thesis is FLEDGE \cite{fledge}. FLEDGE uses virtual-kubelet technology to communicate with end devices through the Kubernetes cluster but instead of deploying virtual-kubelet to end devices, they deploy it to the cloud per device and use it as a facade between the Kubernetes environment and IoT commands. They state in their future work that, they will migrate to install virtual-kubelet agents on the end devices, because creating a pod per device decreases the scalability of their solution.
+A project similar to the work presented in this thesis is FLEDGE \cite{fledge}. The main difference between this thesis and FLEDGE is the location where virtual-kubelet instances are deployed. They deploy virtual-kubelet instances in the cluster and use it as a facade between the Kubernetes environment and IoT devices. This thesis deploys them directly to IoT devices. They state in their future work that they will migrate to install virtual-kubelet agents on the end devices too, because creating a pod per device decreases the scalability of their solution.
 
 The Fogernetes project\cite{fogernetes} from Technical University Munich proposes a labeling schema to use with Kubernetes while managing applications in fog computing. Their labeling schema categorises edge devices according to their: \textit{Location, Device Extension, Performance, Connectivity} and relies on Kubernetes scheduling algorithms to run correct applications on correct devices.
 
 A project by Bellavista et al. \cite{Bellavista2017} proposes a Docker based approach to run applications on fog devices such as Raspberry Pi. Their solution communicates with MQTT and they use Docker Swarm as the orchestrator platform. Nevertheless, they still propose Kubernetes and Apache Mesos for alternative orchestrator methods.
 
-In \cite{Mueller2017} , Mueller et al. compare different cloud technologies to create similar environments between layers from edge to cloud. For their future work, they propose combining lightweight technologies \textit{"to build the core of the seamless computing platform"}. This thesis shows how a lightweight technology such as Unikernel can be combined with Kubernetes, a technology that they already discuss on their work, to help build that core.
+In \cite{Mueller2017} , Mueller et al. compare different cloud technologies to create similar environments between layers from edge to cloud. For their future work, they propose combining lightweight technologies \textit{"to build the core of the seamless computing platform"}. This thesis shows how a lightweight technology such as Unikernel can be combined with Kubernetes, a technology that they already discuss, to help build that core.
 
 For controlling low-resource devices, such as microcontrollers, cloud provider companies have their own solutions. E. g. Google has \textit{Google Cloud IoT Device SDK for Embedded C} repository for connecting low-end devices such as Arduino or ESP32 to their own IoT core product. It enables concurrent Pub/Sub traffic on devices using MQTT. That traffic can then be analysed on the Google Cloud where resources are abundant.
 
 There are some research on orchestrating unikernel applications. FADES project \cite{fades} from Technical University Munich is deploying MirageOS unikernels to specialised hardware devices such as Intel NUC and Cubietruck. Their orchestrator is a custom orchestrator written in Python. An informal talk with one of the authors revealed that it's actually a good idea to use Kubernetes for orchestration.
  %Todo : can I actually say that ??
 
-The Mikelangelo project \cite{Struckmann2018} combines Kubernetes with Unikernels. They are using a unikernel technology called OSv \cite{osv}, that wraps \textit{unmodified linux applications} with a microVM. They are using Virtlet, a Kubernetes plugin to run virtual machines as pods , and register unikernels as virtual machines to the plugin. Their solution even provides a unikernel registry running behing a nginx server. While their implementation is promising, the last commit to the project was almost 3 years ago and it was not possible to recreate their solution.
+The Mikelangelo project \cite{Struckmann2018} combines Kubernetes with Unikernels. They are using a unikernel technology called OSv \cite{osv}, that wraps \textit{unmodified linux applications} with a microVM; Virtlet, a Kubernetes plugin to run virtual machines as pods and finally register unikernels as virtual machines to the plugin. Their solution even provides a unikernel registry running behing a nginx server. While their implementation is promising, the last commit to the project was almost 3 years ago and it was not possible to recreate their solution.
 
-
-
-\iffalse
-
-Another similar project is FADES \cite{fades} project by Munich Technical University. They are using MirageOS unikernels but their deployment environment is specialised hardware devices, namely Intel NUC and Cubietruck. They also have their own orchestrator in Python. While it's better customised for their own scenarios, it lacks the battle-tested reliability of Kubernetes. Nevertheless, it's a proof of growing interest for orchestrated unikernel deployment on edge devices.
-
-
- The search on "unikernel"s in Google Scholar brings up 843 articles and the search "unikernel AND Kubernetes" only brings 137, while "Kubernetes" itself brings 5600. Some articles only mention unikernels as a potential way to deploy their application and does not work on the topic itself. Many articles compare unikernels with other virtualisation methods and benchmark them.
-
-There are open source projects that leverage Kubernetes functionality for IoT devices. Kubeedge \cite{kubeedge} is a technology from Huawei , that bridges the communication between edge devices and Kubernetes cloud. They are still using Docker when running applications on the edge device. Their future work mentions an intelligent scheduling based on data locality, network status and computing power, which this thesis aims to solve to an extend using Kubernetes labels.
-
-Another project that is similar to this thesis is the FLEDGE project\cite{fledge}. FLEDGE also uses virtual-kubelet technology to communicate between edge devices and the Kubernetes cluster. An important difference is they are deploying virtual-kubelet instance per edge device to the cloud and use it as a proxy when communicating with the edge device. It's a nice mixin to use both cloud-native technologies with IoT technologies but as they state in their future work, it causes a new pod to be created for every edge device, which affects the scalability of the solution.
-
-Another mature solution is k3s \cite{k3s}, a lightweight Kubernetes distribution designed for edge devices. K3S is stripped version of Kubernetes with non-default options removed, and some options hardcoded into the system. While K3S is compatible wth the current Kubernetes standards as they are using the same codebase, it sets up it's own master node and can not be used with a running Kubernetes cluster.
-
-
-
-\fi
+This thesis differs itself from the works explained above by bringing a single solution to different problems that those works try to solve. An easy-to-install agent can be used to run unikernels both on IoT devices and on unikernels. It also operates completely without Docker on IoT devices.

@@ -1,5 +1,5 @@
 \chapter{Implementation}\label{chapter:implementation}
-This chapter explains how to set up a unikernel enabled Kubernetes cluster with the required components. It also goes into detail of different implementation ideas that are also possible to extend this project or that were implemented by other parties. Implementation of the project consists of 4 parts:
+This chapter explains how to set up a unikernel-enabled Kubernetes cluster with the required components. It also goes into detail of different implementation ideas that are also possible to extend this project or that were implemented by other parties. Implementation of the project consists of 4 parts:
 \begin{enumerate}
 \item Setting up the Kubernetes cluster
 \item Implementing a custom pod deployer
@@ -12,23 +12,3 @@ This chapter explains how to set up a unikernel enabled Kubernetes cluster with 
 \input{chapters/implementation/virtual-kubelet.tex}
 \input{chapters/implementation/edge.tex}
 \input{chapters/implementation/app.tex}
-
-
-\iffalse
-\section{Proposed Solution}
-
-Before starting to implement unikernels to Kubernetes, a couple of proof of concept unikernel programs will be created. To create those programs, open-sourced unikernel solutions will be used. There are multiple projects with different approaches and different runtime environments. Next chapter explains more about those solutions. Selecting the most suitable one for the purpose of this thesis plays a crucial role because, it is out of scope for this thesis to develop a new unikernel solution just for Kubernetes. Once those programs are created, unikernel deployments will be added to Kubernetes arsenal with the following steps:
-
-1) A node with a type-2 hypervisor will be created. A custom program will be written that takes orders from a server and boot up unikernels according to parameters coming from the order. The custom program will run on the host operating system and there will be no Kubernetes involvement.
-
-2) A Kubernetes cluster will be created and that custom program will be modified to communicate with Kubernetes. Everytime a unikernel deployment is made, Kubernetes will notify this program, and program will do the deployment.
-
-3) Kubernetes DNS system will be integrated to the node with the type-2 hypervisor so they can communicate with other applications.
-
-4) A node with a host operating system with type-1 hypervisor will be created. E.g. Xen hypervisor can also run on a host operating system. This node will be modified to communicate with the Kubernetes cluster through the host operating system. 
-
-5) A node without a host operating system with type-1 hypervisor will be created. This node should also run the custom program that communicates with the Kubernetes cluster on the hypervisor and should also do the networking of unikernels between other Kubernetes resources.This will be the final outcome of the thesis.
-
-
-A scope of this project is not to come up with a new unikernel solution and it will use the ones already developed by the open-source community.It also won't compare application performance between docker containers and unikernels. It will although compare the deployment time between those.
-\fi
