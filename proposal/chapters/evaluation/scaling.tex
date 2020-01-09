@@ -58,12 +58,12 @@ One of the selling points of cloud computing is its scalability. Scalability is 
     \caption{Boot-up times}\label{fig:boot-up}
   \end{figure}
 
-The boot up test was conducted by sequentially starting containers and unikernels with a shell script and timing it with \textit{time} command. The docker container was downloaded before, so its pull time is not part of the benchmark. All the test cases use the same program, a hello world, and the docker container only wraps it in ubuntu image. To prevent caching, all images were compiled just before testing. The sizes of the used images can be seen in \ref{tab:sizes}.
+The boot up test was conducted by sequentially starting containers and unikernels with a shell script and timing it with \textit{time} command. The Docker container was downloaded before, so its pull time is not part of the benchmark. All the test cases use the same program, a hello world, and the Docker container only wraps it in ubuntu image. To prevent caching, all images were compiled just before testing. The sizes of the used images can be seen in \ref{tab:sizes}.
 
-The first take from the graph is the boot-up time of Xen hypervisor. It only needs 10-15\% of total boot time required by docker. Starting a single unikernel happens in subsecond and that opens new possibilities of hyper-scalability in the cloud, similar to Jitsu project explained above. We can boot up new unikernels for on-demand tasks with virtually no delay to the system or to the user. Another take from the graph is measurements of the virtio \cite{virtio} hypervisor. The reasons for its inferior boot up times to docker is not known. Virtio is a layer on top of the KVM hypervisor and that might be the case for this delay or it's possible that because of the relation between Xen hypervisor and MirageOS, it's much more compatible to Xen than it is to KVM. It might also be possible because of the virtualisation limitations of the hardware that the test was conducted on.
+The first take from the graph is the boot-up time of Xen hypervisor. It only needs 10-15\% of total boot time required by Docker. Starting a single unikernel happens in subsecond and that opens new possibilities of hyper-scalability in the cloud, similar to Jitsu project explained above. We can boot up new unikernels for on-demand tasks with virtually no delay to the system or to the user. Another take from the graph is measurements of the virtio \cite{virtio} hypervisor. The reasons for its inferior boot up times to Docker is not known. Virtio is a layer on top of the KVM hypervisor and that might be the case for this delay or it's possible that because of the relation between Xen hypervisor and MirageOS, it's much more compatible to Xen than it is to KVM. It might also be possible because of the virtualisation limitations of the hardware that the test was conducted on.
 
 \subsection{Scaling time}
-Another experiment is for measuring scalability of unikernels compared to Docker in Kubernetes. In the following experiments, the setting is the same as the one showed in \ref{fig:arch}. There is a master node, two traditional nodes and the laptop connected with virtual-kubelet. No pods can be scheduled to run on the master node. The program that is being tested is an infinite loop program that reads data from a file and outputs the value every 2 seconds. The docker container is the same program with ubuntu image wrapped around it. Both nodes have the test image already pulled to their disks. The deployments are already created in Kubernetes. As soon as \textit{scale} command is called, a script counts number of pods with the \textbf{running} status every 0.5 seconds (shown in \ref{fig:kubectl}).
+Another experiment is for measuring scalability of unikernels compared to Docker in Kubernetes. In the following experiments, the setting is the same as the one showed in \ref{fig:arch}. There is a master node, two traditional nodes and the laptop connected with virtual-kubelet. No pods can be scheduled to run on the master node. The program that is being tested is an infinite loop program that reads data from a file and outputs the value every 2 seconds. The Docker container is the same program with ubuntu image wrapped around it. Both nodes have the test image already pulled to their disks. The deployments are already created in Kubernetes. As soon as \textit{scale} command is called, a script counts number of pods with the \textbf{running} status every 0.5 seconds (shown in \ref{fig:kubectl}).
 
 \begin{figure}[htpb]
   \centering
@@ -96,7 +96,7 @@ Another experiment is for measuring scalability of unikernels compared to Docker
 \end{figure}
 \fi
 
-Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen plays a role on their scalability. When given a command to scale from 0 to 30 pods, it only takes 2 seconds for unikernels to boot up. It takes 19 seconds for docker containers. The numbers are smaller than what was measured in boot-up times, because now the programs are being started in parallel through goroutines instead of sequentially.
+Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen plays a role on their scalability. When given a command to scale from 0 to 30 pods, it only takes 2 seconds for unikernels to boot up. It takes 19 seconds for Docker containers. The numbers are smaller than what was measured in boot-up times, because now the programs are being started in parallel through goroutines instead of sequentially.
 
 
 \begin{figure}[htpb]
@@ -129,7 +129,7 @@ Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen pl
   \caption{Scaling from 0 to 50 pods } \label{fig:scale-up-50}
 \end{figure}
 \fi  
-Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 50. It takes 4 seconds for all unikernels to start, while docker needs 26 seconds to scale them.
+Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 50. It takes 4 seconds for all unikernels to start, while Docker needs 26 seconds to scale them.
 \begin{figure}[htpb]
   \centering
   \begin{tikzpicture}
@@ -192,7 +192,7 @@ Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 5
 \end{figure}
 \fi
 
-Figure \ref{fig:scale-down-50} and \ref{fig:scale-down-30} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while docker containers need around 20 seconds. 
+Figure \ref{fig:scale-down-50} and \ref{fig:scale-down-30} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while Docker containers need around 20 seconds. 
 \iffalse
 To measure the performance of scalability of unikernels, we can use the formula proposed by Jindal et al. in \cite{multilayered}. While their formula is for autoscaling systems, it can also be applied here to show the performance difference between unikernels and Docker containers as Kubernetes autoscaler can also operate on unikernel resources as it sees them as pods.
 \begin{equation*}
@@ -210,11 +210,11 @@ We can think of a situation where there is a high request load for 30 seconds, t
   HL(T_{UnikernelPerformance})&=\frac{30-0}{4-0}&=\textbf{7.5} \\
   \end{aligned}
 \end{equation*}
-For this formula, a result of \textbf{1} means that there was a high latency during the whole scaling interval, which means a higher score is better. The scalability of unikernels has 7 times better performance than docker.
+For this formula, a result of \textbf{1} means that there was a high latency during the whole scaling interval, which means a higher score is better. The scalability of unikernels has 7 times better performance than Docker.
 \fi
 
 \subsection{Kubernetes reaction time}
-There is also another information we can read from the graph, namely how fast Kubernetes distributes information. For example, when we look at Figure \ref{fig:scale-down-50}, and only observe the scaling behaviour of docker containers, we might think that Kubernetes has a delay of 6 seconds when distributing \textit{scale-down} command to other nodes. Same argument would also be true for \textit{scale-up} command when we check other experiments as well. There is a visible delay in all cases where node count stays constant for a couple of seconds at start, then changes rapidly with respect to the command. When we observe the unikernel behavior though, we have a different scenario. The node reacts to command almost instantly, with only half a second delay. This phenomenon is visible in all graphs. We can read that Kubernetes distributes commands instantly around the cluster. This new information makes it plausible to suggest a new argument: \textit{"The boot-up times of docker containers is the bottleneck for Kubernetes scalability and different runtimes with better boot up times might help to overcome this problem"}.
+There is also another information we can read from the graph, namely how fast Kubernetes distributes information. For example, when we look at Figure \ref{fig:scale-down-50}, and only observe the scaling behaviour of Docker containers, we might think that Kubernetes has a delay of 6 seconds when distributing \textit{scale-down} command to other nodes. Same argument would also be true for \textit{scale-up} command when we check other experiments as well. There is a visible delay in all cases where node count stays constant for a couple of seconds at start, then changes rapidly with respect to the command. When we observe the unikernel behavior though, we have a different scenario. The node reacts to command almost instantly, with only half a second delay. This phenomenon is visible in all graphs. We can read that Kubernetes distributes commands instantly around the cluster. This new information makes it plausible to suggest a new argument: \textit{"The boot-up times of Docker containers is the bottleneck for Kubernetes scalability and different runtimes with better boot up times might help to overcome this problem"}.
 
 
   
