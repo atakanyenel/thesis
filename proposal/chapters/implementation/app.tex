@@ -23,7 +23,7 @@ Since Unikernel first introduced in 2013 by Madhavapeddy et al in \cite{library-
 
 The reason for choosing MirageOS was the activity around its development and that it behaves directly as a unikernel. For example, both OSv and Rumprun have unused functionality on their kernels to support more languages.
 
-MirageOS requires two files to develop a unikernel. First one is the \textit{config.ml} file. It defines the entry point of the program and lists dependencies. Second one is \textit{unikernel.ml} , which has the application entry point. To use a dependency, it has to be in the config file and adding a dependency requires additional files to be regenerated.
+MirageOS requires two files to develop a unikernel. First one is the \textit{config.ml} file. It defines the entry point of the program and lists dependencies. Second one is \textit{unikernel.ml}, which has the application entry point. To use a dependency, it has to be in the config file and adding a dependency requires additional files to be regenerated.
 
 MirageOS uses an OPAM package with the name \textit{mirage} \cite{opammirage} for development. This package is used to create configuration files that will be sealed with the application code for the target environment and it also compiles the application. Drivers for unikernels are also written in OCaml and published as additional opam packages. Once Mirage creates a deployment tree, it installs required packages through the OCaml repository. The following command in \ref{fig:mirage_configure} configures a package for compilation.
 
