@@ -25,13 +25,7 @@ On the other hand, there are projects where MirageOS was used with superior func
 \end {sequencediagram}
 \caption{Jitsu \cite{jitsu}}\label{fig:jitsu}
 \end{figure}
-\iffalse
-\begin{figure}[htpb]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/jitsu.jpg}
-    \caption{Jitsu \cite{jitsu}} \label{fig:jitsu}
-  \end{figure}
-\fi
+
 Jitsu project is being used to serve static websites, which is a simple task to do. Nevertheless, their fast boot times allows them to use unikernels instead of Docker containers. The DNS server running in that example is also a unikernel, so the environment can be achieved in a pure unikernel fashion.
 
 Another unikernel stack, IncludeOS, writes its applications in C++. C++ is a more industry oriented language than OCaml, but they still have the same network problems. IncludeOS requires an additional file to set up network correctly. It was not easy to set up their hello\_world example flawlessly.

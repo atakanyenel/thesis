@@ -12,13 +12,6 @@ The different use cases explained above are only possible because cloud computin
 
 The abstraction in cloud is possible with hypervisor technologies such as Xen. Controlled by software APIs, hypervisors boot self-contained virtual machines on demand, and can run applications as if they were running on physical hosts. This is called \textit{server consolidation} and it has been a great way to reduce under-utilized hardware.
 
-\iffalse
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=0.4\textwidth]{figures/Linux-containers-vms-unikernels.png}
-  \caption{Different virtualization techniques: https://nordicapis.com/introduction-to-unikernels/} \label{fig:virt}
-\end{figure}
-\fi
 \section{Unikernels}
 Unikernels \cite{library-operating-system} \cite{madhavapeddy2014unikernels} are specialised machine images compiled from high-level languages. Those machine images can run directly on the hypervisor or on bare metal. First examples of unikernels can be seen since the late 1990's with the projects like Exodus \cite{exokernel} and Nemesis \cite{nemesis}. In a unikernel project, the developer selects libraries from a repository where the OS functionalities are implemented in. In most cases, these libraries are also implemented in the high-level language that the project is implemented. Once the required libraries for the project are selected, whole codebase is compiled with configuration code for the target runtime. The resulting artifact has the modular stack architecture similar to figure \ref{fig:unikernel-arch} and is a single OS image. This OS image can then be distributed analogous to conventional OS images and be booted directly by a hypervisor or installed to hardware through BIOS. They can be uploaded to cloud systems like OpenStack \cite{openstack} to be booted at will or can be distributed to smaller devices, which is the purpose of this project.
 

@@ -88,14 +88,6 @@ Another experiment is for measuring scalability of unikernels compared to Docker
   \caption{Scaling from 0 to 30 pods}\label{fig:scale-up-30}
   \end{figure}
 
- \iffalse 
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=1\textwidth]{figures/scales/scale-up-30.png}
-  \caption{Scaling from 0 to 30 pods } \label{fig:scale-up-30}
-\end{figure}
-\fi
-
 Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen plays a role on their scalability. When given a command to scale from 0 to 30 pods, it only takes 2 seconds for unikernels to boot up. It takes 19 seconds for Docker containers. The numbers are smaller than what was measured in boot-up times, because now the programs are being started in parallel through goroutines instead of sequentially.
 
 
@@ -122,13 +114,6 @@ Figure \ref{fig:scale-up-30} shows how fast boot-up time of unikernels in Xen pl
   \caption{Scaling from 0 to 50 pods}\label{fig:scale-up-50}
   \end{figure}
 
-  \iffalse
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{figures/scales/scale-up-50.png}
-  \caption{Scaling from 0 to 50 pods } \label{fig:scale-up-50}
-\end{figure}
-\fi  
 Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 50. It takes 4 seconds for all unikernels to start, while Docker needs 26 seconds to scale them.
 \begin{figure}[htpb]
   \centering
@@ -176,24 +161,30 @@ Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 5
     \caption{Scaling from 30 to 0 pods}\label{fig:scale-down-30}
     \end{figure}
 
+Figure \ref{fig:scale-down-50} and \ref{fig:scale-down-30} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while Docker containers need around 20 seconds.
+\iffalse
+We can measure the performance of unikernels by comparing the total seconds where the system is in its desired state. Adding on top of the measurement in \ref{fig:scale-down-50}, we can a period of 30 seconds where 50 pods are needed. Unikernels reach that state in 4 seconds. Docker reaches that state in 28 seconds.
+
+\begin{equation*}
+  \begin{aligned}
+    T_{total}&=30s \\
+    T_{UnikernelScale}&=4s \\
+    T_{DockerScale}&=28s \\
+    T_{UnikernelInDesiredState}&=T_{total}-T_{UnikernelScale}=26s \\
+    T_{DockerInDesiredState}&=T_{total}-T_{DockerScale}=2s\\
+  \end{aligned}
+\end{equation*}
+Dividing time spent in desired state with total time gives a ratio to compare solutions more analytically.
+
+\begin{equation*}
+  \begin{aligned}
+    T_{UnikernelPerformace}&=\frac{26s}{30s}&=0.86 \\
+    T_{DockerPerformance}&=\frac{2s}{30s}&=0.06 \\
+  \end{aligned}
+  \end{equation*}
+This means Unikernel was 14 times better in achieving the desired for in 30 seconds than Docker.
+\fi
   \iffalse
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{figures/scales/scale-down-30.png}
-  \caption{Scaling from 30 to 0 pods } \label{fig:scale-down-30}
-\end{figure}
-\fi
-
-\iffalse
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{figures/scales/scale-down-50.png}
-  \caption{Scaling from 50 to 0 pods } \label{fig:scale-down-50}
-\end{figure}
-\fi
-
-Figure \ref{fig:scale-down-50} and \ref{fig:scale-down-30} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while Docker containers need around 20 seconds. 
-\iffalse
 To measure the performance of scalability of unikernels, we can use the formula proposed by Jindal et al. in \cite{multilayered}. While their formula is for autoscaling systems, it can also be applied here to show the performance difference between unikernels and Docker containers as Kubernetes autoscaler can also operate on unikernel resources as it sees them as pods.
 \begin{equation*}
   \begin{aligned}
@@ -211,8 +202,8 @@ We can think of a situation where there is a high request load for 30 seconds, t
   \end{aligned}
 \end{equation*}
 For this formula, a result of \textbf{1} means that there was a high latency during the whole scaling interval, which means a higher score is better. The scalability of unikernels has 7 times better performance than Docker.
-\fi
 
+\fi
 \subsection{Kubernetes reaction time}
 There is also another information we can read from the graph, namely how fast Kubernetes distributes information. For example, when we look at Figure \ref{fig:scale-down-50}, and only observe the scaling behaviour of Docker containers, we might think that Kubernetes has a delay of 6 seconds when distributing \textit{scale-down} command to other nodes. Same argument would also be true for \textit{scale-up} command when we check other experiments as well. There is a visible delay in all cases where node count stays constant for a couple of seconds at start, then changes rapidly with respect to the command. When we observe the unikernel behavior though, we have a different scenario. The node reacts to command almost instantly, with only half a second delay. This phenomenon is visible in all graphs. We can read that Kubernetes distributes commands instantly around the cluster. This new information makes it plausible to suggest a new argument: \textit{"The boot-up times of Docker containers is the bottleneck for Kubernetes scalability and different runtimes with better boot up times might help to overcome this problem"}.
 
