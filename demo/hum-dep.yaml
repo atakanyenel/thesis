@@ -28,3 +28,34 @@ spec:
               operator: "Equal"
               value: "unikernel"
               effect: "NoSchedule"
+
+---
+
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+            name: green-daemon
+            namespace: default
+        spec:
+            selector:
+                matchLabels:
+                    name: green-daemon
+            template:
+                metadata:
+                    labels:
+                        name: green-daemon
+                spec:
+                    containers:
+                    - name: sayer
+                      image: led-daemon
+                      args:
+                        - GREEN
+                    nodeSelector:
+                        type: "virtual-kubelet"
+                        model: "raspberry-pi"
+                        light: "GREEN"
+                    tolerations:
+                      - key: "virtual-kubelet.io/provider"
+                        operator: "Equal"
+                        value: "unikernel"
+                        effect: "NoSchedule"

@@ -29,14 +29,14 @@ Despite lack of virtualisation, it's possible to run unikernels on Raspberry Pi 
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[height=0.5\textwidth]{figures/rpi-diagram.pdf}
-  \caption{Yellow connected to pin 18 and Green to pin 23} \label{fig:rpi-diagram}
+  \includegraphics[height=0.6\textwidth]{figures/rpi-diagram.pdf}
+  \caption{Yellow connected to pin 18 and green to pin 23} \label{fig:rpi-diagram}
 \end{figure}
 
-For the IoT case, two different DaemonSets are deployed to the cluster, yellow-daemon \& green-daemon. Both DaemonSets are configured to deploy to nodes labeled with \textit{raspberrypi="true"}. While yellow-daemon is deployed to every node, green-daemon is only deployed to nodes if they have the \textit{light=GREEN} label additional to raspberry label. When a new device connects to cluster through virtual-kubelet, yellow-daemon deploys a unikernel application that turns the yellow led on. This workflow simulates the auto-configuration ability of this solution. The logic of the deployed application can be replaced with e.g. downloading additional binaries, sending GPS data only once, setting up a local network, etc.
+For the IoT case, two different DaemonSets are deployed to the cluster, namely yellow-daemon and green-daemon. Both DaemonSets are configured to deploy to nodes labeled with \textit{model=raspberry-pi}. While yellow-daemon is deployed to every node, green-daemon is only deployed to nodes if they have the \textit{light=GREEN} label additional to raspberry label. When a new device connects to cluster through virtual-kubelet, yellow-daemon deploys a unikernel application that turns the yellow led on. This workflow simulates the auto-configuration ability of this solution. The logic of the deployed application can be replaced with e.g. downloading additional binaries, sending GPS data only once, setting up a local network, etc.
 
 
-When Raspberry Pi is labeled with \textit{light=GREEN}, green-daemon deploys another unikernel on the device, toggling green light on and off every 2 second. When the label is removed, virtual-kubelet kills the unikernel, which returns the green led to OFF state upon graceful termination. The unikernel applications get the pin number as a command-line argument. If a change occurs on the pin number that the led is connected to, the daemon can be edited on the fly with \textit{kubectl edit daemonset green-daemon} and the new pin number can be given to the \textbf{args} field. Termination of the unikernel with the outdated data and creation of the new one is handled completely by the Kubernetes API. The full YAML file for the mentioned daemonSet and the physical wiring of the circuit in \ref{fig:rpi-diagram} can be seen in \hyperref[chapter: Appendix]{appendix}.
+When Raspberry Pi is labeled with \textit{light=GREEN}, green-daemon deploys another unikernel on the device, toggling green light on and off every 2 second. When the label is removed, virtual-kubelet kills the unikernel, which returns the green led to OFF state upon graceful termination. The unikernel applications get the pin number as a command-line argument. If a change occurs on the pin number that the led is connected to, the daemon can be edited on the fly with \textit{kubectl edit daemonset green-daemon} and the new pin number can be given to the \textbf{args} field. Termination of the unikernel with the outdated data and creation of the new one is handled completely by the Kubernetes API. The full YAML file for the mentioned DaemonSet can be seen in \ref{fig:green-daemon}.
 
 
 
