@@ -1,13 +1,48 @@
-\chapter{General Addenda}
+\chapter{Appendix} \label{chapter: Appendix}
 
-If there are several additions you want to add, but they do not fit into the thesis itself, they belong here.
+\begin{code}[htpb]
+    \centering
+    \begin{tabular}{c}
+    \begin{lstlisting}[language=ruby]
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: green-daemon
+          namespace: default
+          labels:
+            unikernel: "true"
+        spec:
+          selector:
+            matchLabels:
+              name: green-daemon
+          template:
+            metadata:
+              labels:
+                name: green-daemon
+            spec:
+              containers:
+                - name: sayer
+                  image: led-daemon
+                  args:
+                    - GREEN
+              nodeSelector:
+                  type: virtual-kubelet
+                  raspberrypi: "true"
+                  light:"GREEN"
+              tolerations:
+              - key: "virtual-kubelet.io/provider"
+                operator: "Equal"
+                value: "unikernel"
+                effect: "NoSchedule"
+  \end{lstlisting}
+  \end{tabular}
+  \caption{Green-daemon specification}\label{fig:green-daemon}
+  \end{code}
 
-\section{Detailed Addition}
 
-Even sections are possible, but usually only used for several elements in, e.g.\ tables, images, etc.
-
-\chapter{Figures}
-\section{Example 1}
-\cmark
-\section{Example 2}
-\xmark
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{rasp-running.jpeg}
+    \caption{Physical wiring of \ref{fig:rpi-diagram}}
+  \end{figure}
+  

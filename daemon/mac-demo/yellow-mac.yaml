@@ -24,6 +24,7 @@ spec:
       nodeSelector:
           type: virtual-kubelet
           light: YELLOW
+          RaspberryPi: "true"
       tolerations:
       - key: "virtual-kubelet.io/provider"
         operator: "Equal"

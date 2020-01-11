@@ -41,7 +41,10 @@ IncludeOS includes the operating system code to the application as a library whe
   Ops is an interface for creating and managing unikernels in the nanovms infrastructure \cite{nanovms}. It has a wrapper around QEMU \cite{qemu} to run unikernels within the Ops-cli. Ops uses configuration files to embed static content and to configure runtime arguments of images at compile time. It supports multiple languages.
 \newline
 
-Some of these projects include Kubernetes as their deployment target but they do it by including a host OS, thus does not use the full potential of unikernels.
+
+There is also a new trend in developing unikernels with the Rust programming language. Rust uses modern paradigms for system level programming and that allows young developers to develop unikernel applications without any knowledge of C or OCaml. Lankes et al. are "exploring Rust for Unikernel Development" more in \cite{Lankes2019}.
+
+While some of those projects include Kubernetes as their deployment target but they do it by including a host OS, thus does not use the full potential of unikernels.
 
 There are companies working on development of unikernels. The most prominent one is Docker, which is the defacto standart for containerized applications \cite{francia_2016}. Unikernels were also subject to CNCF conferences in the past.
 
@@ -56,6 +59,7 @@ Kubernetes' popularity comes from the experience of the developers who built it.
 
 Kubernetes is the most dominant product on the market right now, but alternatives exists. Some of those alternatives have a more narrowed focus than Kubernetes, providing less capabilities while being easier to operate. A small group of these technologies are as follows:
 
+\newpage
 \subsection*{Docker Swarm}
 Docker Swarm is the orchestration solution from the Docker company. It uses the same API as the Docker-cli, so users don't need to learn another set of commands. However, it has less functionality than Kubernetes. For example, secret management of Kubernetes is lacking in Docker Swarm.
 

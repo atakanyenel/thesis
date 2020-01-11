@@ -539,3 +539,60 @@ title = {{Azure/iot-edge-virtual-kubelet-provider: Kubernetes virtual kubelet pr
 url = {https://github.com/Azure/iot-edge-virtual-kubelet-provider},
 urldate = {2020-01-09}
 }
+
+@misc{kube-ops-view,
+title = {{hjacobs/kube-ops-view: Kubernetes Operational View - read-only system dashboard for multiple K8s clusters}},
+url = {https://github.com/hjacobs/kube-ops-view},
+urldate = {2020-01-10}
+}
+
+
+@article{Williams2016,
+abstract = {Recently, unikernels have emerged as an exploration of minimalist software stacks to improve the security of applications in the cloud. In this paper, we propose extending the notion of minimalism beyond an individual virtual machine to include the underlying monitor and the interface it exposes. We propose unikernel monitors. Each unikernel is bundled with a tiny, specialized monitor that only contains what the unikernel needs both in terms of interface and implementation. Unikernel monitors improve isolation through minimal interfaces, reduce complexity, and boot unikernels quickly. Our initial prototype, ukvm, is less than 5{\%} the code size of a traditional monitor, and bootsMirageOS unikernels in as little as 10ms (8× faster than a traditional monitor).},
+author = {Williams, Dan and Koller, Ricardo},
+file = {:Users/atakanyenel/Desktop/thesis/literature/papers/2-unikernel monitors.pdf:pdf},
+journal = {8th USENIX Workshop on Hot Topics in Cloud Computing (HotCloud '16)},
+number = {Vm},
+title = {{Unikernel Monitors: Extending Minimalism Outside of the Box}},
+url = {https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16{\_}williams.pdf},
+year = {2016}
+}
+
+
+@misc{virtlet,
+title = {{Mirantis/virtlet: Kubernetes CRI implementation for running VM workloads}},
+url = {https://github.com/Mirantis/virtlet},
+urldate = {2020-01-10}
+}
+
+@misc{kubevirt,
+title = {{KubeVirt.io}},
+url = {https://kubevirt.io/},
+urldate = {2020-01-10}
+}
+
+
+@article{Koleini2019,
+abstract = {To date, cloud applications have used datacenter resources through manual configuration and deployment of virtual machines and containers. Current trends see increasing use of microservices, where larger applications are split into many small containers, to be developed and deployed independently. However, even with the rise of the devops movement and orchestration facilities such as Kubernetes, there is a tendency to separate development from deployment. We present an exploration of a more extreme point on the devops spectrum: Fractal. Developers embed orchestration logic inside their application, fully automating the processes of scaling up and down. Providing a set of extensions to and an API over the Jitsu platform, we outline the design of Fractal and describe the key features of its implementation: how an application is self-replicated, how replica lifecycles are managed, how failure recovery is handled, and how network traffic is transparently distributed between replicas. We present evaluation of a self-scaling website, and demonstrate that Fractal is both useful and feasible.},
+archivePrefix = {arXiv},
+arxivId = {1902.09636},
+author = {Koleini, Masoud and Oviedo, Carlos and McAuley, Derek and Rotsos, Charalampos and Madhavapeddy, Anil and Gazagnaire, Thomas and Skejgstad, Magnus and Mortier, Richard},
+eprint = {1902.09636},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Koleini et al. - 2019 - Fractal Automated Application Scaling.pdf:pdf},
+month = {feb},
+title = {{Fractal: Automated Application Scaling}},
+url = {http://arxiv.org/abs/1902.09636},
+year = {2019}
+}
+
+
+@article{Lankes2019,
+abstract = {System-level development has been dominated by programming languages like C / C++ for decades. These languages are inherently unsafe, error-prone, and a major reason for vulnerabilities. High-level programming languages with a secure memory model and strong type system are able to improve the quality of the system software. In this paper, we explore the programming language Rust for kernel development and present RustyHermit, which is a unikernel completely written in Rust without any C / C++. We show that the support for RustyHermit can be transparently inte-gratable in the Rust toolchain and common Rust applications are build-able on top of RustyHermit. Previously, we developed the C-based unikernel HermitCore with a similar design to RustyHermit and we are able to compare both kernels. We show that the performance of both kernels is similar and only {\~{}}3.27 {\%} of RustyHermit relies on unsafe code, that cannot be checked by the compiler in detail.},
+author = {Lankes, Stefan and Breitbart, Jens and Pickartz, Simon},
+doi = {10.1145/3365137.3365395},
+file = {:Users/atakanyenel/Library/Application Support/Mendeley Desktop/Downloaded/Lankes, Breitbart, Pickartz - 2019 - Exploring Rust for Unikernel Development.pdf:pdf},
+isbn = {9781450370172},
+title = {{Exploring Rust for Unikernel Development}},
+url = {https://doi.org/10.1145/3365137.3365395},
+year = {2019}
+}

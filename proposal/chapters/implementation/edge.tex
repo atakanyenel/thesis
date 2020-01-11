@@ -1,4 +1,4 @@
-
+\pagebreak
 \section{Setting up end devices}
 Unikernels, similar to traditional OS's can be booted directly from BIOS to hardware. Nevertheless, this is not flexible enough for cloud computing standarts, so hypervisors are used for on demand provisioning of unikernels. For proof of concept development, many different end device configurations were used. There are two different usage scenarios in mind when configuring devices. First one is hypervisor enabled unikernel runtime and the other one is with IoT.
 
@@ -6,9 +6,15 @@ For hypervisor-enabled runtime, a laptop was used. Installing a hypervisor on co
 
 The mentioned laptop has Debian as the host operating system and Xen was installed through Debian with administrative priviledges to access BIOS. After Xen is installed, when laptop is booted up, user can select to start debian with Xen enabled. It's the same interface that a user sees when dual boots e.g. Windows or Linux. Starting with Xen gives xen daemon access to manipulate hardware. Because a linux system is installed on the computer that communicates with the hypervisor, it's a straightforward process to write Kubernetes clients. That laptop is connected to Kubernetes cluster through a valid kubeconfig file. Figure \ref{fig:hypervisor} shows the final overview of the setup. The virtual-kubelet runs on debian and communicates with Xen trough xen-cli, \textbf{xl}. Two additional linux VM's are traditional Kubernetes nodes connected with kubelet and they are running on the LRZ cloud.
 
-For further testing, a VM with Docker daemon was created. This VM does not have a kubelet and runs only virtual-kubelet to communicate with the kubernetes cluster. It still runs Docker containers. The provider for that case was called \textit{Docker}. It was just for exercising the virtual-kubelet API and is not part of the final setup.
+\begin{figure}[htpb]
+  
+  \centering
+  \includegraphics[width=1.2\textwidth]{figures/arch_new.pdf}
+  \caption{ Kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
+\end{figure}
 
-For IoT devices, Raspberry Pi 3 was used. Raspberry Pi uses ARM processor and AMD64 hypervisors can't be ported easily. There is also not too much motivation for it, because Raspberry Pi is not a powerful end-device and not many virtualisation can be done on it. Despite that, there are projects for lightweight virtualisation on Raspberry Pi. For more powerful end devices though, there are hypervisor projects but they are out of scope for this thesis.
+
+For further testing, a VM with Docker runtime was created. This VM does not have a kubelet and runs only virtual-kubelet to communicate with the Kubernetes cluster. It still runs Docker containers. The provider for that case was called \textit{Docker}. It was just for exercising the virtual-kubelet API and is not part of the final setup.
 
 To experiment more with unikernel ecosystem, solo5 was installed alongside Xen to the aforementioned laptop. Solo5 can be built on top of Qemu or KVM and it markets itself as a unikernel specific runtime. To test Solo5, Qemu was installed because the hardware didn't allow KVM virtualisation.
 
@@ -17,13 +23,20 @@ Another enviroment is Docker containers running virtual-kubelet. They are built 
 When configuring end devices for hypervisors, a network interface for unikernels should be set. If a unikernel application is using networking, the network interface should be given to the boot up command to make the local DHCP give it an IP.
 
 
-\begin{figure}[htpb]
-  
-    \centering
-    \includegraphics[width=1.2\textwidth]{figures/arch_new.pdf}
-    \caption{ Kubernetes cluster with a only hypervisor enabled node for unikernel deployment} \label{fig:hypervisor}
-  \end{figure}
-%todo: kubeproxy
-% todo: minios
+For IoT devices, Raspberry Pi 3 was used. Raspberry Pi uses ARM processor and AMD64 hypervisors can't be ported easily. There is also not too much motivation for it, because Raspberry Pi is not a powerful end-device and not many virtualisation can be done on it. Despite that, there are projects for lightweight virtualisation on Raspberry Pi. For more powerful end devices though, there are hypervisor projects but they are out of scope for this thesis.
 
-\pagebreak
+Despite lack of virtualisation, it's possible to run unikernels on Raspberry Pi by selecting Unix as the compilation target. Virtual-kubelet can also be compiled to ARM architecture and only takes 31 MB. A test setup was created with the circuit in \ref{fig:rpi-diagram}.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[height=0.5\textwidth]{figures/rpi-diagram.pdf}
+  \caption{Yellow connected to pin 18 and Green to pin 23} \label{fig:rpi-diagram}
+\end{figure}
+
+For the IoT case, two different DaemonSets are deployed to the cluster, yellow-daemon \& green-daemon. Both DaemonSets are configured to deploy to nodes labeled with \textit{raspberrypi="true"}. While yellow-daemon is deployed to every node, green-daemon is only deployed to nodes if they have the \textit{light=GREEN} label additional to raspberry label. When a new device connects to cluster through virtual-kubelet, yellow-daemon deploys a unikernel application that turns the yellow led on. This workflow simulates the auto-configuration ability of this solution. The logic of the deployed application can be replaced with e.g. downloading additional binaries, sending GPS data only once, setting up a local network, etc.
+
+
+When Raspberry Pi is labeled with \textit{light=GREEN}, green-daemon deploys another unikernel on the device, toggling green light on and off every 2 second. When the label is removed, virtual-kubelet kills the unikernel, which returns the green led to OFF state upon graceful termination. The unikernel applications get the pin number as a command-line argument. If a change occurs on the pin number that the led is connected to, the daemon can be edited on the fly with \textit{kubectl edit daemonset green-daemon} and the new pin number can be given to the \textbf{args} field. Termination of the unikernel with the outdated data and creation of the new one is handled completely by the Kubernetes API. The full YAML file for the mentioned daemonSet and the physical wiring of the circuit in \ref{fig:rpi-diagram} can be seen in \hyperref[chapter: Appendix]{appendix}.
+
+
+

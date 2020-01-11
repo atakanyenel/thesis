@@ -51,7 +51,17 @@ A valid kubeconfig file can be found in the same directory as the Docker-compose
 
 When creating virtual nodes, it's better to use Docker containers, because virtual-kubelet binary listens on certain ports when running and it's hard to start two instances of it on the same machine. Docker containers provide that abstraction.
 
-While testing for this thesis, end devices were simulated on different virtual machines. As It's impossible to setup 100+ devices on the wild, nodes named Rpi-\{random-id\} were generated with different labels according to their simulated tasks.
+While testing for this thesis, end devices were simulated on different virtual machines. As it's impossible to setup 100+ devices on the wild, nodes named rpi-\{random-id\} were generated with different labels according to their simulated tasks.
+
+In figure \ref{fig:largecluster}, one can see a simulated large cluster with 17 nodes. Only the first one is an actual node and the others are simulated with docker-compose. In figure \ref{fig:ui}, every black-white box represents a node while green or yellow boxes represents kube proxy daemon for each node. Kube proxy does not actually run on the nodes, because virtual-kubelet does not support it, nevertheless virtual-kubelet returns them as running to prevent the master from redeploying it.
+\begin{figure}[htbp]
+  \centering
+  \subfloat[Kubernetes operational view from \cite{kube-ops-view}]{\includegraphics[clip,width=\columnwidth]{figures/ui.png}\label{fig:ui}}
+  
+  \subfloat[Kubernetes dashboard]{\includegraphics[clip,width=\columnwidth]{figures/dashboard.png}\label{fig:dashboard}}
+  \caption{A 17 node cluster realised with 16 virtual nodes}\label{fig:largecluster}
+\end{figure}
+
 
 \subsection{The Unikernel Provider}
 The only customizable part of virtual-kubelet is the provider interface. The interface consists of 15 methods that needs to be implemented by the provider developer. Most of the methods are regarding the lifecycle of a pod, while some of them are responsible for the health of the node. 
@@ -112,8 +122,17 @@ The following list explains how other functions were implemented in unikernel an
   \item [ConfigureNode] is only called once. It's set up node information such as the running operating system, processor architecture, addresses, etc.
   \item [nodeConditions] is called periodically to check on node. By checking the remaining capacity on the node, it might return one of the errors: \textit{OutofDisk}, \textit{MemoryPressure}, \textit{DiskPressure}, \textit{NetworkUnavailable}. Because this code is running periodically, developer can write custom functions to check their device for the mentioned errors.
   \end{description}
+
+  Figure \ref{fig:output} shows the console output of virtual-kubelet upon initialization. The first pod to be deployed is the kube-proxy daemon, that is deployed to every node on a Kubernetes cluster. Some of the mentioned commands from the \textit{provider} interface can be seen in the logs.
+
+\begin{figure}[!h]
+  \centering
+  \fbox{\includegraphics[width=1\columnwidth]{figures/vk-output.png}}
+  \caption{Terminal output for virtual-kubelet when initialized} \label{fig:output}
+\end{figure}
+
 \subsection{Communication between cluster and device}
-Once a virtual node is deployed to the cluster, it is crucial to restrict it to deployments it's supposed to handle. To achieve this, deployments regarding the Virtual-kubelet are tagged with a special label. First the \textit{nodeSelector} array of the specification get the item \textit{type: virtual-kubelet}. With that annotation, no real node tries to handle the deployment. The second annotation is to get the correct provider. In theory, a cluster can have multiple virtual nodes with different providers suited for different workloads and a deployment has to go to It's respective provider. Adding a \textit{tolerations} flag allows to select a particular provider. A chunk of an example deployment file can be seen in \ref{fig:deployment}.
+Once a virtual node is deployed to the cluster, it is crucial to restrict it to deployments it's supposed to handle. To achieve this, deployments regarding the Virtual-kubelet are tagged with a special label. First the \textit{nodeSelector} array of the specification get the item \textit{type: virtual-kubelet}. With that annotation, no real node tries to handle the deployment. The second annotation is to get the correct provider. In theory, a cluster can have multiple virtual nodes with different providers suited for different workloads and a deployment has to go to its respective provider. Adding a \textit{tolerations} flag allows to select a particular provider. A chunk of an example deployment file can be seen in \ref{fig:deployment}.
 
 \begin{code}[htpb]
   \centering
@@ -220,5 +239,4 @@ Once a unikernel-specific deployment reaches virtual-kubelet, all of its data ca
 
 \textit{nodeConditions} is also a periodically called function by the master and it can be configured to reflect changes on the host system. For example, if many unikernel images are running on device, there might be not enough memory to start more instances and that methods would change \textit{OutOfDisk} condition to true.
 
-\pagebreak
 When a node disconnects from the Kubernetes cluster, Kubernetes does not re-deploy pods running on it until 5 minutes. The node shows up as NotReady but the pods are still running on it. This is an unwanted scenario for this use case, thus an additional container is deployed to the cluster to delete nodes when they disconnect. That deployment is called \textit{nodeWatcher}. It listens for events regarding nodes, and when a node disconnects, which has the \textit{virtual-kubelet} label, they are also deleted from the cluster. This allows cluster to redeploy pods running on the node without any delay. \textit{NodeWatcher} is a simple container written in python, without any complex logic. It can be used in other scenarios where rapid reaction to node disconnections are desired.

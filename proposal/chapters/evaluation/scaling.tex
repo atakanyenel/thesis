@@ -162,14 +162,12 @@ Figure \ref{fig:scale-up-50} draws a similar picture when scaling up from 0 to 5
     \end{figure}
 
 Figure \ref{fig:scale-down-50} and \ref{fig:scale-down-30} shows the scaling down time of running pods. The result is similar to scaling up cases. It takes around 5 seconds for unikernels to scale down completely while Docker containers need around 20 seconds.
-\iffalse
-We can measure the performance of unikernels by comparing the total seconds where the system is in its desired state. Adding on top of the measurement in \ref{fig:scale-down-50}, we can a period of 30 seconds where 50 pods are needed. Unikernels reach that state in 4 seconds. Docker reaches that state in 28 seconds.
+
+We can measure the performance of unikernels by comparing the total seconds where the system is in its desired state. Adding on top of the measurement in \ref{fig:scale-down-50}, we can a period of 30 seconds where 50 pods are needed. Unikernels reach that state in 4 seconds, \(T_{UnikernelScale}=4s\). Docker reaches that state in 28 seconds, \(T_{DockerScale}=28s\).
 
 \begin{equation*}
   \begin{aligned}
     T_{total}&=30s \\
-    T_{UnikernelScale}&=4s \\
-    T_{DockerScale}&=28s \\
     T_{UnikernelInDesiredState}&=T_{total}-T_{UnikernelScale}=26s \\
     T_{DockerInDesiredState}&=T_{total}-T_{DockerScale}=2s\\
   \end{aligned}
@@ -182,8 +180,8 @@ Dividing time spent in desired state with total time gives a ratio to compare so
     T_{DockerPerformance}&=\frac{2s}{30s}&=0.06 \\
   \end{aligned}
   \end{equation*}
-This means Unikernel was 14 times better in achieving the desired for in 30 seconds than Docker.
-\fi
+This means Unikernel was 14 times better than Docker at serving with the desired state in a 30 seconds interval. Reaching the desired state faster plays a big role in keeping the promises in quality of service level agreements.
+
   \iffalse
 To measure the performance of scalability of unikernels, we can use the formula proposed by Jindal et al. in \cite{multilayered}. While their formula is for autoscaling systems, it can also be applied here to show the performance difference between unikernels and Docker containers as Kubernetes autoscaler can also operate on unikernel resources as it sees them as pods.
 \begin{equation*}
