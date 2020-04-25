@@ -1,0 +1,19 @@
+version: "3"
+services:
+  rpi-temp:
+    build: .
+    image: atakanyenel/vk-client
+    deploy:
+      replicas: 2
+    volumes:
+        - ${PWD}:/tmp
+    environment:
+      - LABELS=sensor=temperature
+
+  rpi-elec:
+    build: .
+    image: atakanyenel/vk-client
+    volumes:
+        - ${PWD}:/tmp
+    environment:
+      - LABELS=sensor=electricity

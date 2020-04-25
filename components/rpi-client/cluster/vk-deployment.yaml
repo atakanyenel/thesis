@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: virtual-node-sa
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: virtual-node-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: virtual-node-sa
+  namespace: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-node
+spec:
+  selector:
+    matchLabels:
+      app: virtual-node
+  template:
+    metadata:
+      labels:
+        app: virtual-node
+    spec:
+      serviceAccount: virtual-node-sa
+      containers:
+      - name: virtual-node
+        image: atakanyenel/vk-client:cluster
+
+        env:
+          - name: LABELS
+            value: light=GREEN

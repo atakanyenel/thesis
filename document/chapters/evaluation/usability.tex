@@ -1,0 +1,67 @@
+\section{Usability}
+In their current state, unikernels are not as easily usable as Docker containers. Docker, or container technology in general, has a working abstraction between code and the container runtime. Unikernels currently lack that abstraction. If a unikernel supports a certain language, then the application code should also be in that language. MirageOS is written in OCaml and all the libraries are also written in OCaml. That's why it only supports applications in OCaml. That makes it really hard for someone to develop applications if they are not familiar with the language. It makes sense that the application code blends in perfectly with the operating system it's being built into but  it restricts developers to develop programs in broad sense. OCaml was not on the list for the most loved 25 programming languages survey of Stack Overflow for 2019 \cite{2019-survey}.
+
+The networking in unikernels is also different than what is used in Docker containers. Docker containers are system processes and connecting processes through ports is well established in computer engineering. Unikernels have their own networking stack for each hypervisor and they are not unified. Bonk et al. \cite{Bonk} explains how certain networking stacks are implemented in MirageOS and how they differ from each other. For each hypervisor, developer has to come up with a custom solution for networking.
+
+On the other hand, there are projects where MirageOS was used with superior functionality. An example project is called Jitsu \cite{jitsu}, \textit{Just In Time Summoning of Unikernels.} In that project, for every DNS request, they are starting a unikernel to respond to that request and return the newly acquired IP of the unikernel with the response header. The working principle can be seen in \ref{fig:jitsu}. This allows them to scale extremely well. Every request is being handled by a unique unikernel instance and the system can respond to incoming traffic on request level.
+
+\begin{figure}[h!]
+\centering
+\begin {sequencediagram}
+  \newinst {client}{Client}
+  \newinst [2]{jitsu}{Jitsu}
+  \newinst [2]{libvirt}{Libvirt}
+  \newinst [2]{unikernel}{Unikernel}
+  %todo: change this to calls
+  \mess [1]{client}{ DNS req. }{jitsu}
+  \mess [1]{jitsu}{ Start VM. }{libvirt}
+  \mess [1]{libvirt}{ Boot Unikernel }{unikernel}
+  \mess [1]{unikernel}{}{libvirt}
+
+  \mess [1]{libvirt}{ VM started }{jitsu}
+
+  \mess [1]{jitsu}{DNS reply with unikernel IP }{client}
+  \mess [1]{client}{TCP connection}{unikernel}
+\end {sequencediagram}
+\caption{Jitsu \cite{jitsu}}\label{fig:jitsu}
+\end{figure}
+
+Jitsu project is being used to serve static websites, which is a simple task to do. Nevertheless, their fast boot times allows them to use unikernels instead of Docker containers. The DNS server running in that example is also a unikernel, so the environment can be achieved in a pure unikernel fashion.
+
+Another unikernel stack, IncludeOS, writes its applications in C++. C++ is a more industry oriented language than OCaml, but they still have the same network problems. IncludeOS requires an additional file to set up network correctly. It was also not easy to set up their hello\_world example flawlessly.
+\pagebreak
+\subsection{Unikernel as Kubernetes Runtime}
+
+Docker is not the only container runtime anymore. The success of Docker led to the creation of Open Container Initiative(OCI). Docker divided its codebase to different modules, called \textit{runC} and \textit{containerd}. They donated \textit{runC} to create a standard for container runtimes. This standardisation was baked into Kubernetes and now Kubernetes can use different runtimes to run containers. One of those interesting runtimes is \textit{Frakti}, a hypervisor-based container runtime. It uses runV underneath, an OCI runtime to run containers on hypervisors. This is possible by how Kubernetes serves its runtime specification. A protobuf file \cite{protobuf} specifies the required interface for container runtimes to interact with the Kubernetes master. Similar to virtual-kubelet presented in this research, a new runtime can be created which will be hypervisor-based as the ones discussed above but runs unikernels instead of containers. The interface is very similar to one that is already implemented by virtual-kubelet. For example, the protobuf file has a \textbf{rpc ListContainers(...)} command, which is already implemented for virtual-kubelet as \textit{GetPods}. A complete implementation will run unikernels natively on Kubernetes, removing the need for virtual-kubelet, making unikernel technology truly cloud native. However it requires a more mature and standardized unikernel environment.
+
+\subsection{Access Control between Unikernels}
+
+MirageOS unikernels can be configured to read from sector-addressable block devices. This allows them to interact with the host machine in a secure and controlled manner. E.g. To attach a block device to a unikernel running on a \textit{solo5-hvt} target, the command in \ref{fig:mirage_block} has to be run.
+
+\begin{code}[htpb]
+  \centering
+  \begin{tabular}{c}
+  \begin{lstlisting}[language=bash]
+    $ solo5-hvt --block:storage=memory.img app.hvt
+    (...)
+    Solo5: Memory map: 512 MB addressable:
+    Solo5:     unused @ (0x0 - 0xfffff)
+    Solo5:       text @ (0x100000 - 0x1eefff)
+    Solo5:     rodata @ (0x1ef000 - 0x228fff)
+    Solo5:       data @ (0x229000 - 0x2dffff)
+    Solo5:       heap >= 0x2e0000 < stack < 0x20000000
+    2018-06-21 12:21:11 -00:00: INF [block] sectors = 100000
+    read_write=true
+    sector_size=512
+    (...)
+    Solo5: solo5_exit(0) called
+\end{lstlisting}
+\end{tabular}
+\caption{Attaching block device to unikernel}\label{fig:mirage_block}
+\end{code}
+
+The name of the block device, in this case \textit{memory.img} can be specified in the deployment yaml file while deploying the unikernel to respective device. For devices where multiple sensor are connected, different block names can be given for each sensor and the hypervisor will provide the isolation needed for security because different unikernels won't even see other files where the sensor data is read. It won't be mounted on their respective filesystem. If a unikernel has to access multiple sensors data, multiple block devices can be given on their deployment file. 
+
+This operation allows both read \& write and unikernels can be extended to read sensor data directly from gpio pins without using any external library such as \textit{WiringPi} or \textit{gpiozero} for Raspberry Pi. With correct labeling and usage of \textit{Daemon Sets}, Kubernetes will know exactly which unikernels to deploy respective to sensor when a device joins the cluster. No preconfiguration is necessary other than labeling.
+
+Access control can be made more flexible by combining it with Kubernetes Persistent Volumes and Persistent Volume Claims. Persistent Volumes in Kubernetes can be labeled and a filepath can be stated in them. This filepath can be used again while deploying the unikernel, thus Kubernetes-native access-control pattern can be achieved without much effort. Although, it should be noted that, implementing this solution with the operator pattern is probably easier.

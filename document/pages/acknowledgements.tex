@@ -1,0 +1,31 @@
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\addcontentsline{toc}{chapter}{Acknowledgments}}
+{\addcontentsline{toc}{chapter}{Danksagungen}}
+\makeatother
+\thispagestyle{empty}
+
+\vspace*{20mm}
+
+\begin{center}
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\usekomafont{section} Acknowledgments}
+{\usekomafont{section} Danksagungen}
+\makeatother
+\end{center}
+
+\vspace{10mm}
+
+%TODO: Acknowledgments
+I would like to thank my advisor Vladimir Podolskiy for giving me the motivation to continue on the cloud computing path. He was a reliable mentor throughout my entire master's program.
+
+Next, I would like to thank Anshul Jindal for introducing me to unikernels.
+
+Furthermore, I would like to thank Prof. Dr. Michael Gerndt for giving me the opportunity to work on on this topic.
+
+I would like to thank Leibniz-Rechenzentrum for providing me credits to conduct my experiments.
+
+Finally, I thank my parents for always supporting me during my years of study. Teşekkürler.
+
+\cleardoublepage{}

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: green-daemon
+  namespace: default
+
+spec:
+  selector:
+    matchLabels:
+      name: green-daemon
+  template:
+    metadata:
+      labels:
+        name: green-daemon
+    spec:
+      containers:
+        - name: uni-run
+          image: humidity-daemon
+          args:
+            - GREEN
+      nodeSelector:
+          type: virtual-kubelet
+          location: germany
+          sensor: humidity
+          os: raspbian
+      tolerations:
+      - key: virtual-kubelet.io/provider
+        operator: Equal
+        value: unikernel
+        effect: NoSchedule
+
+

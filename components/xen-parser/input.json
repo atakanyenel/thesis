@@ -1,0 +1,73 @@
+[
+    {
+        "domid": 0,
+        "config": {
+            "c_info": {
+                "type": "pv",
+                "name": "Domain-0"
+            },
+            "b_info": {
+                "max_memkb": 17179869180,
+                "target_memkb": 7817783,
+                "sched_params": {
+                    "sched": "credit",
+                    "weight": 256,
+                    "cap": 0
+                },
+                "type.pv": {
+
+                },
+                "arch_arm": {
+
+                }
+            }
+        }
+    },
+    {
+        "domid": 1,
+        "config": {
+            "c_info": {
+                "type": "hvm",
+                "name": "hello",
+                "uuid": "76d164d3-0201-49c2-9324-4e8e58543b04",
+                "run_hotplug_scripts": "True"
+            },
+            "b_info": {
+                "max_memkb": 262144,
+                "target_memkb": 262144,
+                "video_memkb": 8192,
+                "shadow_memkb": 2048,
+                "sched_params": {
+                    "sched": "credit",
+                    "weight": 256,
+                    "cap": 0
+                },
+                "claim_mode": "True",
+                "kernel": "/home/atakanyenel/mirage-skeleton/tutorial/hello/./hello.xen",
+                "type.hvm": {
+                    "vga": {
+
+                    },
+                    "vnc": {
+
+                    },
+                    "sdl": {
+
+                    },
+                    "spice": {
+
+                    },
+                    "rdm": {
+
+                    }
+                },
+                "arch_arm": {
+
+                }
+            },
+            "on_reboot": "restart",
+            "on_crash": "preserve",
+            "on_soft_reset": "soft_reset"
+        }
+    }
+]

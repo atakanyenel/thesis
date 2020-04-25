@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: humidity
+    labels:
+        app: humidity
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: humidity
+    template:
+        metadata:
+            labels:
+                app: humidity
+        spec:
+            containers:
+            - name: unikernel
+              image : main.native
+              env:
+                - name: "sensor"
+                  value: "humidity"
+            nodeSelector:
+              type: virtual-kubelet
+              model: raspberry-pi
+            tolerations:
+            - key: "virtual-kubelet.io/provider"
+              operator: "Equal"
+              value: "unikernel"
+              effect: "NoSchedule"
+
+---
+
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+            name: green-daemon
+            namespace: default
+        spec:
+            selector:
+                matchLabels:
+                    name: green-daemon
+            template:
+                metadata:
+                    labels:
+                        name: green-daemon
+                spec:
+                    containers:
+                    - name: sayer
+                      image: led-daemon
+                      args:
+                        - GREEN
+                    nodeSelector:
+                        type: "virtual-kubelet"
+                        model: "raspberry-pi"
+                        light: "GREEN"
+                    tolerations:
+                      - key: "virtual-kubelet.io/provider"
+                        operator: "Equal"
+                        value: "unikernel"
+                        effect: "NoSchedule"

@@ -1,0 +1,14 @@
+\chapter{Implementation}\label{chapter:implementation}
+This chapter explains how to set up a unikernel-enabled Kubernetes cluster with the required components. It also goes into detail of different implementation ideas that are also possible to extend this project or that were implemented by other parties. Implementation of the project consists of 4 parts:
+\begin{enumerate}
+\item Setting up the Kubernetes cluster
+\item Implementing a custom pod deployer
+\item Setting up the edge environments
+\item Developing unikernel applications
+\end{enumerate}
+
+
+\input{chapters/implementation/cluster.tex}
+\input{chapters/implementation/virtual-kubelet.tex}
+\input{chapters/implementation/edge.tex}
+\input{chapters/implementation/app.tex}

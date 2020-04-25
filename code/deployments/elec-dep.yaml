@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: elec-program
+    labels:
+        app: elec-program
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: elec-program
+    template:
+        metadata:
+            labels:
+                app: elec-program
+        spec:
+            containers:
+            - name: unikernel
+              image : unikernel-image
+              ports:
+              - containerPort: 4433
+            nodeSelector:
+              type: virtual-kubelet
+              sensor: electricity
+            tolerations:
+            - key: "virtual-kubelet.io/provider"
+              operator: "Equal"
+              value: "unikernel"
+              effect: "NoSchedule"
